@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/popupMBLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_dark"
+    tools:context=".PopUpAddressMB">
+
+    <TextView
+        android:id="@+id/labelMBBit"
+        android:layout_width="62dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="25dp"
+        android:clickable="false"
+        android:gravity="center_horizontal"
+        android:inputType="none"
+        android:text="@string/labelBit"
+        app:layout_constraintStart_toEndOf="@+id/labelMBDataType"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinnerMBBit"
+        android:layout_width="60dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/holo_green_dark"
+        android:entries="@array/bits_8bit"
+        android:focusable="auto"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        android:popupBackground="@android:color/holo_green_dark"
+        app:layout_constraintStart_toEndOf="@+id/spinnerMBDataType"
+        app:layout_constraintTop_toBottomOf="@+id/labelMBBit" />
+
+    <TextView
+        android:id="@+id/labelMBDataType"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"
+        android:clickable="false"
+        android:gravity="center_horizontal"
+        android:inputType="none"
+        android:text="@string/tvDataType"
+        app:layout_constraintStart_toEndOf="@+id/labelMBAddress"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinnerMBDataType"
+        android:layout_width="80dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/holo_green_dark"
+        android:entries="@array/modbus_data_type_bool"
+        android:focusable="auto"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        android:popupBackground="@android:color/holo_green_dark"
+        app:layout_constraintStart_toEndOf="@+id/etMBAddress"
+        app:layout_constraintTop_toBottomOf="@+id/labelMBDataType" />
+
+    <TextView
+        android:id="@+id/labelMBAddress"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"
+        android:clickable="false"
+        android:gravity="center_horizontal"
+        android:inputType="none"
+        android:text="@string/tvAddress"
+        app:layout_constraintStart_toEndOf="@+id/labelMBIO"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/labelMBIO"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="25dp"
+        android:clickable="false"
+        android:gravity="center_horizontal"
+        android:inputType="none"
+        android:text="@string/tvIO"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="35dp"
+        android:onClick="sendMessageReturnTag"
+        android:text="@string/btnOK"
+        app:layout_constraintStart_toEndOf="@+id/labelMBBit"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinnerMBIO"
+        android:layout_width="40dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/holo_green_dark"
+        android:entries="@array/modbusAddress"
+        android:focusable="auto"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        android:popupBackground="@android:color/holo_green_dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelMBIO" />
+
+    <EditText
+        android:id="@+id/etMBAddress"
+        android:layout_width="70dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:ems="10"
+        android:focusable="auto"
+        android:focusableInTouchMode="true"
+        android:gravity="center_horizontal"
+        android:hint="@string/ModbusPLCAddressHint"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:maxLength="5"
+        android:text="@string/ModbusPLCAddress"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/spinnerMBIO"
+        app:layout_constraintTop_toBottomOf="@+id/labelMBAddress" />
+
+    <TextView
+        android:id="@+id/labelMBStringLength"
+        android:layout_width="110dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="15dp"
+        android:clickable="false"
+        android:gravity="center_horizontal"
+        android:inputType="none"
+        android:text="@string/labelStringLength"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerMBIO" />
+
+    <Spinner
+        android:id="@+id/spinnerMBStringLength"
+        android:layout_width="40dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:background="@android:color/holo_green_dark"
+        android:entries="@array/str_length"
+        android:popupBackground="@android:color/holo_green_dark"
+        app:layout_constraintStart_toEndOf="@+id/labelMBStringLength"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerMBDataType" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
