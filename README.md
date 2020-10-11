@@ -23,7 +23,9 @@ See the following link for instructions on how to create AAR for libplctag: http
 # Functionality
 - Only a single value will be displayed per tag entered, either of string/char/integer/float...etc.
 - It provides automated READ while, during this operation, unused tag spots can be used to write in parallel.
-- The left half of the screen is for a PLC utilizing AB protocol while the right half is for Modbus (simultaneous use).
+- The left half of the screen is for a PLC utilizing AB protocol while the right half is for Modbus (simultaneous use of both).
+- As for AB tags, you will need to specify the Custom String Length when the "custom string" data type is selected.
+- As for Modbus tags, you will need to specify the String Length when the "string" data type is selected.
 
 Not everything could be tested by me, since I don't have access to all the PLCs.
 
@@ -33,5 +35,5 @@ The app was also tested as working on an old RCA tablet with arm processor and A
 # Licensing
 This is all dual licensed under Mozilla Public License 2.0 and GNU Lesser/Library General Public License 2.1 to cover for the use of libplctag and jna libraries.
 
-
+# Trademarks
 Any and all trademarks, either directly on indirectly used or mentioned in this project, belong to their respetive owners.
