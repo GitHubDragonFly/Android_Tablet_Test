@@ -24,6 +24,7 @@ See the following link for instructions on how to create AAR for libplctag: http
 - Only a single value will be displayed per tag entered, either of string/char/integer/float...etc.
 - It provides automated READ while, during this operation, unused tag spots can be used to write in parallel.
 - The left half of the screen is for a PLC utilizing AB protocol while the right half is for Modbus (simultaneous use of both).
+- "Get Tags" will fetch ControlLogix tags and selecting any of the fetched tags will copy it to the clipboard.
 - As for AB tags, you will need to specify the Custom String Length when the "custom string" data type is selected.
 - As for Modbus tags, you will need to specify the String Length when the "string" data type is selected.
 
