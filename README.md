@@ -6,6 +6,7 @@ Intended to be used solely as a testing tool (not fit for any production environ
 Minimum requirement is Android 4.1 (API level 16) while targeting Android 11 (API level 30).
 Designed for landscape orientation due to the number of components used.
 Also designed to hide the status bar and keep the screen turned on.
+In order to work as designed, it uses permission to access Internet and Network State (see app/src/main/AndroidManifest.xml file).
 
 It is using the following open source libraries, in the form of AAR modules added to the app:
 
@@ -17,14 +18,14 @@ Other modifications would be related to added methods for unsigned integers, pre
 
 Related project: https://github.com/libplctag/libplctag4android
 
-This app is as experimental as the above mentioned related project, but a bit more elaborate.
+This app is as experimental as the above mentioned related project but a bit more elaborate.
 The above mentioned related project can be used to compile the latest prerelease version of the libplctag library.
 
-See the following link for instructions on how to create AAR for libplctag: https://github.com/libplctag/libplctag4android/issues/1
+See this for instructions on how to create libplctag AAR: https://github.com/libplctag/libplctag4android/issues/1
 
 # Functionality
 - Only a single value will be displayed per tag entered, either of string/char/integer/float...etc.
-- It provides automated READ while, during this operation, unused tag spots can be used to write in parallel.
+- It provides automated READ while, during this operation, unused tag spots can be populated and used to write in parallel.
 - The left half of the screen is for a PLC utilizing AB protocol while the right half is for Modbus (simultaneous use of both).
 - "Get Tags" will fetch ControlLogix tags and selecting any of the fetched tags will copy it to the clipboard.
 - As for AB tags, you will need to specify the Custom String Length when the "custom string" data type is selected.
