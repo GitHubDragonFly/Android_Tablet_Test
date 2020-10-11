@@ -11,8 +11,7 @@ It is using the following open source libraries, in the form of AAR modules adde
 - jna ( https://github.com/java-native-access/jna )
 
 It is also using a modified version of the Tag.java wrapper, part of the libplctag project, so a tag_id for every tag created could be mapped and used in the software.
-Other modifications would be related to added methods for signed/unsigned integers, previously mentioned in the related libplctag4android project (see below).
-All the modifications can be seen just by openning the project, navigating to the "libplctag" project and openning the AAR file.
+Other modifications would be related to added methods for unsigned integers, previously mentioned in the related libplctag4android project (see below) as well as an additional experimental 128-bit support. All the modifications can be seen just by openning this project, navigating to the "libplctag" project, openning the AAR file and navigating through classes.jar.
 
 Related project: https://github.com/libplctag/libplctag4android
 
@@ -22,10 +21,12 @@ The above mentioned related project can be used to compile the latest prerelease
 See the following link for instructions on how to create AAR for libplctag: https://github.com/libplctag/libplctag4android/issues/1
 
 # Functionality
-
 - Only a single value will be displayed per tag entered, either of string/char/integer/float...etc.
 - It provides automated READ while unused tag spots can be used to write in parallel.
 - The left half of the screen is for a PLC utilizing AB protocol while the right half is for Modbus (simultaneous use).
 
 Screenshots folder has pictures of this app running inside the Android x86 emulator tablet.
 The app was also tested as working on an old RCA tablet with arm processor and Android 5.0.
+
+# Licensing
+This is all dual licensed under Mozilla Public License 2.0 and GNU Lesser/Library General Public License 2.1 to cover for the use of libplctag and jna libraries.
