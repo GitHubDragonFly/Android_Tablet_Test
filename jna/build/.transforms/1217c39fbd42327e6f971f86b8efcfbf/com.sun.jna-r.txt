@@ -1,2 +1,0 @@
-com.sun.jna
-string jna_library_appname
