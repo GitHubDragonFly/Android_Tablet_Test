@@ -3,7 +3,9 @@ Android tablet app for communication with Allen Bradley and Modbus programmable 
 
 Intended to be used solely as a testing tool (not fit for any production environment).
 
-Minimum requirement is Android 4.1 (API level 16) while targeting Android 11 (API level 30), designed for landscape orientation due to the number of components used.
+Minimum requirement is Android 4.1 (API level 16) while targeting Android 11 (API level 30).
+Designed for landscape orientation due to the number of components used.
+Also designed to hide the status bar and keep the screen turned on.
 
 It is using the following open source libraries, in the form of AAR modules added to the app:
 
