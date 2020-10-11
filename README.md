@@ -27,7 +27,8 @@ See the following link for instructions on how to create AAR for libplctag: http
 - As for AB tags, you will need to specify the Custom String Length when the "custom string" data type is selected.
 - As for Modbus tags, you will need to specify the String Length when the "string" data type is selected.
 
-Not everything could be tested by me, since I don't have access to all the PLCs.
+Not everything could be tested by me, since I don't have access to all the different PLCs supported by the libplctag library.
+So, there might be bugs in the app.
 
 Screenshots folder has pictures of this app running inside the Android x86 emulator tablet (Nexus 7 (2012) API 25).
 The app was also tested as working on an old RCA tablet with arm processor and Android 5.0.
