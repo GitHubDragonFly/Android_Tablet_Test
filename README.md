@@ -29,7 +29,7 @@ See the following link for instructions on how to create AAR for libplctag: http
 
 Not everything could be tested by me, since I don't have access to all the PLCs.
 
-Screenshots folder has pictures of this app running inside the Android x86 emulator tablet.
+Screenshots folder has pictures of this app running inside the Android x86 emulator tablet (Nexus 7 (2012) API 25).
 The app was also tested as working on an old RCA tablet with arm processor and Android 5.0.
 
 # Licensing
