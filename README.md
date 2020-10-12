@@ -41,4 +41,4 @@ The app was also tested as working on an old RCA tablet with arm processor and A
 This is all dual licensed under Mozilla Public License 2.0 and GNU Lesser/Library General Public License 2.1 to cover for the use of libplctag and jna libraries.
 
 # Trademarks
-Any and all trademarks, either directly on indirectly used or mentioned in this project, belong to their respetive owners.
+Any and all trademarks, either directly on indirectly mentioned in this project, belong to their respetive owners.
