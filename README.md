@@ -23,6 +23,8 @@ The above mentioned related project can be used to compile the latest prerelease
 
 See this for instructions on how to create libplctag AAR: https://github.com/libplctag/libplctag4android/issues/1
 
+It might be even simpler to copy the existing AAR file to a different location, unpack it, replace the old libraries with new ones, re-pack it as a "zip" file and then change the extension to "aar". Then open this project in the Android Studio, unload the libplctag module, remove the module, delete it and then add the new AAR as a module to the project.
+
 # Functionality
 - Only a single value will be displayed per tag entered, either of string/char/integer/float...etc.
 - It provides automated READ while, during this operation, unused tag spots can be populated and used to write in parallel.
