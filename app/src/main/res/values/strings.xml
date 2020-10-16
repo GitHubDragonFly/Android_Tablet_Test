@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">AB &amp; Modbus Master</string>
-    <string name="btnExit">Exit</string>
     <string name="btnOK">OK</string>
     <string name="btnGetTags">Get Tags</string>
     <string name="btnWrite">Write</string>
@@ -27,7 +26,7 @@
     <string name="LGXProgram">MainProgram</string>
     <string name="LGXProgramHint">Program Name</string>
     <string name="LGXIPAddress">192.168.1.21</string>
-    <string name="LGXIPAddressHint">xxx.xxx.xxx.xxx</string>
+    <string name="LGXIPAddressHint">IP Address</string>
     <string name="LGXPath">1,3</string>
     <string name="LGXPathHint">CSV</string>
     <string name="ModbusIPAddress">192.168.1.20:502</string>
