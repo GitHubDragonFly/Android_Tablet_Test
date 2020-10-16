@@ -2,6 +2,7 @@
 Android tablet app for communication with Allen Bradley and Modbus programmable logic controllers (PLC).
 
 Intended to be used solely as a testing tool (not fit for any production environment).
+Could also represent a great resource for educational purposes.
 
 Minimum requirement is Android 4.1 (API level 16) while targeting Android 11 (API level 30).
 Designed for landscape orientation due to the number of components used.
@@ -23,7 +24,7 @@ The above mentioned related project can be used to compile the latest prerelease
 
 See these instructions on how to create libplctag AAR:  https://github.com/libplctag/libplctag4android/issues/1
 
-It might be even simpler to just copy the existing libplctag AAR file to a different location, unpack it, replace the old libraries with new ones, re-pack it as a "zip" file and then change the extension to "aar". Then open this project in the Android Studio, unload the libplctag module, remove the module, delete it and then add the new AAR as a module to the project.
+It might be even simpler to just copy the existing libplctag AAR file to a different location, unpack it, replace the old libraries with new ones, re-pack it as a "zip" file and then change the extension to "aar". Then open this project in the Android Studio, unload the libplctag module, remove the module, delete it and then add the new AAR as a module to the project. Android Studio doesn't seem to remove related entries once the module is removed so check the settings.gradle file for possible multiple entries of the same project and remove as necessary.
 
 # Functionality
 - Only a single value will be displayed per tag entered, either of string/char/integer/float...etc.
@@ -34,7 +35,7 @@ It might be even simpler to just copy the existing libplctag AAR file to a diffe
 - As for Modbus tags, you will need to specify the String Length when the "string" data type is selected.
 
 Not everything could be tested by me, since I don't have access to all the different PLCs supported by the libplctag library.
-So, there might be bugs in the app.
+So, there might be bugs in the app. See the libplctag website for all PLCs supported by the library.
 
 Screenshots folder has pictures of this app running inside the Android x86 emulator tablet (Nexus 7 (2012) API 25).
 The app was also tested as working on an old RCA tablet with arm processor and Android 5.0.
@@ -43,4 +44,4 @@ The app was also tested as working on an old RCA tablet with arm processor and A
 This is all dual licensed under Mozilla Public License 2.0 and GNU Lesser/Library General Public License 2.1 to cover for the use of libplctag and jna libraries.
 
 # Trademarks
-Any and all trademarks, either directly on indirectly mentioned in this project, belong to their respetive owners.
+Any and all trademarks, either directly or indirectly mentioned in this project, belong to their respetive owners.
