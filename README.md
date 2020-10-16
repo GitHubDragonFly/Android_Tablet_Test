@@ -33,7 +33,8 @@ It might be even simpler to just copy the existing libplctag AAR file to a diffe
 - "Get Tags" will fetch ControlLogix tags, both Controller and Program, and by selecting any of the fetched tags it will be copied to the clipboard. You can specify the name of the Program (the default is set to the MainProgram).
 - As for AB tags, you will need to specify the Custom String Length when the "custom string" data type is selected.
 - As for Modbus tags, you will need to specify the String Length when the "string" data type is selected.
-- Modbus addressing: CO = Coil, DI = Discrete Input, IR = Input Register, HR = Holding Register
+- Modbus addressing: CO = Coil, DI = Discrete Input, IR = Input Register, HR = Holding Register.
+- Error handling has been built into the app but is also relying on the libplctag library itself.
 
 Not everything could be tested by me, since I don't have access to all the different PLCs supported by the libplctag library.
 So, there might be bugs in the app. See the libplctag website for all PLCs supported by the library.
