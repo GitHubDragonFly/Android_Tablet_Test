@@ -30,6 +30,14 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
         while (!isCancelled()){
             String name = params[2].substring(0, params[2].indexOf(';'));
 
+            if (name.startsWith("di") || name.startsWith("ir")){
+                value = "MB Write Failed";
+                publishProgress();
+                MBWriteMaster.close(tag_id);
+                Log.v(TAG,"doInBackground Finished");
+                return "FINISHED";
+            }
+
             if (name.contains("/")){
                 bitIndex = Integer.parseInt(name.substring(name.indexOf('/') + 1));
                 name = name.substring(0, name.indexOf('/'));
