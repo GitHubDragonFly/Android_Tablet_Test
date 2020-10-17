@@ -31,7 +31,7 @@
     <string name="LGXPathHint">CSV</string>
     <string name="ModbusIPAddress">192.168.1.20:502</string>
     <string name="ModbusPLCAddress">0</string>
-    <string name="ModbusPLCAddressHint">Unsigned Short Number</string>
+    <string name="ModbusPLCAddressHint">Unsigned Short</string>
     <string name="tagHint">Tag</string>
     <string name="WriteHint">Read / Write</string>
     <string name="timeout">10000</string>
