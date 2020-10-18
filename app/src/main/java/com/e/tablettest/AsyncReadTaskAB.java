@@ -5,7 +5,6 @@ import android.util.Log;
 import android.os.AsyncTask;
 import org.libplctag.Tag;
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -302,14 +301,8 @@ public class AsyncReadTaskAB extends AsyncTask<ArrayList<ArrayList<String>>, Voi
                                         break;
                                     case "custom string":
                                         //Actual String Length from first 4 bytes
-                                        byte[] csbytes = new byte[4];
+                                        int actStrLgth = ABMaster.getInt32(id, 0);
 
-                                        csbytes[0] = (byte)(ABMaster.getUInt8(id, 3));
-                                        csbytes[1] = (byte)(ABMaster.getUInt8(id, 2));
-                                        csbytes[2] = (byte)(ABMaster.getUInt8(id, 1));
-                                        csbytes[3] = (byte)(ABMaster.getUInt8(id, 0));
-
-                                        int actStrLgth = ByteBuffer.wrap(csbytes, 0, 4).getInt();
                                         byte[] csvalBytes = new byte[actStrLgth];
 
                                         for (int k = 0; k < actStrLgth; k++){
@@ -337,14 +330,8 @@ public class AsyncReadTaskAB extends AsyncTask<ArrayList<ArrayList<String>>, Voi
                                             }
                                         } else if (cpu.equals("controllogix")){
                                             //String Length from first 4 bytes
-                                            byte[] bytes = new byte[4];
+                                            int strLgth = ABMaster.getInt32(id, 0);
 
-                                            bytes[0] = (byte)(ABMaster.getUInt8(id, 3));
-                                            bytes[1] = (byte)(ABMaster.getUInt8(id, 2));
-                                            bytes[2] = (byte)(ABMaster.getUInt8(id, 1));
-                                            bytes[3] = (byte)(ABMaster.getUInt8(id, 0));
-
-                                            int strLgth = ByteBuffer.wrap(bytes, 0, 4).getInt();
                                             valBytes = new byte[strLgth];
 
                                             for (int k = 0; k < strLgth; k++){
@@ -352,12 +339,8 @@ public class AsyncReadTaskAB extends AsyncTask<ArrayList<ArrayList<String>>, Voi
                                             }
                                         } else {
                                             //String Length from first 2 bytes
-                                            byte[] bytes = new byte[2];
+                                            int strLgth = ABMaster.getInt16(id, 0);
 
-                                            bytes[0] = (byte)(ABMaster.getUInt8(id, 1));
-                                            bytes[1] = (byte)(ABMaster.getUInt8(id, 0));
-
-                                            int strLgth = ByteBuffer.wrap(bytes, 0, 2).getShort();
                                             int result = strLgth % 2;
 
                                             if (result == 0)
