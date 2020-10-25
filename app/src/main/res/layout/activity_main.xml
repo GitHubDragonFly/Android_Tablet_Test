@@ -1763,7 +1763,7 @@
         android:layout_marginTop="22dp"
         android:layout_marginEnd="35dp"
         android:layout_marginRight="35dp"
-        android:checked="true"
+        android:checked="false"
         android:onClick="sendMessageCheckBoxSwapBytesWords"
         android:text="@string/checkboxSwapWords"
         app:layout_constraintEnd_toEndOf="parent"
