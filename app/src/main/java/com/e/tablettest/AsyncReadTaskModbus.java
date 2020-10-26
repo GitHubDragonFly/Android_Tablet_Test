@@ -100,15 +100,15 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
 
                             if (swapBytes){
                                 if (swapWords){
-                                    byteOrder = int32byteOrder[1];
-                                } else {
                                     byteOrder = int32byteOrder[0];
+                                } else {
+                                    byteOrder = int32byteOrder[2];
                                 }
                             } else {
                                 if (swapWords){
-                                    byteOrder = int32byteOrder[3];
+                                    byteOrder = int32byteOrder[1];
                                 } else {
-                                    byteOrder = int32byteOrder[2];
+                                    byteOrder = int32byteOrder[3];
                                 }
                             }
 
@@ -121,15 +121,15 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
 
                             if (swapBytes){
                                 if (swapWords){
-                                    byteOrder = int64byteOrder[1];
-                                } else {
                                     byteOrder = int64byteOrder[0];
+                                } else {
+                                    byteOrder = int64byteOrder[2];
                                 }
                             } else {
                                 if (swapWords){
-                                    byteOrder = int64byteOrder[3];
+                                    byteOrder = int64byteOrder[1];
                                 } else {
-                                    byteOrder = int64byteOrder[2];
+                                    byteOrder = int64byteOrder[3];
                                 }
                             }
 
@@ -142,6 +142,13 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                         case "string":
                             elem_size = 2;
                             elem_count = (int)Math.ceil((float)strLength / (float)elem_size);
+
+                            if (swapBytes){
+                                byteOrder = int16byteOrder[0];
+                            } else {
+                                byteOrder = int16byteOrder[1];
+                            }
+
                             break;
                     }
 
@@ -202,16 +209,13 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                                         break;
                                     case "int128":
                                     case "uint128":
-                                        if (swapBytes && !swapWords){
-                                            tempValue = String.valueOf(MBMaster.getBit(id,bitIndex[i]));
-                                        } else {
-                                            byte[] bytes = new byte[elem_size * elem_count];
+                                        byte[] biBytes = new byte[elem_size * elem_count];
 
-                                            for (int z = 0; z < bytes.length; z++) {
-                                                bytes[z] = (byte) MBMaster.getUInt8(id, z);
-                                            }
-                                            tempValue = ExtractInt128Bit(SwapCheck(bytes), bitIndex[i]);
+                                        for (int z = 0; z < biBytes.length; z++) {
+                                            biBytes[z] = (byte) MBMaster.getUInt8(id, z);
                                         }
+                                        tempValue = ExtractInt128Bit(SwapCheck(biBytes), bitIndex[i]);
+
                                         break;
                                     case "string":
                                         byte[] bytes = new byte[elem_size * elem_count];
@@ -220,15 +224,15 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                                             bytes[z] = (byte) MBMaster.getUInt8(id, z);
                                         }
 
-                                        if (swapBytes && !swapWords){
+                                        if (!swapBytes && swapWords){
                                             try {
-                                                tempValue = new String(new byte[] {bytes[bitIndex[i]]}, "UTF-8");
+                                                tempValue = new String(new byte[] {SwapCheck(bytes)[bitIndex[i]]}, "UTF-8");
                                             } catch (UnsupportedEncodingException e) {
                                                 e.printStackTrace();
                                             }
                                         } else {
                                             try {
-                                                tempValue = new String(new byte[] {SwapCheck(bytes)[bitIndex[i]]}, "UTF-8");
+                                                tempValue = new String(new byte[] {bytes[bitIndex[i]]}, "UTF-8");
                                             } catch (UnsupportedEncodingException e) {
                                                 e.printStackTrace();
                                             }
@@ -238,18 +242,16 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                             } else {
                                 switch (dType[i]){
                                     case "int8":
-                                        if (swapBytes){
-                                            tempValue = String.valueOf(MBMaster.getInt8(id,0));
-                                        } else {
+                                        if (swapBytes)
                                             tempValue = String.valueOf(MBMaster.getInt8(id,1));
-                                        }
+                                        else
+                                            tempValue = String.valueOf(MBMaster.getInt8(id,0));
                                         break;
                                     case "uint8":
-                                        if (swapBytes){
-                                            tempValue = String.valueOf(MBMaster.getUInt8(id,0));
-                                        } else {
+                                        if (swapBytes)
                                             tempValue = String.valueOf(MBMaster.getUInt8(id,1));
-                                        }
+                                        else
+                                            tempValue = String.valueOf(MBMaster.getUInt8(id,0));
                                         break;
                                     case "int16":
                                         tempValue = String.valueOf(MBMaster.getInt16(id,0));
@@ -270,32 +272,26 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                                         tempValue = String.valueOf(MBMaster.getUInt64(id,0));
                                         break;
                                     case "int128":
-                                        if (swapBytes && !swapWords){
-                                            tempValue = String.valueOf(MBMaster.getInt128(id,0));
-                                        } else {
-                                            byte[] bytes = new byte[elem_size * elem_count];
+                                        byte[] biBytes = new byte[elem_size * elem_count];
 
-                                            for (int z = 0; z < bytes.length; z++) {
-                                                bytes[z] = (byte) MBMaster.getUInt8(id, z);
-                                            }
-
-                                            byte[] swapped = SwapCheck(bytes);
-                                            tempValue = String.valueOf(BitConverterInt128(BigInteger2binaryString(swapped)));
+                                        for (int z = 0; z < biBytes.length; z++) {
+                                            biBytes[z] = (byte) MBMaster.getUInt8(id, z);
                                         }
+
+                                        byte[] biSwapped = SwapCheck(biBytes);
+                                        tempValue = String.valueOf(BitConverterInt128(BigInteger2binaryString(biSwapped)));
+
                                         break;
                                     case "uint128":
-                                        if (swapBytes && !swapWords){
-                                            tempValue = String.valueOf(MBMaster.getUInt128(id,0));
-                                        } else {
-                                            byte[] bytes = new byte[elem_size * elem_count];
+                                        byte[] ubiBytes = new byte[elem_size * elem_count];
 
-                                            for (int z = 0; z < bytes.length; z++) {
-                                                bytes[z] = (byte) MBMaster.getUInt8(id, z);
-                                            }
-
-                                            byte[] swapped = SwapCheck(bytes);
-                                            tempValue = String.valueOf(BitConverterUInt128(BigInteger2binaryString(swapped)));
+                                        for (int z = 0; z < ubiBytes.length; z++) {
+                                            ubiBytes[z] = (byte) MBMaster.getUInt8(id, z);
                                         }
+
+                                        byte[] ubiSwapped = SwapCheck(ubiBytes);
+                                        tempValue = String.valueOf(BitConverterUInt128(BigInteger2binaryString(ubiSwapped)));
+
                                         break;
                                     case "float32":
                                         tempValue = String.valueOf(MBMaster.getFloat32(id,0));
@@ -329,19 +325,14 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                                             bytes[z] = (byte) MBMaster.getUInt8(id, z);
                                         }
 
-                                        if (swapBytes && !swapWords){
-                                            try {
-                                                tempValue = new String(bytes, "UTF-8");
-                                            } catch (UnsupportedEncodingException e) {
-                                                e.printStackTrace();
-                                            }
-                                        } else {
-                                            try {
-                                                tempValue = new String(SwapCheck(bytes), "UTF-8");
-                                            } catch (UnsupportedEncodingException e) {
-                                                e.printStackTrace();
-                                            }
+                                        byte[] swappedBytes = SwapCheck(bytes);
+
+                                        try {
+                                            tempValue = new String(swappedBytes, "UTF-8");
+                                        } catch (UnsupportedEncodingException e) {
+                                            e.printStackTrace();
                                         }
+
                                         break;
                                 }
                             }
@@ -429,13 +420,13 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
 
     private byte[] SwapCheck(byte[] bytes)
     {
-        if (!MainActivity.cbSwapWordsChecked && bytes.length > 3)
+        if (MainActivity.cbSwapWordsChecked && bytes.length > 3)
         {
             for (int i = 0; i < bytes.length / 2; i++)
             {
                 byte tempByte = bytes[i];
-                bytes[i] = bytes[bytes.length / 2 + i];
-                bytes[bytes.length / 2 + i] = tempByte;
+                bytes[i] = bytes[bytes.length - i - 1];
+                bytes[bytes.length - i - 1] = tempByte;
             }
         }
 

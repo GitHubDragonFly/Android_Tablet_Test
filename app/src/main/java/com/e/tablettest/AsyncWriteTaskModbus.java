@@ -59,27 +59,32 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
             switch (dataType) {
                 case "bool":
                     elem_size = 1;
+                    elem_count = 1;
                     break;
                 case "int8":
                 case "uint8":
                 case "int16":
                 case "uint16":
                     elem_size = 2;
+                    elem_count = 1;
                     break;
                 case "int32":
                 case "uint32":
                 case "float32":
                 case "bool array":
-                    elem_size = 4;
+                    elem_size = 2;
+                    elem_count = 2;
                     break;
                 case "int64":
                 case "uint64":
                 case "float64":
-                    elem_size = 8;
+                    elem_size = 2;
+                    elem_count = 4;
                     break;
                 case "int128":
                 case "uint128":
-                    elem_size = 16;
+                    elem_size = 2;
+                    elem_count = 8;
                     break;
                 case "string":
                     elem_size = 2;
@@ -143,17 +148,10 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                         } else {
                             System.arraycopy(tempBytes, 0, bytes, bitIndex, tempBytes.length);
 
-                            if (swapBytes && swapWords){
-                                for (int z = 0; z < bytes.length; z++) {
-                                    MBWriteMaster.setUInt8(tag_id, z, bytes[z]);
-                                }
+                            byte[] swappedBytes = SwapCheck(bytes);
 
-                            } else {
-                                byte[] swappedBytes = SwapCheck(bytes);
-
-                                for (int z = 0; z < swappedBytes.length; z++) {
-                                    MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
-                                }
+                            for (int z = 0; z < swappedBytes.length; z++) {
+                                MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
                             }
                         }
                     } else if (dataType.equals("int128") || dataType.equals("uint128")){
@@ -209,10 +207,51 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                             MBWriteMaster.setUInt64(tag_id, 0, new BigInteger(params[3]));
                             break;
                         case "int128":
-                            MBWriteMaster.setInt128(tag_id, 0, new BigInteger(params[3]));
+                            BigInteger bi = new BigInteger(params[3]);
+
+                            if (bi.signum() < 0){
+                                bi = (new BigInteger("340282366920938463463374607431768211456")).add(bi);
+                            }
+
+                            byte[] biBytes = bi.toByteArray();
+                            byte[] tempbiBytes = new byte[16];
+
+                            System.arraycopy(biBytes, 0, tempbiBytes, (16 - biBytes.length), biBytes.length);
+
+                            byte[] biSwappedBytes = SwapCheck(tempbiBytes);
+
+                            for (int j = 0; j < biSwappedBytes.length; j++){
+                                short value;
+
+                                if (biSwappedBytes[j] < 0)
+                                    value = (short)(biSwappedBytes[j] & 0xFF);
+                                else
+                                    value = biSwappedBytes[j];
+
+                                MBWriteMaster.setUInt8(tag_id, j, value);
+                            }
+
                             break;
                         case "uint128":
-                            MBWriteMaster.setUInt128(tag_id, 0, new BigInteger(params[3]));
+                            BigInteger ubi = new BigInteger(params[3]);
+                            byte[] ubiBytes = ubi.toByteArray();
+                            byte[] tempubiBytes = new byte[16];
+
+                            System.arraycopy(ubiBytes, 0, tempubiBytes, (16 - ubiBytes.length), ubiBytes.length);
+
+                            byte[] ubiSwappedBytes = SwapCheck(tempubiBytes);
+
+                            for (int j = 0; j < ubiSwappedBytes.length; j++){
+                                short value;
+
+                                if (ubiSwappedBytes[j] < 0)
+                                    value = (short)(ubiSwappedBytes[j] & 0xFF);
+                                else
+                                    value = ubiSwappedBytes[j];
+
+                                MBWriteMaster.setUInt8(tag_id, j, value);
+                            }
+
                             break;
                         case "float32":
                             MBWriteMaster.setFloat32(tag_id, 0, Float.parseFloat(params[3]));
@@ -235,18 +274,12 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
 
                             System.arraycopy(tempBytes, 0, bytes, 0, tempBytes.length);
 
-                            if (swapBytes && swapWords){
-                                for (int z = 0; z < bytes.length; z++) {
-                                    MBWriteMaster.setUInt8(tag_id, z, bytes[z]);
-                                }
+                            byte[] swappedBytes = SwapCheck(bytes);
 
-                            } else {
-                                byte[] swappedBytes = SwapCheck(bytes);
-
-                                for (int z = 0; z < swappedBytes.length; z++) {
-                                    MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
-                                }
+                            for (int z = 0; z < swappedBytes.length; z++) {
+                                MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
                             }
+
                             break;
                     }
                 }
@@ -295,7 +328,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
 
     private byte[] SwapCheck(byte[] bytes)
     {
-        if (!MainActivity.cbSwapWordsChecked && bytes.length > 3)
+        if (MainActivity.cbSwapWordsChecked && bytes.length > 3)
         {
             for (int i = 0; i < bytes.length / 2; i++)
             {
