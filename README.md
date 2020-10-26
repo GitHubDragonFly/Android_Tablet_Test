@@ -34,10 +34,10 @@ It might be even simpler to just copy the existing libplctag AAR file to a diffe
 - As for AB tags, you will need to specify the Custom String Length when the "custom string" data type is selected.
 - As for Modbus tags, you will need to specify the String Length when the "string" data type is selected.
 - Modbus addressing: CO = Coil, DI = Discrete Input, IR = Input Register, HR = Holding Register.
-- Error handling has been built into the app but is also relying on the libplctag library itself.
+- Some error handling has been built into the app but it is also relying on the libplctag library itself for additional error handling.
 
-Not everything could be tested by me, since I don't have access to all the different PLCs supported by the libplctag library.
-So, there might be bugs in the app. See the libplctag website for all PLCs supported by the library.
+There might be bugs in the app. Not everything could be tested by me, since I don't have access to all the different PLCs supported by the libplctag library.
+See the libplctag website for all PLCs supported by the library.
 
 Screenshots folder has pictures of this app running inside the Android x86 emulator tablet (Nexus 7 (2012) API 25).
 The app was also tested as working on an old RCA tablet with arm processor and Android 5.0.
