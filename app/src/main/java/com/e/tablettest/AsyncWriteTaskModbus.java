@@ -10,6 +10,11 @@ import java.math.BigInteger;
 public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
     private static final String TAG = "Modbus Write Activity";
 
+    BigInteger BigIntegerMin = new BigInteger("-170141183460469231731687303715884105728");
+    BigInteger BigIntegerMax = new BigInteger("170141183460469231731687303715884105727");
+    BigInteger BigUIntegerMin = new BigInteger("0");
+    BigInteger BigUIntegerMax = new BigInteger("340282366920938463463374607431768211455");
+
     public String value = "";
     private int elem_size, elem_count = 1, strLength;
     private Tag MBWriteMaster = new Tag();
@@ -23,9 +28,6 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
         String gateway_unitId = params[0];
         int timeout = Integer.parseInt(params[1]);
         int tag_id = -1, bitIndex = -1;
-
-        boolean swapBytes = MainActivity.cbSwapBytesChecked;
-        boolean swapWords = MainActivity.cbSwapWordsChecked;
 
         while (!isCancelled()){
             String name = params[2].substring(0, params[2].indexOf(';'));
@@ -88,7 +90,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                     break;
                 case "string":
                     elem_size = 2;
-                    elem_count = (int)Math.ceil((float)strLength / (float)elem_size);
+                    elem_count = (int)Math.ceil((float)strLength / 2F);
                     break;
             }
 
@@ -110,6 +112,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
 
                 if (bitIndex > -1){
                     int BitValueToWrite = 0;
+                    byte[] tempBytes = new byte[]{};
 
                     if (!dataType.equals("string")){
                         if (params[3].equals("1") || params[3].equals("true") || params[3].equals("True")){
@@ -123,16 +126,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                             Log.v(TAG,"doInBackground Finished");
                             return "FINISHED";
                         }
-                    }
-
-                    if (dataType.equals("string")){
-                        byte[] bytes = new byte[elem_size * elem_count];
-                        byte[] tempBytes = new byte[0];
-
-                        for (int z = 0; z < bytes.length; z++) {
-                            bytes[z] = (byte) MBWriteMaster.getUInt8(tag_id, z);
-                        }
-
+                    } else{
                         try {
                             tempBytes = params[3].getBytes("UTF-8");
                         } catch (UnsupportedEncodingException e) {
@@ -145,37 +139,51 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                             MBWriteMaster.close(tag_id);
                             Log.v(TAG,"doInBackground Finished");
                             return "FINISHED";
-                        } else {
-                            System.arraycopy(tempBytes, 0, bytes, bitIndex, tempBytes.length);
+                        }
+                    }
 
-                            byte[] swappedBytes = SwapCheck(bytes);
+                    if (dataType.equals("string")){
+                        int zeroBytes = 0;
+                        byte[] bytes = new byte[elem_size * elem_count];
 
-                            for (int z = 0; z < swappedBytes.length; z++) {
-                                MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
-                            }
+                        for (int i = 0; i < bytes.length; i++){
+                            bytes[i] = (byte)MBWriteMaster.getUInt8(tag_id, i);
+                        }
+
+                        byte[] swappedBytes = SwapCheck(bytes);
+
+                        for (byte swappedByte : swappedBytes) {
+                            if (swappedByte == 0)
+                                zeroBytes += 1;
+                            else
+                                break;
+                        }
+
+                        if (MainActivity.cbSwapBytesChecked){
+                            if (MainActivity.cbSwapWordsChecked){
+                                MBWriteMaster.setUInt8(tag_id, (2 * elem_count) - 1 - bitIndex - zeroBytes, tempBytes[0]);
+                            } else
+                                MBWriteMaster.setUInt8(tag_id, bitIndex, tempBytes[0]);
+                        } else{
+                            if (MainActivity.cbSwapWordsChecked)
+                                MBWriteMaster.setUInt8(tag_id, (2 * elem_count) - bitIndex - zeroBytes, tempBytes[0]);
+                            else
+                                MBWriteMaster.setUInt8(tag_id, bitIndex + zeroBytes - 1, tempBytes[0]);
                         }
                     } else if (dataType.equals("int128") || dataType.equals("uint128")){
-                        if (swapBytes && swapWords){
-                            MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
-                        } else {
-                            byte[] bytes = new byte[elem_size * elem_count];
+                        int quot = (int)Math.floor(bitIndex / 8F);
+                        int remainder = bitIndex % 8;
 
-                            for (int z = 0; z < bytes.length; z++) {
-                                bytes[z] = (byte) MBWriteMaster.getUInt8(tag_id, z);
-                            }
-
-                            byte[] swappedBytes = SwapCheck(bytes);
-
-                            int byte2change = (int)Math.floor((float)bitIndex / 8F);
-
-                            if (BitValueToWrite == 1)
-                                swappedBytes[byte2change] |= 1 << (bitIndex - (byte2change * 8));
+                        if (MainActivity.cbSwapBytesChecked){
+                            if (MainActivity.cbSwapWordsChecked){
+                                MBWriteMaster.setBit(tag_id, 127 - bitIndex, BitValueToWrite);
+                            } else
+                                MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
+                        } else{
+                            if (MainActivity.cbSwapWordsChecked)
+                                MBWriteMaster.setBit(tag_id, 127 - bitIndex, BitValueToWrite);
                             else
-                                swappedBytes[byte2change] &= ~(1 << (bitIndex - (byte2change * 8)));
-
-                            for (int z = 0; z < swappedBytes.length; z++) {
-                                MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
-                            }
+                                MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
                         }
                     } else {
                         MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
@@ -200,71 +208,80 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                         case "uint32":
                             MBWriteMaster.setUInt32(tag_id, 0, Long.parseLong(params[3]));
                             break;
+                        case "float32":
+                            MBWriteMaster.setFloat32(tag_id, 0, Float.parseFloat(params[3]));
+                            break;
                         case "int64":
                             MBWriteMaster.setInt64(tag_id, 0, Long.parseLong(params[3]));
                             break;
                         case "uint64":
                             MBWriteMaster.setUInt64(tag_id, 0, new BigInteger(params[3]));
                             break;
+                        case "float64":
+                            MBWriteMaster.setFloat64(tag_id, 0, Double.parseDouble(params[3]));
+                            break;
                         case "int128":
-                            BigInteger bi = new BigInteger(params[3]);
+                            BigInteger value2write = new BigInteger(params[3]);
+                            int comp1 = value2write.compareTo(BigIntegerMin);
+                            int comp2 = value2write.compareTo(BigIntegerMax);
 
-                            if (bi.signum() < 0){
-                                bi = (new BigInteger("340282366920938463463374607431768211456")).add(bi);
-                            }
+                            if (comp1 < 0 && comp2 > 0){
+                                value = "MB Write Failed";
+                                publishProgress();
+                                MBWriteMaster.close(tag_id);
+                                Log.v(TAG,"doInBackground Finished");
+                                return "FINISHED";
+                            } else{
+                                byte[] value2writeBytes = value2write.toByteArray();
+                                byte[] valueBytes = new byte[16];
 
-                            byte[] biBytes = bi.toByteArray();
-                            byte[] tempbiBytes = new byte[16];
+                                System.arraycopy(value2writeBytes, 0, valueBytes, 0, value2writeBytes.length);
 
-                            System.arraycopy(biBytes, 0, tempbiBytes, (16 - biBytes.length), biBytes.length);
+                                for (int i = 0; i < valueBytes.length / 2; i++)
+                                {
+                                    byte tempByte = valueBytes[i];
+                                    valueBytes[i] = valueBytes[valueBytes.length - i - 1];
+                                    valueBytes[valueBytes.length - i - 1] = tempByte;
+                                }
 
-                            byte[] biSwappedBytes = SwapCheck(tempbiBytes);
+                                byte[] swappedBytes = SwapCheck(valueBytes);
 
-                            for (int j = 0; j < biSwappedBytes.length; j++){
-                                short value;
-
-                                if (biSwappedBytes[j] < 0)
-                                    value = (short)(biSwappedBytes[j] & 0xFF);
-                                else
-                                    value = biSwappedBytes[j];
-
-                                MBWriteMaster.setUInt8(tag_id, j, value);
+                                for (int k = 0; k < swappedBytes.length; k++){
+                                    MBWriteMaster.setUInt8(tag_id, k, swappedBytes[k]);
+                                }
                             }
 
                             break;
                         case "uint128":
-                            BigInteger ubi = new BigInteger(params[3]);
-                            byte[] ubiBytes = ubi.toByteArray();
-                            byte[] tempubiBytes = new byte[16];
+                            BigInteger uvalue2write = new BigInteger(params[3]);
+                            int ucomp1 = uvalue2write.compareTo(BigUIntegerMin);
+                            int ucomp2 = uvalue2write.compareTo(BigUIntegerMax);
 
-                            System.arraycopy(ubiBytes, 0, tempubiBytes, (16 - ubiBytes.length), ubiBytes.length);
+                            if (ucomp1 < 0 && ucomp2 > 0){
+                                value = "MB Write Failed";
+                                publishProgress();
+                                MBWriteMaster.close(tag_id);
+                                Log.v(TAG,"doInBackground Finished");
+                                return "FINISHED";
+                            } else{
+                                byte[] uvalue2writeBytes = uvalue2write.toByteArray();
+                                byte[] uvalueBytes = new byte[16];
 
-                            byte[] ubiSwappedBytes = SwapCheck(tempubiBytes);
+                                System.arraycopy(uvalue2writeBytes, 0, uvalueBytes, 0, uvalue2writeBytes.length);
 
-                            for (int j = 0; j < ubiSwappedBytes.length; j++){
-                                short value;
+                                byte[] swappedBytes = SwapCheck(uvalueBytes);
 
-                                if (ubiSwappedBytes[j] < 0)
-                                    value = (short)(ubiSwappedBytes[j] & 0xFF);
-                                else
-                                    value = ubiSwappedBytes[j];
-
-                                MBWriteMaster.setUInt8(tag_id, j, value);
+                                for (int k = 0; k < swappedBytes.length; k++){
+                                    MBWriteMaster.setUInt8(tag_id, k, swappedBytes[k]);
+                                }
                             }
-
-                            break;
-                        case "float32":
-                            MBWriteMaster.setFloat32(tag_id, 0, Float.parseFloat(params[3]));
-                            break;
-                        case "float64":
-                            MBWriteMaster.setFloat64(tag_id, 0, Double.parseDouble(params[3]));
                             break;
                         case "bool":
                             MBWriteMaster.setBit(tag_id, 0, Integer.parseInt(params[3]));
                             break;
                         case "string":
                             byte[] bytes = new byte[elem_size * elem_count];
-                            byte[] tempBytes = new byte[0];
+                            byte[] tempBytes = new byte[]{};
 
                             try {
                                 tempBytes = params[3].getBytes("UTF-8");

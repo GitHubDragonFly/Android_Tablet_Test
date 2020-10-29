@@ -582,6 +582,7 @@ public class AsyncReadTaskAB extends AsyncTask<ArrayList<ArrayList<String>>, Voi
                 if (!values[i].equals(tempValue)){
                     values[i] = tempValue.trim();
                     value = tempValue.trim();
+                    tempValue = "";
 
                     callerID = params[0].get(2).get(i);
 

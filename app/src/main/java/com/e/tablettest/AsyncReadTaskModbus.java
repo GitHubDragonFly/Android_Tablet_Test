@@ -15,7 +15,7 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
     private static final String TAG = "Modbus Read Activity";
 
     String value = "", tempValue = "", callerID = "", gateway_path = "", name = "", dataType = "";
-    int tag_id, timeout, number_of_addresses, elem_size, elem_count, strLength;
+    int tag_id, timeout, number_of_addresses, elem_size, elem_count, stringLength;
     HashMap<String, Integer> dict = new HashMap<>();
     private Tag MBMaster = new Tag();
 
@@ -41,10 +41,12 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
         String[] tags = new String[number_of_addresses];
         String[] dType = new String[number_of_addresses];
         int[] bitIndex = new int[number_of_addresses];
+        int[] strLength = new int[number_of_addresses];
         Arrays.fill(values, "");
         Arrays.fill(tags, "");
         Arrays.fill(dType, "");
         Arrays.fill(bitIndex, -1);
+        Arrays.fill(strLength, -1);
 
         boolean swapBytes = MainActivity.cbSwapBytesChecked;
         boolean swapWords = MainActivity.cbSwapWordsChecked;
@@ -68,9 +70,9 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                         dataType = fullString.substring(fullString.indexOf(';') + 1);
 
                     if (dataType.equals("string")){
-                        strLength = Integer.parseInt(fullString.substring(fullString.lastIndexOf(';') + 1));
+                        stringLength = Integer.parseInt(fullString.substring(fullString.lastIndexOf(';') + 1));
                         if (bitIndex[i] > 0)
-                            bitIndex[i] --;
+                            bitIndex[i] -= 1;
                     }
 
                     switch (dataType) {
@@ -141,14 +143,8 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                             break;
                         case "string":
                             elem_size = 2;
-                            elem_count = (int)Math.ceil((float)strLength / (float)elem_size);
-
-                            if (swapBytes){
-                                byteOrder = int16byteOrder[0];
-                            } else {
-                                byteOrder = int16byteOrder[1];
-                            }
-
+                            elem_count = (int)Math.ceil((float)stringLength / 2F);
+                            strLength[i] = elem_size * elem_count;
                             break;
                     }
 
@@ -190,54 +186,69 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                             MBMaster.read(id, timeout);
 
                             if (bitIndex[i] > -1){
-                                switch (dType[i]) {
-                                    case "int8":
-                                    case "uint8":
-                                    case "int16":
-                                    case "uint16":
-                                        tempValue = ExtractInt16Bit((short) MBMaster.getUInt16(id, 0), bitIndex[i]);
-                                        break;
-                                    case "int32":
-                                    case "uint32":
-                                    case "float32":
-                                        tempValue = ExtractInt32Bit((int) MBMaster.getUInt32(id, 0), bitIndex[i]);
-                                        break;
-                                    case "int64":
-                                    case "uint64":
-                                    case "float64":
-                                        tempValue = ExtractInt64Bit(MBMaster.getUInt64(id, 0).longValue(), bitIndex[i]);
-                                        break;
-                                    case "int128":
-                                    case "uint128":
-                                        byte[] biBytes = new byte[elem_size * elem_count];
+                                if (dType[i].equals("string")){
+                                    byte[] bytes = new byte[strLength[i]];
 
-                                        for (int z = 0; z < biBytes.length; z++) {
-                                            biBytes[z] = (byte) MBMaster.getUInt8(id, z);
-                                        }
-                                        tempValue = ExtractInt128Bit(SwapCheck(biBytes), bitIndex[i]);
+                                    for (int z = 0; z < bytes.length; z++) {
+                                        bytes[z] = (byte) MBMaster.getUInt8(id, z);
+                                    }
 
-                                        break;
-                                    case "string":
-                                        byte[] bytes = new byte[elem_size * elem_count];
+                                    byte[] swappedBytes = SwapCheck(bytes);
 
-                                        for (int z = 0; z < bytes.length; z++) {
-                                            bytes[z] = (byte) MBMaster.getUInt8(id, z);
-                                        }
+                                    try {
+                                        tempValue = (new String(swappedBytes, "UTF-8")).trim();
+                                        tempValue = String.valueOf(tempValue.charAt(bitIndex[i]));
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else if (dType[i].equals("int128") || dType[i].equals("uint128")){
+                                    byte[] bytes = new byte[16];
 
-                                        if (!swapBytes && swapWords){
-                                            try {
-                                                tempValue = new String(new byte[] {SwapCheck(bytes)[bitIndex[i]]}, "UTF-8");
-                                            } catch (UnsupportedEncodingException e) {
-                                                e.printStackTrace();
-                                            }
+                                    for (int z = 0; z < bytes.length; z++) {
+                                        bytes[z] = (byte) MBMaster.getUInt8(id, z);
+                                    }
+
+                                    byte[] swappedBytes = SwapCheck(bytes);
+
+                                    boolean bit = (new BigInteger(swappedBytes).testBit(bitIndex[i]));
+
+                                    if (MainActivity.boolDisplay.equals("One : Zero")){
+                                        if (bit){
+                                            tempValue = "1";
                                         } else {
-                                            try {
-                                                tempValue = new String(new byte[] {bytes[bitIndex[i]]}, "UTF-8");
-                                            } catch (UnsupportedEncodingException e) {
-                                                e.printStackTrace();
-                                            }
+                                            tempValue = "0";
                                         }
-                                        break;
+                                    } else if (MainActivity.boolDisplay.equals("On : Off")){
+                                        if (bit){
+                                            tempValue = "On";
+                                        } else {
+                                            tempValue = "Off";
+                                        }
+                                    } else {
+                                        if (bit){
+                                            tempValue = "True";
+                                        } else {
+                                            tempValue = "False";
+                                        }
+                                    }
+                                } else{
+                                    int val = MBMaster.getBit(id,0);
+
+                                    if (MainActivity.boolDisplay.equals("One : Zero")){
+                                        tempValue = String.valueOf(val);
+                                    } else if (MainActivity.boolDisplay.equals("On : Off")){
+                                        if (val == 1){
+                                            tempValue = "On";
+                                        } else {
+                                            tempValue = "Off";
+                                        }
+                                    } else {
+                                        if (val == 1){
+                                            tempValue = "True";
+                                        } else {
+                                            tempValue = "False";
+                                        }
+                                    }
                                 }
                             } else {
                                 switch (dType[i]){
@@ -265,39 +276,33 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                                     case "uint32":
                                         tempValue = String.valueOf(MBMaster.getUInt32(id,0));
                                         break;
+                                    case "float32":
+                                        tempValue = String.valueOf(MBMaster.getFloat32(id,0));
+                                        break;
                                     case "int64":
                                         tempValue = String.valueOf(MBMaster.getInt64(id,0));
                                         break;
                                     case "uint64":
                                         tempValue = String.valueOf(MBMaster.getUInt64(id,0));
                                         break;
-                                    case "int128":
-                                        byte[] biBytes = new byte[elem_size * elem_count];
-
-                                        for (int z = 0; z < biBytes.length; z++) {
-                                            biBytes[z] = (byte) MBMaster.getUInt8(id, z);
-                                        }
-
-                                        byte[] biSwapped = SwapCheck(biBytes);
-                                        tempValue = String.valueOf(BitConverterInt128(BigInteger2binaryString(biSwapped)));
-
-                                        break;
-                                    case "uint128":
-                                        byte[] ubiBytes = new byte[elem_size * elem_count];
-
-                                        for (int z = 0; z < ubiBytes.length; z++) {
-                                            ubiBytes[z] = (byte) MBMaster.getUInt8(id, z);
-                                        }
-
-                                        byte[] ubiSwapped = SwapCheck(ubiBytes);
-                                        tempValue = String.valueOf(BitConverterUInt128(BigInteger2binaryString(ubiSwapped)));
-
-                                        break;
-                                    case "float32":
-                                        tempValue = String.valueOf(MBMaster.getFloat32(id,0));
-                                        break;
                                     case "float64":
                                         tempValue = String.valueOf(MBMaster.getFloat64(id,0));
+                                        break;
+                                    case "int128":
+                                    case "uint128":
+                                        byte[] bytes = new byte[16];
+
+                                        for (int z = 0; z < bytes.length; z++) {
+                                            bytes[z] = (byte) MBMaster.getUInt8(id, z);
+                                        }
+
+                                        byte[] swappedBytes = SwapCheck(bytes);
+
+                                        if (dType[i].equals("int128"))
+                                            tempValue = String.valueOf(BitConverterInt128(BigInteger2binaryString(swappedBytes)));
+                                        else
+                                            tempValue = String.valueOf(BitConverterUInt128(BigInteger2binaryString(swappedBytes)));
+
                                         break;
                                     case "bool":
                                         int val = MBMaster.getBit(id,0);
@@ -319,16 +324,16 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                                         }
                                         break;
                                     case "string":
-                                        byte[] bytes = new byte[elem_size * elem_count];
+                                        byte[] strBytes = new byte[strLength[i]];
 
-                                        for (int z = 0; z < bytes.length; z++) {
-                                            bytes[z] = (byte) MBMaster.getUInt8(id, z);
+                                        for (int z = 0; z < strBytes.length; z++) {
+                                            strBytes[z] = (byte) MBMaster.getUInt8(id, z);
                                         }
 
-                                        byte[] swappedBytes = SwapCheck(bytes);
+                                        byte[] strSwappedBytes = SwapCheck(strBytes);
 
                                         try {
-                                            tempValue = new String(swappedBytes, "UTF-8");
+                                            tempValue = (new String(strSwappedBytes, "UTF-8")).trim();
                                         } catch (UnsupportedEncodingException e) {
                                             e.printStackTrace();
                                         }
@@ -364,8 +369,9 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
 
                 // If the value has changed then publish progress on UI thread
                 if (!values[i].equals(tempValue)){
-                    values[i] = tempValue;
-                    value = tempValue;
+                    values[i] = tempValue.trim();
+                    value = tempValue.trim();
+                    tempValue = "";
                     callerID = params[0].get(2).get(i);
 
                     publishProgress();
@@ -485,101 +491,5 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
         }
 
         return UInt128;
-    }
-
-    private String ExtractInt128Bit(byte[] value, int BitToReturn)
-    {
-        char[] bitString = BigInteger2binaryString(value);
-
-        if (bitString[127 - BitToReturn] == '0')
-        {
-            if (MainActivity.boolDisplay.equals("One : Zero"))
-                return "0";
-            else if (MainActivity.boolDisplay.equals("On : Off"))
-                return "Off";
-            else
-                return "False";
-        }
-        else
-        {
-            if (MainActivity.boolDisplay.equals("One : Zero"))
-                return "1";
-            else if (MainActivity.boolDisplay.equals("On : Off"))
-                return "On";
-            else
-                return "True";
-        }
-    }
-
-    private String ExtractInt64Bit(long value, int BitToReturn)
-    {
-        char[] bitString = String.format("%64s", Long.toBinaryString(value)).replace(' ', '0').toCharArray();
-
-        if (bitString[63 - BitToReturn] == '0')
-        {
-            if (MainActivity.boolDisplay.equals("One : Zero"))
-                return "0";
-            else if (MainActivity.boolDisplay.equals("On : Off"))
-                return "Off";
-            else
-                return "False";
-        }
-        else
-        {
-            if (MainActivity.boolDisplay.equals("One : Zero"))
-                return "1";
-            else if (MainActivity.boolDisplay.equals("On : Off"))
-                return "On";
-            else
-                return "True";
-        }
-    }
-
-    private String ExtractInt32Bit(int value, int BitToReturn)
-    {
-        char[] bitString = String.format("%32s", Integer.toBinaryString(value)).replace(' ', '0').toCharArray();
-
-        if (bitString[31 - BitToReturn] == '0')
-        {
-            if (MainActivity.boolDisplay.equals("One : Zero"))
-                return "0";
-            else if (MainActivity.boolDisplay.equals("On : Off"))
-                return "Off";
-            else
-                return "False";
-        }
-        else
-        {
-            if (MainActivity.boolDisplay.equals("One : Zero"))
-                return "1";
-            else if (MainActivity.boolDisplay.equals("On : Off"))
-                return "On";
-            else
-                return "True";
-        }
-    }
-
-    private String ExtractInt16Bit(short value, int BitToReturn)
-    {
-        char[] bitString = String.format("%16s", Integer.toBinaryString(0xFFFF & value)).replace(' ', '0').toCharArray();
-
-        if (bitString[15 - BitToReturn] == '0')
-        {
-            if (MainActivity.boolDisplay.equals("One : Zero"))
-                return "0";
-            else if (MainActivity.boolDisplay.equals("On : Off"))
-                return "Off";
-            else
-                return "False";
-        }
-        else
-        {
-            if (MainActivity.boolDisplay.equals("One : Zero"))
-                return "1";
-            else if (MainActivity.boolDisplay.equals("On : Off"))
-                return "On";
-            else
-                return "True";
-        }
     }
 }
