@@ -171,16 +171,34 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                                 MBWriteMaster.setUInt8(tag_id, bitIndex + zeroBytes - 1, tempBytes[0]);
                         }
                     } else if (dataType.equals("int128") || dataType.equals("uint128")){
+                        int zeroBytes = 0;
+                        byte[] bytes = new byte[elem_size * elem_count];
+
+                        for (int i = 0; i < bytes.length; i++){
+                            bytes[i] = (byte)MBWriteMaster.getUInt8(tag_id, i);
+                        }
+
+                        byte[] swappedBytes = SwapCheck(bytes);
+
+                        for (byte swappedByte : swappedBytes) {
+                            if (swappedByte == 0)
+                                zeroBytes += 1;
+                            else
+                                break;
+                        }
+
+                        int quot = (int)Math.floor(bitIndex / 8F);
+
                         if (MainActivity.cbSwapBytesChecked){
                             if (MainActivity.cbSwapWordsChecked){
-                                MBWriteMaster.setBit(tag_id, 127 - bitIndex, BitValueToWrite);
+                                MBWriteMaster.setBit(tag_id, 127 - bitIndex - zeroBytes * 8 + quot * 16, BitValueToWrite);
                             } else
-                                MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
+                                MBWriteMaster.setBit(tag_id, bitIndex - quot * 16 + zeroBytes * 8 + 8, BitValueToWrite);
                         } else{
                             if (MainActivity.cbSwapWordsChecked)
-                                MBWriteMaster.setBit(tag_id, 128 - bitIndex, BitValueToWrite);
+                                MBWriteMaster.setBit(tag_id, 128 - bitIndex - zeroBytes * 8 + quot * 16, BitValueToWrite);
                             else
-                                MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
+                                MBWriteMaster.setBit(tag_id, bitIndex - quot * 16 + zeroBytes * 8, BitValueToWrite);
                         }
                     } else {
                         MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
@@ -232,14 +250,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                                 byte[] value2writeBytes = value2write.toByteArray();
                                 byte[] valueBytes = new byte[16];
 
-                                System.arraycopy(value2writeBytes, 0, valueBytes, 0, value2writeBytes.length);
-
-                                for (int i = 0; i < valueBytes.length / 2; i++)
-                                {
-                                    byte tempByte = valueBytes[i];
-                                    valueBytes[i] = valueBytes[valueBytes.length - i - 1];
-                                    valueBytes[valueBytes.length - i - 1] = tempByte;
-                                }
+                                System.arraycopy(value2writeBytes, 0, valueBytes, 16 - value2writeBytes.length, value2writeBytes.length);
 
                                 byte[] swappedBytes = SwapCheck(valueBytes);
 
@@ -264,7 +275,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                                 byte[] uvalue2writeBytes = uvalue2write.toByteArray();
                                 byte[] uvalueBytes = new byte[16];
 
-                                System.arraycopy(uvalue2writeBytes, 0, uvalueBytes, 0, uvalue2writeBytes.length);
+                                System.arraycopy(uvalue2writeBytes, 0, uvalueBytes, 16 - uvalue2writeBytes.length, uvalue2writeBytes.length);
 
                                 byte[] swappedBytes = SwapCheck(uvalueBytes);
 
