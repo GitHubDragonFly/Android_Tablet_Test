@@ -171,9 +171,6 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                                 MBWriteMaster.setUInt8(tag_id, bitIndex + zeroBytes - 1, tempBytes[0]);
                         }
                     } else if (dataType.equals("int128") || dataType.equals("uint128")){
-                        int quot = (int)Math.floor(bitIndex / 8F);
-                        int remainder = bitIndex % 8;
-
                         if (MainActivity.cbSwapBytesChecked){
                             if (MainActivity.cbSwapWordsChecked){
                                 MBWriteMaster.setBit(tag_id, 127 - bitIndex, BitValueToWrite);
@@ -181,7 +178,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                                 MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
                         } else{
                             if (MainActivity.cbSwapWordsChecked)
-                                MBWriteMaster.setBit(tag_id, 127 - bitIndex, BitValueToWrite);
+                                MBWriteMaster.setBit(tag_id, 128 - bitIndex, BitValueToWrite);
                             else
                                 MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
                         }
