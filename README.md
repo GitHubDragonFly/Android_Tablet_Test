@@ -44,6 +44,16 @@ See the libplctag website for all PLCs supported by the library.
 Screenshots folder has pictures of this app running inside the Android x86 emulator tablet (Nexus 7 (2012) API 25).
 The app was also tested as working on an old RCA tablet with arm processor and Android 5.0.
 
+# Build
+
+All it takes is to:
+
+- Download and install Android Studio.
+- Download and extract the zip file of this project.
+- Open this as an existing project in Android Studio and, on the menu, do a Build/Rebuild Project.
+- Locate created APK file in this folder: app/build/outputs/apk/free/debug.
+- Copy the APK over to your tablet and install it (you might need to enable the "Install from Unknown Sources" option).
+
 # Licensing
 This is all dual licensed under Mozilla Public License 2.0 and GNU Lesser/Library General Public License 2.1 to cover for the use of libplctag and jna libraries.
 
