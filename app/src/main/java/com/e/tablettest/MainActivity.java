@@ -336,7 +336,9 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 }
                 break;
             case R.id.spinnerCLGXTags:
-                if (!(spinCLGXTags.getSelectedItem().toString().startsWith("*") || spinCLGXTags.getSelectedItem().toString().startsWith("Failed"))){
+                if (!(spinCLGXTags.getSelectedItem().toString().startsWith("*") || spinCLGXTags.getSelectedItem().toString().startsWith("Failed") ||
+                        spinCLGXTags.getSelectedItem().toString().equals("Controller + Program Tags"))) {
+
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("Selected CLGX Tag", spinCLGXTags.getSelectedItem().toString());
                     clipboard.setPrimaryClip(clip);
@@ -379,6 +381,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         } else {
             return;
         }
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.ab_tags_please_wait));
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapter.notifyDataSetChanged();
+        spinCLGXTags.setAdapter(dataAdapter);
 
         myTaskGetCLGXTags.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
 
