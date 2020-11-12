@@ -43,6 +43,14 @@
     <string name="osArchHint">OS Arch</string>
     <string name="platformArchHint">Platform Arch</string>
 
+    <string-array name="ab_tags">
+        <item>Controller + Program Tags</item>
+    </string-array>
+
+    <string-array name="ab_tags_please_wait">
+        <item>Please wait…</item>
+    </string-array>
+
     <string-array name="ab_cpu">
         <item>controllogix</item>
         <item>logixpccc</item>
