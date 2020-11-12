@@ -984,6 +984,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/rounded_rectangle_darker_gray"
+        android:entries="@array/ab_tags"
         android:focusable="auto"
         android:focusableInTouchMode="true"
         android:orientation="horizontal"
