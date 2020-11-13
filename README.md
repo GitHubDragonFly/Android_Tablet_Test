@@ -59,3 +59,9 @@ This is all dual licensed under Mozilla Public License 2.0 and GNU Lesser/Librar
 
 # Trademarks
 Any and all trademarks, either directly or indirectly mentioned in this project, belong to their respective owners.
+
+# Useful Resources
+The forum of AdvancedHMI website, which is another open source project providing communication with a large number of different PLCs:
+
+https://www.advancedhmi.com/forum/
+
