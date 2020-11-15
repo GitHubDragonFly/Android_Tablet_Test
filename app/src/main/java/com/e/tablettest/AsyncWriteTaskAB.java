@@ -152,11 +152,30 @@ public class AsyncWriteTaskAB extends AsyncTask<String, Void, String> {
             ABWriteMaster.read(tag_id, timeout);
 
             if (bitIndex > -1){
-                if (dataType.equals("custom string") || dataType.equals("string")){
+                if (dataType.equals("custom string") || (dataType.equals("string") && cpu.equals("controllogix"))) {
                     try {
                         ABWriteMaster.setUInt8(tag_id, bitIndex + 3, params[3].getBytes("UTF-8")[0]);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
+                    }
+                } else if (dataType.equals("string")){
+                    if (cpu.equals("micro800")) {
+                        try {
+                            ABWriteMaster.setUInt8(tag_id, bitIndex + 1, params[3].getBytes("UTF-8")[0]);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            int result = bitIndex % 2;
+
+                            if (result == 0)
+                                ABWriteMaster.setUInt8(tag_id, bitIndex, params[3].getBytes("UTF-8")[0]);
+                            else
+                                ABWriteMaster.setUInt8(tag_id, bitIndex + 2, params[3].getBytes("UTF-8")[0]);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                     }
                 } else {
                     if (!(params[3].equals("0") || params[3].equals("false") || params[3].equals("False") ||
@@ -241,39 +260,39 @@ public class AsyncWriteTaskAB extends AsyncTask<String, Void, String> {
                                 e.printStackTrace();
                             }
 
-                            assert strBytes != null;
+                            if (strBytes != null){
+                                if (strBytes.length > customStringLength){
+                                    value = "AB Write Failed";
+                                    publishProgress();
+                                    ABWriteMaster.close(tag_id);
+                                    Log.v(TAG,"doInBackground Finished");
+                                    return "FINISHED";
+                                } else {
+                                    byte[] allBytes, strLengthBytes;
 
-                            if (strBytes.length > customStringLength){
-                                value = "AB Write Failed";
-                                publishProgress();
-                                ABWriteMaster.close(tag_id);
-                                Log.v(TAG,"doInBackground Finished");
-                                return "FINISHED";
-                            } else {
-                                byte[] allBytes, strLengthBytes;
+                                    strLengthBytes = ByteBuffer.allocate(4).putInt(strBytes.length).array();
 
-                                strLengthBytes = ByteBuffer.allocate(4).putInt(strBytes.length).array();
+                                    allBytes = new byte[customStringLength + 4];
 
-                                allBytes = new byte[customStringLength + 4];
+                                    //Add data length bytes
+                                    allBytes[0] = strLengthBytes[3];
+                                    allBytes[1] = strLengthBytes[2];
+                                    allBytes[2] = strLengthBytes[1];
+                                    allBytes[3] = strLengthBytes[0];
 
-                                //Add data length bytes
-                                allBytes[0] = strLengthBytes[3];
-                                allBytes[1] = strLengthBytes[2];
-                                allBytes[2] = strLengthBytes[1];
-                                allBytes[3] = strLengthBytes[0];
+                                    //Add data bytes
+                                    System.arraycopy(strBytes, 0, allBytes, 4, strBytes.length);
 
-                                //Add data bytes
-                                System.arraycopy(strBytes, 0, allBytes, 4, strBytes.length);
-
-                                //Set all byte values to the tag
-                                for (int j = 0; j < allBytes.length; j++){
-                                    ABWriteMaster.setUInt8(tag_id, j, allBytes[j]);
+                                    //Set all byte values to the tag
+                                    for (int j = 0; j < allBytes.length; j++){
+                                        ABWriteMaster.setUInt8(tag_id, j, allBytes[j]);
+                                    }
                                 }
                             }
 
                             break;
                         case "string":
-                            byte[] data = null, valBytes, lengthBytes;
+                            byte[] data = null, valBytes = new byte[]{}, lengthBytes;
 
                             if (cpu.equals("micro800")){
                                 try {
@@ -282,16 +301,17 @@ public class AsyncWriteTaskAB extends AsyncTask<String, Void, String> {
                                     e.printStackTrace();
                                 }
 
-                                assert data != null;
-                                lengthBytes = ByteBuffer.allocate(4).putInt(data.length).array();
+                                if (data != null){
+                                    lengthBytes = ByteBuffer.allocate(4).putInt(data.length).array();
 
-                                valBytes = new byte[data.length + 1];
+                                    valBytes = new byte[data.length + 1];
 
-                                //Add data length bytes
-                                valBytes[0] = lengthBytes[3];
+                                    //Add data length bytes
+                                    valBytes[0] = lengthBytes[3];
 
-                                //Add data bytes
-                                System.arraycopy(data, 0, valBytes, 1, data.length);
+                                    //Add data bytes
+                                    System.arraycopy(data, 0, valBytes, 1, data.length);
+                                }
                             } else if (cpu.equals("controllogix")){
                                 try {
                                     data = params[3].getBytes("UTF-8");
@@ -299,19 +319,20 @@ public class AsyncWriteTaskAB extends AsyncTask<String, Void, String> {
                                     e.printStackTrace();
                                 }
 
-                                assert data != null;
-                                lengthBytes = ByteBuffer.allocate(4).putInt(data.length).array();
+                                if (data != null){
+                                    lengthBytes = ByteBuffer.allocate(4).putInt(data.length).array();
 
-                                valBytes = new byte[data.length + 4];
+                                    valBytes = new byte[data.length + 4];
 
-                                //Add data length bytes
-                                valBytes[0] = lengthBytes[3];
-                                valBytes[1] = lengthBytes[2];
-                                valBytes[2] = lengthBytes[1];
-                                valBytes[3] = lengthBytes[0];
+                                    //Add data length bytes
+                                    valBytes[0] = lengthBytes[3];
+                                    valBytes[1] = lengthBytes[2];
+                                    valBytes[2] = lengthBytes[1];
+                                    valBytes[3] = lengthBytes[0];
 
-                                //Add data bytes
-                                System.arraycopy(data, 0, valBytes, 4, data.length);
+                                    //Add data bytes
+                                    System.arraycopy(data, 0, valBytes, 4, data.length);
+                                }
                             } else {
                                 int result = params[3].length() % 2;
 
@@ -324,25 +345,26 @@ public class AsyncWriteTaskAB extends AsyncTask<String, Void, String> {
                                     e.printStackTrace();
                                 }
 
-                                assert data != null;
-                                lengthBytes = ByteBuffer.allocate(4).putInt(data.length).array();
+                                if (data != null){
+                                    lengthBytes = ByteBuffer.allocate(4).putInt(data.length).array();
 
-                                valBytes = new byte[data.length + 2];
+                                    valBytes = new byte[84];
 
-                                //Add data length bytes
-                                valBytes[0] = lengthBytes[3];
-                                valBytes[1] = lengthBytes[2];
+                                    //Add data length bytes
+                                    valBytes[0] = lengthBytes[3];
+                                    valBytes[1] = lengthBytes[2];
 
-                                // Reverse data bytes
-                                for (int z = 0; z < data.length - 1; z += 2)
-                                {
-                                    byte temp = data[z];
-                                    data[z] = data[z + 1];
-                                    data[z + 1] = temp;
+                                    // Reverse data bytes
+                                    for (int z = 0; z < data.length - 1; z += 2)
+                                    {
+                                        byte temp = data[z];
+                                        data[z] = data[z + 1];
+                                        data[z + 1] = temp;
+                                    }
+
+                                    //Add data bytes
+                                    System.arraycopy(data, 0, valBytes, 2, data.length);
                                 }
-
-                                //Add data bytes
-                                System.arraycopy(data, 0, valBytes, 2, data.length);
                             }
 
                             //Set all byte values to the tag

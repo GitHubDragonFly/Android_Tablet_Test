@@ -37,12 +37,12 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
         number_of_addresses = params[0].get(1).size();
         gateway_path = params[0].get(0).get(0);
 
-        String[] values = new String[number_of_addresses];
+        //String[] values = new String[number_of_addresses];
         String[] tags = new String[number_of_addresses];
         String[] dType = new String[number_of_addresses];
         int[] bitIndex = new int[number_of_addresses];
         int[] strLength = new int[number_of_addresses];
-        Arrays.fill(values, "");
+        //Arrays.fill(values, "");
         Arrays.fill(tags, "");
         Arrays.fill(dType, "");
         Arrays.fill(bitIndex, -1);
@@ -184,6 +184,7 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                     if (id != null){
                         if (MBMaster.getStatus(id) == 0){
                             MBMaster.read(id, timeout);
+                            tempValue = "";
 
                             if (bitIndex[i] > -1){
                                 if (dType[i].equals("string")){
@@ -382,9 +383,7 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
 
                 // Publish progress on UI thread continuously, controlled with thread's sleep time.
 
-                values[i] = tempValue.trim();
                 value = tempValue.trim();
-                tempValue = "";
 
                 callerID = params[0].get(2).get(i);
 

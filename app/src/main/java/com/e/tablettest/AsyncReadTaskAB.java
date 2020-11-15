@@ -33,11 +33,11 @@ public class AsyncReadTaskAB extends AsyncTask<ArrayList<ArrayList<String>>, Voi
         int timeout = Integer.parseInt(params[0].get(0).get(1));
         int number_of_addresses = params[0].get(1).size();
 
-        String[] values = new String[number_of_addresses];
+        //String[] values = new String[number_of_addresses];
         String[] tags = new String[number_of_addresses];
         String[] dType = new String[number_of_addresses];
         int[] bitIndex = new int[number_of_addresses];
-        Arrays.fill(values, "");
+        //Arrays.fill(values, "");
         Arrays.fill(tags, "");
         Arrays.fill(dType, "");
         Arrays.fill(bitIndex, -1);
@@ -215,13 +215,33 @@ public class AsyncReadTaskAB extends AsyncTask<ArrayList<ArrayList<String>>, Voi
                     if (id != null){
                         if (ABMaster.getStatus(id) == 0){
                             ABMaster.read(id, timeout);
+                            tempValue = "";
 
                             if (bitIndex[i] > -1){
-                                if (dType[i].equals("custom string") || dType[i].equals("string")){
+                                if (dType[i].equals("custom string") || (dType[i].equals("string") && cpu.equals("controllogix"))) {
                                     try {
-                                        tempValue = new String(new byte[] {(byte)ABMaster.getUInt8(id, bitIndex[i] + 3)}, "UTF-8");
+                                        tempValue = new String(new byte[]{(byte) ABMaster.getUInt8(id, bitIndex[i] + 3)}, "UTF-8");
                                     } catch (UnsupportedEncodingException e) {
                                         e.printStackTrace();
+                                    }
+                                } else if (dType[i].equals("string")) {
+                                    if (cpu.equals("micro800")) {
+                                        try {
+                                            tempValue = new String(new byte[]{(byte) ABMaster.getUInt8(id, bitIndex[i])}, "UTF-8");
+                                        } catch (UnsupportedEncodingException e) {
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        try {
+                                            int result = bitIndex[i] % 2;
+
+                                            if (result == 0)
+                                                tempValue = new String(new byte[]{(byte) ABMaster.getUInt8(id, bitIndex[i])}, "UTF-8");
+                                            else
+                                                tempValue = new String(new byte[]{(byte) ABMaster.getUInt8(id, bitIndex[i] + 2)}, "UTF-8");
+                                        } catch (UnsupportedEncodingException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                 } else {
                                     int val = ABMaster.getBit(id, bitIndex[i]);
@@ -593,9 +613,7 @@ public class AsyncReadTaskAB extends AsyncTask<ArrayList<ArrayList<String>>, Voi
 
                 // Publish progress on UI thread continuously, controlled with thread's sleep time.
 
-                values[i] = tempValue.trim();
                 value = tempValue.trim();
-                tempValue = "";
 
                 callerID = params[0].get(2).get(i);
 
