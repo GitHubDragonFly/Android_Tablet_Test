@@ -367,22 +367,36 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                     }
                 }
 
-                // If the value has changed then publish progress on UI thread
-                if (!values[i].equals(tempValue)){
-                    values[i] = tempValue.trim();
-                    value = tempValue.trim();
-                    tempValue = "";
-                    callerID = params[0].get(2).get(i);
+                // Publish progress on UI thread when value has changed.
 
-                    publishProgress();
-                }
+                //if (!values[i].equals(tempValue)){
+                //    values[i] = tempValue.trim();
+                //    value = tempValue.trim();
+                //    tempValue = "";
 
-                // Optional routine to slow down the communication
-                //try {
-                //    Thread.sleep(100);
-                //} catch (InterruptedException e) {
-                //    e.printStackTrace();
+                //    callerID = params[0].get(2).get(i);
+
+                //    publishProgress();
                 //}
+
+
+                // Publish progress on UI thread continuously, controlled with thread's sleep time.
+
+                values[i] = tempValue.trim();
+                value = tempValue.trim();
+                tempValue = "";
+
+                callerID = params[0].get(2).get(i);
+
+                publishProgress();
+
+                // Slow down the communication to give time for UI to update all the values.
+                // Adjust the sleep time if necessary.
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
