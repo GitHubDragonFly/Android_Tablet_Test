@@ -23,7 +23,7 @@ Related project: [libplctag4android](https://github.com/libplctag/libplctag4andr
 This app is as experimental as the above mentioned related project but a bit more elaborate.
 The above mentioned related project can be used to compile the latest prerelease version of the libplctag library.
 
-See these instructions on how to create libplctag AAR:  https://github.com/libplctag/libplctag4android/issues/1
+See [this link](https://github.com/libplctag/libplctag4android/issues/1) for instructions on how to create libplctag AAR.
 
 It might be even simpler to just copy the existing libplctag AAR file to a different location, unpack it, replace the old libraries with new ones, re-pack it as a "zip" file and then change the extension to "aar". Then open this project in the Android Studio, unload the libplctag module, remove the module, delete it and then add the new AAR as a module to the project. Android Studio doesn't seem to remove related entries once the module is removed so check the settings.gradle file for possible multiple entries of the same project and remove as necessary.
 
