@@ -5,7 +5,7 @@
     android:id="@+id/popupMBLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rounded_rectangle_lighter_blue"
+    android:background="@drawable/rounded_rectangle_light_blue"
     tools:context=".PopUpAddressMB">
 
     <TextView
