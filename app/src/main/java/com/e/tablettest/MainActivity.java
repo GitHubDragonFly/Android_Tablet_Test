@@ -1137,6 +1137,12 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         startActivity(intent);
     }
 
+    public void sendMessageScreenClean(View v)
+    {
+        Intent intent = new Intent(MainActivity.this, ScreenClean.class);
+        startActivity(intent);
+    }
+
     public void sendMessageCheckBoxSwapBytesWords(View v)
     {
         CheckBox cb = (CheckBox)v;
