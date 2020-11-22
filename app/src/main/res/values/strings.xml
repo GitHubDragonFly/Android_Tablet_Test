@@ -5,8 +5,11 @@
     <string name="btnWrite">Write</string>
     <string name="btnClearABTags">Clear AB Tags</string>
     <string name="btnClearMBTags">Clear MB Tags</string>
-    <string name="tvABAUTO">AB AUTO</string>
-    <string name="tvMBAUTO">MB AUTO</string>
+    <string name="btnScreenClean">Screen Clean</string>
+    <string name="btnABAutoON">AB Auto ON</string>
+    <string name="btnABAutoOFF">AB Auto OFF</string>
+    <string name="btnMBAutoON">MB Auto ON</string>
+    <string name="btnMBAutoOFF">MB Auto OFF</string>
     <string name="tvIO">I / O</string>
     <string name="tvAddress">Address</string>
     <string name="tvDataType">Data Type</string>
