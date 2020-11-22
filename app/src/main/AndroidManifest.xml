@@ -33,6 +33,11 @@
             android:windowSoftInputMode="stateVisible|adjustPan|adjustResize">
         </activity>
 
+        <activity android:name=".ScreenClean"
+            android:parentActivityName="com.e.tablettest.MainActivity"
+            android:theme="@style/AppTheme.ScreenCleanTheme">
+        </activity>
+
     </application>
 
 </manifest>
