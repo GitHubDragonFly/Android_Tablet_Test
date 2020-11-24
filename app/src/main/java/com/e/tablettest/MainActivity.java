@@ -390,6 +390,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         myTaskGetCLGXTags.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
 
         btnGetCLGXTags.setEnabled(false);
+        btnGetCLGXTags.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
 
         Log.v(TAG, "GetCLGXTags Task is " + myTaskGetCLGXTags.getStatus().toString());
     }
@@ -408,7 +409,9 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     TextUtils.isEmpty(etAB3.getText()) && TextUtils.isEmpty(etAB4.getText()) &&
                     TextUtils.isEmpty(etAB5.getText()) && TextUtils.isEmpty(etAB6.getText()) &&
                     TextUtils.isEmpty(etAB7.getText()) && TextUtils.isEmpty(etAB8.getText())){
+
                 btnAB.setText(btnAB.getTextOff());
+                myTaskAB = null;
                 return;
             }
 
@@ -427,6 +430,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             timeout = timeout.replace(" ", "");
 
             if (TextUtils.isEmpty(ipaddress) || !TextUtils.isDigitsOnly(timeout)){
+                myTaskAB = null;
                 return;
             }
 
@@ -580,7 +584,9 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     TextUtils.isEmpty(etMB3.getText()) && TextUtils.isEmpty(etMB4.getText()) &&
                     TextUtils.isEmpty(etMB5.getText()) && TextUtils.isEmpty(etMB6.getText()) &&
                     TextUtils.isEmpty(etMB7.getText()) && TextUtils.isEmpty(etMB8.getText())){
+
                 btnMB.setText(btnMB.getTextOff());
+                myTaskMB = null;
                 return;
             }
 
@@ -598,6 +604,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             timeout = timeout.replace(" ", "");
 
             if (TextUtils.isEmpty(ipaddress) || !TextUtils.isDigitsOnly(timeout)){
+                myTaskMB = null;
                 return;
             }
 
@@ -1241,6 +1248,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         }
 
         btnGetCLGXTags.setEnabled(true);
+        btnGetCLGXTags.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_on));
     }
 
     @Override
