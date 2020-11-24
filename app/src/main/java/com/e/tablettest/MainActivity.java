@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     EditText etAB1, etAB2, etAB3, etAB4, etAB5, etAB6, etAB7, etAB8, etMB1, etMB2, etMB3, etMB4, etMB5, etMB6, etMB7, etMB8;
     EditText etABIP, etABPath, etMBIP, etMBUnitID, etTimeout, etProgram;
     ToggleButton btnAB, btnMB;
-    Button btnGetCLGXTags, btnWriteAB1, btnWriteAB2, btnWriteAB3, btnWriteAB4, btnWriteAB5, btnWriteAB6, btnWriteAB7, btnWriteAB8;
-    Button btnWriteMB1, btnWriteMB2, btnWriteMB3, btnWriteMB4, btnWriteMB5, btnWriteMB6, btnWriteMB7, btnWriteMB8;
+    Button btnGetCLGXTags, btnWriteABCaller, btnWriteAB1, btnWriteAB2, btnWriteAB3, btnWriteAB4, btnWriteAB5, btnWriteAB6, btnWriteAB7, btnWriteAB8;
+    Button btnWriteMBCaller, btnWriteMB1, btnWriteMB2, btnWriteMB3, btnWriteMB4, btnWriteMB5, btnWriteMB6, btnWriteMB7, btnWriteMB8;
     Spinner spinABCPU, spinMBCPU, spinCLGXTags, spinBooleanDisplay;
     CheckBox cbSwapBytes, cbSwapWords;
     ColorStateList textColor;
@@ -763,6 +763,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         timeout = timeout.replace(" ", "");
 
         if (TextUtils.isEmpty(ipaddress) || !TextUtils.isDigitsOnly(timeout)){
+            myWriteTaskAB = null;
             return;
         }
 
@@ -779,9 +780,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         switch(v.getId()){
             case R.id.btnWriteABTag1:
                 if (TextUtils.isEmpty(etAB1.getText())){
+                    myWriteTaskAB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvAB1.getText())){
+                        myWriteTaskAB = null;
                         return;
                     } else {
                         params[2] = etAB1.getText().toString();
@@ -791,9 +794,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteABTag2:
                 if (TextUtils.isEmpty(etAB2.getText())){
+                    myWriteTaskAB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvAB2.getText())){
+                        myWriteTaskAB = null;
                         return;
                     } else {
                         params[2] = etAB2.getText().toString();
@@ -803,9 +808,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteABTag3:
                 if (TextUtils.isEmpty(etAB3.getText())){
+                    myWriteTaskAB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvAB3.getText())){
+                        myWriteTaskAB = null;
                         return;
                     } else {
                         params[2] = etAB3.getText().toString();
@@ -815,9 +822,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteABTag4:
                 if (TextUtils.isEmpty(etAB4.getText())){
+                    myWriteTaskAB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvAB4.getText())){
+                        myWriteTaskAB = null;
                         return;
                     } else {
                         params[2] = etAB4.getText().toString();
@@ -827,9 +836,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteABTag5:
                 if (TextUtils.isEmpty(etAB5.getText())){
+                    myWriteTaskAB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvAB5.getText())){
+                        myWriteTaskAB = null;
                         return;
                     } else {
                         params[2] = etAB5.getText().toString();
@@ -839,9 +850,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteABTag6:
                 if (TextUtils.isEmpty(etAB6.getText())){
+                    myWriteTaskAB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvAB6.getText())){
+                        myWriteTaskAB = null;
                         return;
                     } else {
                         params[2] = etAB6.getText().toString();
@@ -851,9 +864,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteABTag7:
                 if (TextUtils.isEmpty(etAB7.getText())){
+                    myWriteTaskAB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvAB7.getText())){
+                        myWriteTaskAB = null;
                         return;
                     } else {
                         params[2] = etAB7.getText().toString();
@@ -863,9 +878,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteABTag8:
                 if (TextUtils.isEmpty(etAB8.getText())){
+                    myWriteTaskAB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvAB8.getText())){
+                        myWriteTaskAB = null;
                         return;
                     } else {
                         params[2] = etAB8.getText().toString();
@@ -874,6 +891,10 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 }
                 break;
         }
+
+        btnWriteABCaller = (Button)v;
+        btnWriteABCaller.setEnabled(false);
+        btnWriteABCaller.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
 
         myWriteTaskAB.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
 
@@ -900,6 +921,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         timeout = timeout.replace(" ", "");
 
         if (TextUtils.isEmpty(ipaddress) || !TextUtils.isDigitsOnly(timeout)){
+            myWriteTaskMB = null;
             return;
         }
 
@@ -911,9 +933,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         switch(v.getId()){
             case R.id.btnWriteMBTag1:
                 if (TextUtils.isEmpty(etMB1.getText())){
+                    myWriteTaskMB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvMB1.getText())){
+                        myWriteTaskMB = null;
                         return;
                     } else {
                         params[2] = etMB1.getText().toString();
@@ -923,9 +947,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteMBTag2:
                 if (TextUtils.isEmpty(etMB2.getText())){
+                    myWriteTaskMB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvMB2.getText())){
+                        myWriteTaskMB = null;
                         return;
                     } else {
                         params[2] = etMB2.getText().toString();
@@ -935,9 +961,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteMBTag3:
                 if (TextUtils.isEmpty(etMB3.getText())){
+                    myWriteTaskMB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvMB3.getText())){
+                        myWriteTaskMB = null;
                         return;
                     } else {
                         params[2] = etMB3.getText().toString();
@@ -947,9 +975,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteMBTag4:
                 if (TextUtils.isEmpty(etMB4.getText())){
+                    myWriteTaskMB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvMB4.getText())){
+                        myWriteTaskMB = null;
                         return;
                     } else {
                         params[2] = etMB4.getText().toString();
@@ -959,9 +989,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteMBTag5:
                 if (TextUtils.isEmpty(etMB5.getText())){
+                    myWriteTaskMB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvMB5.getText())){
+                        myWriteTaskMB = null;
                         return;
                     } else {
                         params[2] = etMB5.getText().toString();
@@ -971,9 +1003,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteMBTag6:
                 if (TextUtils.isEmpty(etMB6.getText())){
+                    myWriteTaskMB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvMB6.getText())){
+                        myWriteTaskMB = null;
                         return;
                     } else {
                         params[2] = etMB6.getText().toString();
@@ -983,9 +1017,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteMBTag7:
                 if (TextUtils.isEmpty(etMB7.getText())){
+                    myWriteTaskMB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvMB7.getText())){
+                        myWriteTaskMB = null;
                         return;
                     } else {
                         params[2] = etMB7.getText().toString();
@@ -995,9 +1031,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case R.id.btnWriteMBTag8:
                 if (TextUtils.isEmpty(etMB8.getText())){
+                    myWriteTaskMB = null;
                     return;
                 } else {
                     if (TextUtils.isEmpty(tvMB8.getText())){
+                        myWriteTaskMB = null;
                         return;
                     } else {
                         params[2] = etMB8.getText().toString();
@@ -1006,6 +1044,10 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 }
                 break;
         }
+
+        btnWriteMBCaller = (Button)v;
+        btnWriteMBCaller.setEnabled(false);
+        btnWriteMBCaller.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
 
         myWriteTaskMB.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
 
@@ -1214,12 +1256,19 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 myWriteTaskAB.cancel(true);
                 myWriteTaskAB = null;
             }
+
+            btnWriteABCaller.setEnabled(true);
+            btnWriteABCaller.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_on));
         } else {
             if (myWriteTaskMB != null){
                 myWriteTaskMB.cancel(true);
                 myWriteTaskMB = null;
             }
+
+            btnWriteMBCaller.setEnabled(true);
+            btnWriteMBCaller.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_on));
         }
+
         ((TextView)findViewById(R.id.labelWriteMessage)).setText(value.substring(3));
     }
 }
