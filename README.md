@@ -34,6 +34,8 @@ It might be even simpler to just copy the existing libplctag AAR file to a diffe
 - "Get Tags" button will fetch ControlLogix tags, both Controller and Program, and by selecting any of the fetched tags it will be copied to the clipboard.
 - You can specify the name of the Program to get tags for (the default is set to MainProgram).
 - "Write" buttons are only functional when enabled & tag is present & value is present.
+- Only a single "Write" process per PLC can be running at the time.
+- "Screen Clean" allows cleaning the screen without exiting the app.
 - As for AB tags, you will need to specify the Custom String Length when the "custom string" data type is selected.
 - As for Modbus tags, you will need to specify the String Length when the "string" data type is selected.
 - Modbus addressing: CO = Coil, DI = Discrete Input, IR = Input Register, HR = Holding Register.
