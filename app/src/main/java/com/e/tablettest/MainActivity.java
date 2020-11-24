@@ -550,6 +550,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 abi.etABTag.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 abi.etABTag.setClickable(true);
                 abi.etABTagValue.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                abi.etABTagValue.setTextColor(textColor);
                 abi.etABTagValue.setText("");
                 abi.btnWriteAB.setEnabled(true);
                 abi.btnWriteAB.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_on));
@@ -726,6 +727,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 mbi.etMBTag.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 mbi.etMBTag.setClickable(true);
                 mbi.etMBTagValue.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                mbi.etMBTagValue.setTextColor(textColor);
                 mbi.etMBTagValue.setText("");
                 mbi.btnWriteMB.setEnabled(true);
                 mbi.btnWriteMB.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_on));
