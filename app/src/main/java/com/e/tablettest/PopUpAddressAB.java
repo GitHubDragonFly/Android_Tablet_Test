@@ -1,6 +1,7 @@
 package com.e.tablettest;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +13,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -217,6 +219,8 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
 
     public void sendMessageReturnTag(View v)
     {
+        ((Button)v).setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
+
         // Remove all the spaces from the tag
         String tag = (etABTag.getText().toString()).replace(" ", "");
 

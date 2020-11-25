@@ -99,12 +99,14 @@
     <Button
         android:id="@+id/button2"
         android:layout_width="88dp"
-        android:layout_height="48dp"
+        android:layout_height="36dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="48dp"
+        android:background="@android:drawable/button_onoff_indicator_on"
         android:onClick="sendMessageReturnTag"
         android:text="@string/btnOK"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toEndOf="@+id/labelMBBit"
         app:layout_constraintTop_toTopOf="parent" />
 
