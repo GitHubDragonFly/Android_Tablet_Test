@@ -14,7 +14,10 @@
         android:screenOrientation="landscape"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -24,18 +27,21 @@
         <activity android:name=".PopUpAddressAB"
             android:parentActivityName="com.e.tablettest.MainActivity"
             android:theme="@style/AppTheme.CustomTheme"
+            android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateVisible|adjustPan|adjustResize">
         </activity>
 
         <activity android:name=".PopUpAddressMB"
             android:parentActivityName="com.e.tablettest.MainActivity"
             android:theme="@style/AppTheme.CustomTheme"
+            android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateVisible|adjustPan|adjustResize">
         </activity>
 
         <activity android:name=".ScreenClean"
             android:parentActivityName="com.e.tablettest.MainActivity"
-            android:theme="@style/AppTheme.ScreenCleanTheme">
+            android:theme="@style/AppTheme.ScreenCleanTheme"
+            android:screenOrientation="sensorLandscape">
         </activity>
 
     </application>

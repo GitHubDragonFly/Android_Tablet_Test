@@ -2,7 +2,6 @@ package com.e.tablettest;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -11,7 +10,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -31,7 +29,6 @@ public class PopUpAddressMB extends AppCompatActivity implements AdapterView.OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         setContentView(R.layout.popup_address_mb);
 
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -154,7 +151,7 @@ public class PopUpAddressMB extends AppCompatActivity implements AdapterView.OnI
 
     public void sendMessageReturnTag(View v)
     {
-        ((Button)v).setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
+        v.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
 
         String addr = (etMBAddr.getText().toString());
 

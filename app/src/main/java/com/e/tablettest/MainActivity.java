@@ -6,7 +6,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.content.res.ColorStateList;
 import android.os.AsyncTask;
@@ -86,8 +85,6 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Set landscape screen mode
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         // Hide status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // Keep the screen turned on
@@ -276,9 +273,6 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         et0.setText(osArch);
         EditText et1 = findViewById(R.id.txtPlatformArch);
         et1.setText(platformArch);
-
-        //Hide keyboard
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     @Override
