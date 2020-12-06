@@ -47,10 +47,11 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     AsyncWriteTaskAB myWriteTaskAB = null;
     AsyncWriteTaskModbus myWriteTaskMB = null;
 
-    EditText tvAB1, tvAB2, tvAB3, tvAB4, tvAB5, tvAB6, tvAB7, tvAB8, tvMB1, tvMB2, tvMB3, tvMB4, tvMB5, tvMB6, tvMB7, tvMB8;
-    EditText etAB1, etAB2, etAB3, etAB4, etAB5, etAB6, etAB7, etAB8, etMB1, etMB2, etMB3, etMB4, etMB5, etMB6, etMB7, etMB8;
+    EditText tvABx, tvAB1, tvAB2, tvAB3, tvAB4, tvAB5, tvAB6, tvAB7, tvAB8, tvMBx, tvMB1, tvMB2, tvMB3, tvMB4, tvMB5, tvMB6, tvMB7, tvMB8;
+    EditText etABx, etAB1, etAB2, etAB3, etAB4, etAB5, etAB6, etAB7, etAB8, etMBx, etMB1, etMB2, etMB3, etMB4, etMB5, etMB6, etMB7, etMB8;
     EditText etABIP, etABPath, etMBIP, etMBUnitID, etTimeout, etProgram;
     ToggleButton btnAB, btnMB;
+    TextView lblWriteMessage;
     Button btnGetCLGXTags, btnWriteABCaller, btnWriteAB1, btnWriteAB2, btnWriteAB3, btnWriteAB4, btnWriteAB5, btnWriteAB6, btnWriteAB7, btnWriteAB8;
     Button btnWriteMBCaller, btnWriteMB1, btnWriteMB2, btnWriteMB3, btnWriteMB4, btnWriteMB5, btnWriteMB6, btnWriteMB7, btnWriteMB8;
     Spinner spinABCPU, spinMBCPU, spinCLGXTags, spinBooleanDisplay;
@@ -173,6 +174,8 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             public void afterTextChanged(Editable editable) {
             }
         };
+
+        lblWriteMessage = findViewById(R.id.labelWriteMessage);
 
         tvAB1 = findViewById(R.id.tvABTagValue1);
         tvAB2 = findViewById(R.id.tvABTagValue2);
@@ -782,118 +785,99 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
 
         switch(v.getId()){
             case R.id.btnWriteABTag1:
-                if (TextUtils.isEmpty(etAB1.getText())){
+                if (TextUtils.isEmpty(etAB1.getText()) || TextUtils.isEmpty(tvAB1.getText())){
                     myWriteTaskAB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvAB1.getText())){
-                        myWriteTaskAB = null;
-                        return;
-                    } else {
-                        params[2] = etAB1.getText().toString();
-                        params[3] = tvAB1.getText().toString();
-                    }
+                    params[2] = etAB1.getText().toString();
+                    etABx = etAB1;
+                    params[3] = tvAB1.getText().toString();
+                    tvABx = tvAB1;
                 }
                 break;
             case R.id.btnWriteABTag2:
-                if (TextUtils.isEmpty(etAB2.getText())){
+                if (TextUtils.isEmpty(etAB2.getText()) || TextUtils.isEmpty(tvAB2.getText())){
                     myWriteTaskAB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvAB2.getText())){
-                        myWriteTaskAB = null;
-                        return;
-                    } else {
-                        params[2] = etAB2.getText().toString();
-                        params[3] = tvAB2.getText().toString();
-                    }
+                    params[2] = etAB2.getText().toString();
+                    etABx = etAB2;
+                    params[3] = tvAB2.getText().toString();
+                    tvABx = tvAB2;
                 }
                 break;
             case R.id.btnWriteABTag3:
-                if (TextUtils.isEmpty(etAB3.getText())){
+                if (TextUtils.isEmpty(etAB3.getText()) || TextUtils.isEmpty(tvAB3.getText())){
                     myWriteTaskAB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvAB3.getText())){
-                        myWriteTaskAB = null;
-                        return;
-                    } else {
-                        params[2] = etAB3.getText().toString();
-                        params[3] = tvAB3.getText().toString();
-                    }
+                    params[2] = etAB3.getText().toString();
+                    etABx = etAB3;
+                    params[3] = tvAB3.getText().toString();
+                    tvABx = tvAB3;
                 }
                 break;
             case R.id.btnWriteABTag4:
-                if (TextUtils.isEmpty(etAB4.getText())){
+                if (TextUtils.isEmpty(etAB4.getText()) || TextUtils.isEmpty(tvAB4.getText())){
                     myWriteTaskAB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvAB4.getText())){
-                        myWriteTaskAB = null;
-                        return;
-                    } else {
-                        params[2] = etAB4.getText().toString();
-                        params[3] = tvAB4.getText().toString();
-                    }
+                    params[2] = etAB4.getText().toString();
+                    etABx = etAB4;
+                    params[3] = tvAB4.getText().toString();
+                    tvABx = tvAB4;
                 }
                 break;
             case R.id.btnWriteABTag5:
-                if (TextUtils.isEmpty(etAB5.getText())){
+                if (TextUtils.isEmpty(etAB5.getText()) || TextUtils.isEmpty(tvAB5.getText())){
                     myWriteTaskAB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvAB5.getText())){
-                        myWriteTaskAB = null;
-                        return;
-                    } else {
-                        params[2] = etAB5.getText().toString();
-                        params[3] = tvAB5.getText().toString();
-                    }
+                    params[2] = etAB5.getText().toString();
+                    etABx = etAB5;
+                    params[3] = tvAB5.getText().toString();
+                    tvABx = tvAB5;
                 }
                 break;
             case R.id.btnWriteABTag6:
-                if (TextUtils.isEmpty(etAB6.getText())){
+                if (TextUtils.isEmpty(etAB6.getText()) || TextUtils.isEmpty(tvAB6.getText())){
                     myWriteTaskAB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvAB6.getText())){
-                        myWriteTaskAB = null;
-                        return;
-                    } else {
-                        params[2] = etAB6.getText().toString();
-                        params[3] = tvAB6.getText().toString();
-                    }
+                    params[2] = etAB6.getText().toString();
+                    etABx = etAB6;
+                    params[3] = tvAB6.getText().toString();
+                    tvABx = tvAB6;
                 }
                 break;
             case R.id.btnWriteABTag7:
-                if (TextUtils.isEmpty(etAB7.getText())){
+                if (TextUtils.isEmpty(etAB7.getText()) || TextUtils.isEmpty(tvAB7.getText())){
                     myWriteTaskAB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvAB7.getText())){
-                        myWriteTaskAB = null;
-                        return;
-                    } else {
-                        params[2] = etAB7.getText().toString();
-                        params[3] = tvAB7.getText().toString();
-                    }
+                    params[2] = etAB7.getText().toString();
+                    etABx = etAB7;
+                    params[3] = tvAB7.getText().toString();
+                    tvABx = tvAB7;
                 }
                 break;
             case R.id.btnWriteABTag8:
-                if (TextUtils.isEmpty(etAB8.getText())){
+                if (TextUtils.isEmpty(etAB8.getText()) || TextUtils.isEmpty(tvAB8.getText())){
                     myWriteTaskAB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvAB8.getText())){
-                        myWriteTaskAB = null;
-                        return;
-                    } else {
-                        params[2] = etAB8.getText().toString();
-                        params[3] = tvAB8.getText().toString();
-                    }
+                    params[2] = etAB8.getText().toString();
+                    etABx = etAB8;
+                    params[3] = tvAB8.getText().toString();
+                    tvABx = tvAB8;
                 }
                 break;
         }
+
+        lblWriteMessage.setText(getResources().getStringArray(R.array.ab_tags_please_wait)[0]);
+
+        etABx.setEnabled(false);
+        tvABx.setEnabled(false);
 
         btnWriteABCaller = (Button)v;
         btnWriteABCaller.setEnabled(false);
@@ -935,118 +919,99 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
 
         switch(v.getId()){
             case R.id.btnWriteMBTag1:
-                if (TextUtils.isEmpty(etMB1.getText())){
+                if (TextUtils.isEmpty(etMB1.getText()) || TextUtils.isEmpty(tvMB1.getText())){
                     myWriteTaskMB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvMB1.getText())){
-                        myWriteTaskMB = null;
-                        return;
-                    } else {
-                        params[2] = etMB1.getText().toString();
-                        params[3] = tvMB1.getText().toString();
-                    }
+                    params[2] = etMB1.getText().toString();
+                    etMBx = etMB1;
+                    params[3] = tvMB1.getText().toString();
+                    tvMBx = tvMB1;
                 }
                 break;
             case R.id.btnWriteMBTag2:
-                if (TextUtils.isEmpty(etMB2.getText())){
+                if (TextUtils.isEmpty(etMB2.getText()) || TextUtils.isEmpty(tvMB2.getText())){
                     myWriteTaskMB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvMB2.getText())){
-                        myWriteTaskMB = null;
-                        return;
-                    } else {
-                        params[2] = etMB2.getText().toString();
-                        params[3] = tvMB2.getText().toString();
-                    }
+                    params[2] = etMB2.getText().toString();
+                    etMBx = etMB2;
+                    params[3] = tvMB2.getText().toString();
+                    tvMBx = tvMB2;
                 }
                 break;
             case R.id.btnWriteMBTag3:
-                if (TextUtils.isEmpty(etMB3.getText())){
+                if (TextUtils.isEmpty(etMB3.getText()) || TextUtils.isEmpty(tvMB3.getText())){
                     myWriteTaskMB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvMB3.getText())){
-                        myWriteTaskMB = null;
-                        return;
-                    } else {
-                        params[2] = etMB3.getText().toString();
-                        params[3] = tvMB3.getText().toString();
-                    }
+                    params[2] = etMB3.getText().toString();
+                    etMBx = etMB3;
+                    params[3] = tvMB3.getText().toString();
+                    tvMBx = tvMB3;
                 }
                 break;
             case R.id.btnWriteMBTag4:
-                if (TextUtils.isEmpty(etMB4.getText())){
+                if (TextUtils.isEmpty(etMB4.getText()) || TextUtils.isEmpty(tvMB4.getText())){
                     myWriteTaskMB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvMB4.getText())){
-                        myWriteTaskMB = null;
-                        return;
-                    } else {
-                        params[2] = etMB4.getText().toString();
-                        params[3] = tvMB4.getText().toString();
-                    }
+                    params[2] = etMB4.getText().toString();
+                    etMBx = etMB4;
+                    params[3] = tvMB4.getText().toString();
+                    tvMBx = tvMB4;
                 }
                 break;
             case R.id.btnWriteMBTag5:
-                if (TextUtils.isEmpty(etMB5.getText())){
+                if (TextUtils.isEmpty(etMB5.getText()) || TextUtils.isEmpty(tvMB5.getText())){
                     myWriteTaskMB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvMB5.getText())){
-                        myWriteTaskMB = null;
-                        return;
-                    } else {
-                        params[2] = etMB5.getText().toString();
-                        params[3] = tvMB5.getText().toString();
-                    }
+                    params[2] = etMB5.getText().toString();
+                    etMBx = etMB5;
+                    params[3] = tvMB5.getText().toString();
+                    tvMBx = tvMB5;
                 }
                 break;
             case R.id.btnWriteMBTag6:
-                if (TextUtils.isEmpty(etMB6.getText())){
+                if (TextUtils.isEmpty(etMB6.getText()) || TextUtils.isEmpty(tvMB6.getText())){
                     myWriteTaskMB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvMB6.getText())){
-                        myWriteTaskMB = null;
-                        return;
-                    } else {
-                        params[2] = etMB6.getText().toString();
-                        params[3] = tvMB6.getText().toString();
-                    }
+                    params[2] = etMB6.getText().toString();
+                    etMBx = etMB6;
+                    params[3] = tvMB6.getText().toString();
+                    tvMBx = tvMB6;
                 }
                 break;
             case R.id.btnWriteMBTag7:
-                if (TextUtils.isEmpty(etMB7.getText())){
+                if (TextUtils.isEmpty(etMB7.getText()) || TextUtils.isEmpty(tvMB7.getText())){
                     myWriteTaskMB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvMB7.getText())){
-                        myWriteTaskMB = null;
-                        return;
-                    } else {
-                        params[2] = etMB7.getText().toString();
-                        params[3] = tvMB7.getText().toString();
-                    }
+                    params[2] = etMB7.getText().toString();
+                    etMBx = etMB7;
+                    params[3] = tvMB7.getText().toString();
+                    tvMBx = tvMB7;
                 }
                 break;
             case R.id.btnWriteMBTag8:
-                if (TextUtils.isEmpty(etMB8.getText())){
+                if (TextUtils.isEmpty(etMB8.getText()) || TextUtils.isEmpty(tvMB8.getText())){
                     myWriteTaskMB = null;
                     return;
                 } else {
-                    if (TextUtils.isEmpty(tvMB8.getText())){
-                        myWriteTaskMB = null;
-                        return;
-                    } else {
-                        params[2] = etMB8.getText().toString();
-                        params[3] = tvMB8.getText().toString();
-                    }
+                    params[2] = etMB8.getText().toString();
+                    etMBx = etMB8;
+                    params[3] = tvMB8.getText().toString();
+                    tvMBx = tvMB8;
                 }
                 break;
         }
+
+        lblWriteMessage.setText(getResources().getStringArray(R.array.ab_tags_please_wait)[0]);
+
+        etMBx.setEnabled(false);
+        tvMBx.setEnabled(false);
 
         btnWriteMBCaller = (Button)v;
         btnWriteMBCaller.setEnabled(false);
@@ -1261,6 +1226,9 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 myWriteTaskAB = null;
             }
 
+            etABx.setEnabled(true);
+            tvABx.setEnabled(true);
+
             btnWriteABCaller.setEnabled(true);
             btnWriteABCaller.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_on));
         } else {
@@ -1269,10 +1237,13 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 myWriteTaskMB = null;
             }
 
+            etMBx.setEnabled(true);
+            tvMBx.setEnabled(true);
+
             btnWriteMBCaller.setEnabled(true);
             btnWriteMBCaller.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_on));
         }
 
-        ((TextView)findViewById(R.id.labelWriteMessage)).setText(value.substring(3));
+        lblWriteMessage.setText(value.substring(3));
     }
 }
