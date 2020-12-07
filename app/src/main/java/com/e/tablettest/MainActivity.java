@@ -1215,6 +1215,58 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     @Override
     public void UpdateTags(String callerId, String value) {
         ((EditText)findViewById(getResources().getIdentifier(callerId, "id", getPackageName()))).setText(value);
+
+        switch (callerId){
+            case "etABTag1":
+                tvAB1.setText("");
+                break;
+            case "etABTag2":
+                tvAB2.setText("");
+                break;
+            case "etABTag3":
+                tvAB3.setText("");
+                break;
+            case "etABTag4":
+                tvAB4.setText("");
+                break;
+            case "etABTag5":
+                tvAB5.setText("");
+                break;
+            case "etABTag6":
+                tvAB6.setText("");
+                break;
+            case "etABTag7":
+                tvAB7.setText("");
+                break;
+            case "etABTag8":
+                tvAB8.setText("");
+                break;
+            case "etMBTag1":
+                tvMB1.setText("");
+                break;
+            case "etMBTag2":
+                tvMB2.setText("");
+                break;
+            case "etMBTag3":
+                tvMB3.setText("");
+                break;
+            case "etMBTag4":
+                tvMB4.setText("");
+                break;
+            case "etMBTag5":
+                tvMB5.setText("");
+                break;
+            case "etMBTag6":
+                tvMB6.setText("");
+                break;
+            case "etMBTag7":
+                tvMB7.setText("");
+                break;
+            case "etMBTag8":
+                tvMB8.setText("");
+                break;
+        }
+
         callerName = "";
     }
 
