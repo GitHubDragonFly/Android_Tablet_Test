@@ -60,7 +60,7 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
 
                     if (spinABDataType.getSelectedItem().toString().equals("bool") || spinABDataType.getSelectedItem().toString().equals("bool array") ||
                             spinABDataType.getSelectedItem().toString().equals("timer") || spinABDataType.getSelectedItem().toString().equals("counter") ||
-                            spinABDataType.getSelectedItem().toString().equals("control")){
+                            spinABDataType.getSelectedItem().toString().equals("control") || callerName.equals("etABTagGauge")){
 
                         spinABBit.setEnabled(false);
                     } else {
@@ -85,7 +85,11 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
 
         switch(cpu){
             case "controllogix":
-                stringArray = getResources().getStringArray(R.array.ab_data_type);
+                if (callerName.equals("etABTagGauge"))
+                    stringArray = getResources().getStringArray(R.array.gauge_data_type);
+                else
+                    stringArray = getResources().getStringArray(R.array.ab_data_type);
+
                 dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringArray);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 dataAdapter.notifyDataSetChanged();
@@ -97,7 +101,11 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
             case "plc5":
             case "micro800":
             case "njnx":
-                stringArray = getResources().getStringArray(R.array.ab_mlgx_data_type);
+                if (callerName.equals("etABTagGauge"))
+                    stringArray = getResources().getStringArray(R.array.gauge_data_type);
+                else
+                    stringArray = getResources().getStringArray(R.array.ab_mlgx_data_type);
+
                 dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringArray);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 dataAdapter.notifyDataSetChanged();
@@ -175,6 +183,9 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
                         spinABBit.setEnabled(false);
                         break;
                 }
+
+                if (callerName.equals("etABTagGauge"))
+                    spinABBit.setEnabled(false);
 
                 dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringArray);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

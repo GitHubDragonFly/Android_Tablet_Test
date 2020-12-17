@@ -22,7 +22,8 @@ public class PopUpAddressMB extends AppCompatActivity implements AdapterView.OnI
 
     DisplayMetrics dm = new DisplayMetrics();
     String callerName;
-    EditText etMBAddr;
+    EditText etMBAddress;
+    ArrayAdapter<String> dataAdapter;
     Spinner spinMBIO, spinMBBit, spinMBDataType, spinMBStringLength;
 
     @Override
@@ -37,7 +38,7 @@ public class PopUpAddressMB extends AppCompatActivity implements AdapterView.OnI
 
         callerName = MainActivity.callerName;
 
-        etMBAddr = findViewById(R.id.etMBAddress);
+        etMBAddress = findViewById(R.id.etMBAddress);
 
         spinMBIO = findViewById(R.id.spinnerMBIO);
         spinMBIO.setOnItemSelectedListener(this);
@@ -49,6 +50,15 @@ public class PopUpAddressMB extends AppCompatActivity implements AdapterView.OnI
 
         spinMBStringLength = findViewById(R.id.spinnerMBStringLength);
         spinMBStringLength.setOnItemSelectedListener(this);
+
+        if (callerName.equals("etMBTagGauge"))
+            dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.modbusGaugeAddress));
+        else
+            dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.modbusAddress));
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapter.notifyDataSetChanged();
+        spinMBIO.setAdapter(dataAdapter);
     }
 
     @Override
@@ -57,21 +67,27 @@ public class PopUpAddressMB extends AppCompatActivity implements AdapterView.OnI
 
         switch(parent.getId()){
             case R.id.spinnerMBIO:
-                if (spinMBIO.getSelectedItem().toString().equals("CO") ||
-                        spinMBIO.getSelectedItem().toString().equals("DI")){
+                if (spinMBIO.getSelectedItem().toString().equals("CO") || spinMBIO.getSelectedItem().toString().equals("DI")){
                     stringArray = getResources().getStringArray(R.array.modbus_data_type_bool);
-                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringArray);
+                    dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringArray);
                     dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     dataAdapter.notifyDataSetChanged();
                     spinMBDataType.setAdapter(dataAdapter);
                     spinMBBit.setEnabled(false);
                 } else {
-                    stringArray = getResources().getStringArray(R.array.modbus_data_type);
-                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringArray);
+                    if (callerName.equals("etMBTagGauge")){
+                        stringArray = getResources().getStringArray(R.array.gauge_data_type);
+                        spinMBBit.setEnabled(false);
+                    }
+                    else {
+                        stringArray = getResources().getStringArray(R.array.modbus_data_type);
+                        spinMBBit.setEnabled(true);
+                    }
+
+                    dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringArray);
                     dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     dataAdapter.notifyDataSetChanged();
                     spinMBDataType.setAdapter(dataAdapter);
-                    spinMBBit.setEnabled(true);
                 }
                 break;
             case R.id.spinnerMBDataType:
@@ -153,7 +169,7 @@ public class PopUpAddressMB extends AppCompatActivity implements AdapterView.OnI
     {
         v.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
 
-        String addr = (etMBAddr.getText().toString());
+        String addr = (etMBAddress.getText().toString());
 
         if (!TextUtils.isEmpty(addr)){
             int addrValue = Integer.parseInt(addr);

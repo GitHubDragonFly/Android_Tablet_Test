@@ -44,6 +44,20 @@
             android:screenOrientation="sensorLandscape">
         </activity>
 
+        <activity
+            android:name=".GaugeActivityAB"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.GaugeTheme"
+            android:screenOrientation="sensorLandscape">
+        </activity>
+
+        <activity
+            android:name=".GaugeActivityMB"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.GaugeTheme"
+            android:screenOrientation="sensorLandscape">
+        </activity>
+
     </application>
 
 </manifest>

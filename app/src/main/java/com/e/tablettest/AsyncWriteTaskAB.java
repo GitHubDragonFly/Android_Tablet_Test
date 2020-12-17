@@ -136,7 +136,7 @@ public class AsyncWriteTaskAB extends AsyncTask<String, Void, String> {
             }
         }
 
-        tagABString += gateway_path_cpu + "&elem_size=" + elem_size + "&elem_count=1&name=" + name + "&elem_type=" + dataType;
+        tagABString += gateway_path_cpu + "&elem_size=" + elem_size + "&elem_count=1&name=" + name;
 
         tag_id = ABWriteMaster.TagCreate(tagABString, timeout);
 

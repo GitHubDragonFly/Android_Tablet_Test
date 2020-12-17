@@ -68,42 +68,44 @@
         app:layout_constraintEnd_toStartOf="@+id/txtOSArch" />
 
     <Button
-        android:id="@+id/btnWriteABTag8"
+        android:id="@+id/btnABGauge"
         android:layout_width="60dp"
         android:layout_height="30dp"
-        android:layout_marginStart="7dp"
-        android:layout_marginLeft="7dp"
-        android:layout_marginTop="7dp"
-        android:background="@android:drawable/button_onoff_indicator_on"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="6dp"
+        android:background="@android:drawable/button_onoff_indicator_off"
         android:clickable="true"
+        android:enabled="false"
         android:focusable="true"
         android:gravity="center_horizontal|center_vertical"
-        android:onClick="sendMessageWriteAB"
-        android:text="@string/btnWrite"
+        android:onClick="sendMessageGaugeAB"
+        android:text="@string/btnGauge"
         android:textAllCaps="false"
         android:textColor="@android:color/black"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/tvABTagValue8"
-        app:layout_constraintTop_toBottomOf="@+id/btnWriteABTag7" />
+        app:layout_constraintStart_toEndOf="@+id/etABTagGauge"
+        app:layout_constraintTop_toBottomOf="@+id/tvABTagValue7" />
 
     <Button
-        android:id="@+id/btnWriteMBTag8"
+        android:id="@+id/btnMBGauge"
         android:layout_width="60dp"
         android:layout_height="30dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:background="@android:drawable/button_onoff_indicator_on"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@android:drawable/button_onoff_indicator_off"
         android:clickable="true"
+        android:enabled="false"
         android:focusable="true"
         android:gravity="center_horizontal|center_vertical"
-        android:onClick="sendMessageWriteMB"
-        android:text="@string/btnWrite"
+        android:onClick="sendMessageGaugeMB"
+        android:text="@string/btnGauge"
         android:textAllCaps="false"
         android:textColor="@android:color/black"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/tvMBTagValue7"
-        app:layout_constraintTop_toBottomOf="@+id/btnWriteMBTag7" />
+        app:layout_constraintEnd_toStartOf="@+id/etMBTagGauge"
+        app:layout_constraintTop_toBottomOf="@+id/tvMBTagValue7" />
 
     <Button
         android:id="@+id/btnWriteABTag7"
@@ -369,22 +371,8 @@
         android:text="@string/LGXProgram"
         android:textColor="@android:color/black"
         android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/labelProgram"
-        app:layout_constraintTop_toBottomOf="@+id/etABIPAddress" />
-
-    <TextView
-        android:id="@+id/labelProgram"
-        android:layout_width="125dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="16dp"
-        android:clickable="false"
-        android:gravity="center_horizontal|center_vertical"
-        android:inputType="none"
-        android:text="@string/labelLGXProgram"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerABCPU" />
+        app:layout_constraintTop_toBottomOf="@id/spinnerABCPU" />
 
     <EditText
         android:id="@+id/etTimeout"
@@ -458,38 +446,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvMBTagValue6" />
 
     <EditText
-        android:id="@+id/tvMBTagValue8"
-        android:layout_width="190dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/rounded_rectangle_light_gray"
-        android:clickable="true"
-        android:enabled="false"
-        android:focusable="true"
-        android:gravity="center_horizontal|center_vertical"
-        android:hint="@string/WriteHint"
-        android:importantForAutofill="no"
-        android:inputType="textNoSuggestions"
-        android:scrollbarAlwaysDrawHorizontalTrack="true"
-        android:scrollbarAlwaysDrawVerticalTrack="false"
-        android:scrollbarDefaultDelayBeforeFade="4000"
-        android:scrollbarSize="2dp"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbarThumbHorizontal="@android:color/holo_blue_light"
-        android:scrollbarTrackHorizontal="?android:attr/scrollbarTrackVertical"
-        android:scrollbars="horizontal"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/etMBTag8"
-        app:layout_constraintTop_toBottomOf="@+id/tvMBTagValue7" />
-
-    <EditText
-        android:id="@+id/etMBTag8"
+        android:id="@+id/etMBTagGauge"
         android:layout_width="200dp"
         android:layout_height="30dp"
         android:layout_marginTop="7dp"
@@ -745,7 +702,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvABTagValue6" />
 
     <EditText
-        android:id="@+id/etABTag8"
+        android:id="@+id/etABTagGauge"
         android:layout_width="200dp"
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
@@ -773,36 +730,6 @@
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etABTag7" />
-
-    <EditText
-        android:id="@+id/tvABTagValue8"
-        android:layout_width="190dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="7dp"
-        android:background="@drawable/rounded_rectangle_light_gray"
-        android:clickable="true"
-        android:enabled="false"
-        android:focusable="true"
-        android:gravity="center_horizontal|center_vertical"
-        android:hint="@string/WriteHint"
-        android:importantForAutofill="no"
-        android:inputType="textNoSuggestions"
-        android:scrollbarAlwaysDrawHorizontalTrack="true"
-        android:scrollbarDefaultDelayBeforeFade="4000"
-        android:scrollbarSize="2dp"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbarThumbHorizontal="@android:color/holo_blue_light"
-        android:scrollbarTrackHorizontal="?android:attr/scrollbarTrackVertical"
-        android:scrollbars="horizontal"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/etABTag8"
-        app:layout_constraintTop_toBottomOf="@+id/tvABTagValue7" />
 
     <EditText
         android:id="@+id/etABTag6"
@@ -1663,8 +1590,8 @@
         android:id="@+id/btnGetCLGXTags"
         android:layout_width="100dp"
         android:layout_height="34dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="12dp"
         android:background="@android:drawable/button_onoff_indicator_on"
         android:clickable="true"
@@ -1677,7 +1604,7 @@
         android:textSize="14sp"
         android:textStyle="italic"
         app:layout_constraintStart_toEndOf="@+id/etCLGXProgram"
-        app:layout_constraintTop_toBottomOf="@+id/etABPath" />
+        app:layout_constraintTop_toBottomOf="@id/etABIPAddress" />
 
     <Button
         android:id="@+id/btnWriteABTag1"

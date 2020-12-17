@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">AB &amp; Modbus Master</string>
     <string name="btnOK">OK</string>
+    <string name="btnGauge">Gauge</string>
+    <string name="btnGaugeDemo">Gauge Demo</string>
     <string name="btnGetTags">Get Tags</string>
     <string name="btnWrite">Write</string>
     <string name="btnClearABTags">Clear AB Tags</string>
@@ -25,14 +27,13 @@
     <string name="labelMBPLCCPU">PLC / CPU</string>
     <string name="labelMBIPAddress">IP Address</string>
     <string name="labelMBUnitID">UnitID</string>
-    <string name="labelLGXProgram">Program Tags for :</string>
     <string name="LGXProgram">MainProgram</string>
     <string name="LGXProgramHint">Program Name</string>
     <string name="LGXIPAddress">192.168.1.21</string>
     <string name="LGXIPAddressHint">IP Address</string>
     <string name="LGXPath">1,3</string>
     <string name="LGXPathHint">CSV</string>
-    <string name="ModbusIPAddress">192.168.1.20:502</string>
+    <string name="ModbusIPAddress">192.168.1.20</string>
     <string name="ModbusPLCAddress">0</string>
     <string name="ModbusPLCAddressHint">Unsigned Short</string>
     <string name="tagHint">Tag</string>
@@ -103,6 +104,19 @@
         <item>control</item>
     </string-array>
 
+    <string-array name="gauge_data_type">
+        <item>int8</item>
+        <item>uint8</item>
+        <item>int16</item>
+        <item>uint16</item>
+        <item>int32</item>
+        <item>uint32</item>
+        <item>int64</item>
+        <item>uint64</item>
+        <item>float32</item>
+        <item>float64</item>
+    </string-array>
+
     <string-array name="modbus">
         <item>modbus</item>
     </string-array>
@@ -110,6 +124,11 @@
     <string-array name="modbusAddress">
         <item>CO</item>
         <item>DI</item>
+        <item>IR</item>
+        <item>HR</item>
+    </string-array>
+
+    <string-array name="modbusGaugeAddress">
         <item>IR</item>
         <item>HR</item>
     </string-array>

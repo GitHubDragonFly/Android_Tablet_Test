@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
 
     private static final String TAG = "Main Activity";
 
+    public static String abGaugeAddress = "", abCPU = "", abIPAddress = "", abPath = "", timeout = "";
+    public static String mbGaugeAddress = "", mbIPAddress = "", mbUnitID = "";
     public static String cpu = "", callerName = "", boolDisplay = "";
     public static boolean cbSwapBytesChecked, cbSwapWordsChecked;
 
@@ -47,13 +49,13 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     AsyncWriteTaskAB myWriteTaskAB = null;
     AsyncWriteTaskModbus myWriteTaskMB = null;
 
-    EditText tvABx, tvAB1, tvAB2, tvAB3, tvAB4, tvAB5, tvAB6, tvAB7, tvAB8, tvMBx, tvMB1, tvMB2, tvMB3, tvMB4, tvMB5, tvMB6, tvMB7, tvMB8;
-    EditText etABx, etAB1, etAB2, etAB3, etAB4, etAB5, etAB6, etAB7, etAB8, etMBx, etMB1, etMB2, etMB3, etMB4, etMB5, etMB6, etMB7, etMB8;
+    EditText tvABx, tvAB1, tvAB2, tvAB3, tvAB4, tvAB5, tvAB6, tvAB7, tvMBx, tvMB1, tvMB2, tvMB3, tvMB4, tvMB5, tvMB6, tvMB7;
+    EditText etABx, etAB1, etAB2, etAB3, etAB4, etAB5, etAB6, etAB7, etABGauge, etMBx, etMB1, etMB2, etMB3, etMB4, etMB5, etMB6, etMB7, etMBGauge;
     EditText etABIP, etABPath, etMBIP, etMBUnitID, etTimeout, etProgram;
     ToggleButton btnAB, btnMB;
     TextView lblWriteMessage;
-    Button btnGetCLGXTags, btnWriteABCaller, btnWriteAB1, btnWriteAB2, btnWriteAB3, btnWriteAB4, btnWriteAB5, btnWriteAB6, btnWriteAB7, btnWriteAB8;
-    Button btnWriteMBCaller, btnWriteMB1, btnWriteMB2, btnWriteMB3, btnWriteMB4, btnWriteMB5, btnWriteMB6, btnWriteMB7, btnWriteMB8;
+    Button btnGetCLGXTags, btnWriteABCaller, btnWriteAB1, btnWriteAB2, btnWriteAB3, btnWriteAB4, btnWriteAB5, btnWriteAB6, btnWriteAB7, btnABGauge;
+    Button btnWriteMBCaller, btnWriteMB1, btnWriteMB2, btnWriteMB3, btnWriteMB4, btnWriteMB5, btnWriteMB6, btnWriteMB7, btnMBGauge;
     Spinner spinABCPU, spinMBCPU, spinCLGXTags, spinBooleanDisplay;
     CheckBox cbSwapBytes, cbSwapWords;
     ColorStateList textColor;
@@ -137,8 +139,12 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                         case "etABTag7":
                             tvAB7.setEnabled(textHasValue);
                             break;
-                        case "etABTag8":
-                            tvAB8.setEnabled(textHasValue);
+                        case "etABTagGauge":
+                            btnABGauge.setEnabled(textHasValue);
+                            if (textHasValue)
+                                btnABGauge.setBackground(ContextCompat.getDrawable(MainActivity.this.getBaseContext(), android.R.drawable.button_onoff_indicator_on));
+                            else
+                                btnABGauge.setBackground(ContextCompat.getDrawable(MainActivity.this.getBaseContext(), android.R.drawable.button_onoff_indicator_off));
                             break;
                         case "etMBTag1":
                             tvMB1.setEnabled(textHasValue);
@@ -161,8 +167,12 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                         case "etMBTag7":
                             tvMB7.setEnabled(textHasValue);
                             break;
-                        case "etMBTag8":
-                            tvMB8.setEnabled(textHasValue);
+                        case "etMBTagGauge":
+                            btnMBGauge.setEnabled(textHasValue);
+                            if (textHasValue)
+                                btnMBGauge.setBackground(ContextCompat.getDrawable(MainActivity.this.getBaseContext(), android.R.drawable.button_onoff_indicator_on));
+                            else
+                                btnMBGauge.setBackground(ContextCompat.getDrawable(MainActivity.this.getBaseContext(), android.R.drawable.button_onoff_indicator_off));
                             break;
                     }
 
@@ -184,7 +194,6 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         tvAB5 = findViewById(R.id.tvABTagValue5);
         tvAB6 = findViewById(R.id.tvABTagValue6);
         tvAB7 = findViewById(R.id.tvABTagValue7);
-        tvAB8 = findViewById(R.id.tvABTagValue8);
         tvMB1 = findViewById(R.id.tvMBTagValue1);
         tvMB2 = findViewById(R.id.tvMBTagValue2);
         tvMB3 = findViewById(R.id.tvMBTagValue3);
@@ -192,7 +201,6 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         tvMB5 = findViewById(R.id.tvMBTagValue5);
         tvMB6 = findViewById(R.id.tvMBTagValue6);
         tvMB7 = findViewById(R.id.tvMBTagValue7);
-        tvMB8 = findViewById(R.id.tvMBTagValue8);
 
         textColor = tvAB1.getTextColors();
 
@@ -210,8 +218,8 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         etAB6.addTextChangedListener(tcListener);
         etAB7 = findViewById(R.id.etABTag7);
         etAB7.addTextChangedListener(tcListener);
-        etAB8 = findViewById(R.id.etABTag8);
-        etAB8.addTextChangedListener(tcListener);
+        etABGauge = findViewById(R.id.etABTagGauge);
+        etABGauge.addTextChangedListener(tcListener);
         etMB1 = findViewById(R.id.etMBTag1);
         etMB1.addTextChangedListener(tcListener);
         etMB2 = findViewById(R.id.etMBTag2);
@@ -226,8 +234,8 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         etMB6.addTextChangedListener(tcListener);
         etMB7 = findViewById(R.id.etMBTag7);
         etMB7.addTextChangedListener(tcListener);
-        etMB8 = findViewById(R.id.etMBTag8);
-        etMB8.addTextChangedListener(tcListener);
+        etMBGauge = findViewById(R.id.etMBTagGauge);
+        etMBGauge.addTextChangedListener(tcListener);
 
         btnWriteAB1 = findViewById(R.id.btnWriteABTag1);
         btnWriteAB2 = findViewById(R.id.btnWriteABTag2);
@@ -236,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         btnWriteAB5 = findViewById(R.id.btnWriteABTag5);
         btnWriteAB6 = findViewById(R.id.btnWriteABTag6);
         btnWriteAB7 = findViewById(R.id.btnWriteABTag7);
-        btnWriteAB8 = findViewById(R.id.btnWriteABTag8);
+        btnABGauge = findViewById(R.id.btnABGauge);
         btnWriteMB1 = findViewById(R.id.btnWriteMBTag1);
         btnWriteMB2 = findViewById(R.id.btnWriteMBTag2);
         btnWriteMB3 = findViewById(R.id.btnWriteMBTag3);
@@ -244,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         btnWriteMB5 = findViewById(R.id.btnWriteMBTag5);
         btnWriteMB6 = findViewById(R.id.btnWriteMBTag6);
         btnWriteMB7 = findViewById(R.id.btnWriteMBTag7);
-        btnWriteMB8 = findViewById(R.id.btnWriteMBTag8);
+        btnMBGauge = findViewById(R.id.btnMBGauge);
 
         btnAB = findViewById(R.id.toggleButtonAB);
         btnMB = findViewById(R.id.toggleButtonMB);
@@ -405,7 +413,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             if (TextUtils.isEmpty(etAB1.getText()) && TextUtils.isEmpty(etAB2.getText()) &&
                     TextUtils.isEmpty(etAB3.getText()) && TextUtils.isEmpty(etAB4.getText()) &&
                     TextUtils.isEmpty(etAB5.getText()) && TextUtils.isEmpty(etAB6.getText()) &&
-                    TextUtils.isEmpty(etAB7.getText()) && TextUtils.isEmpty(etAB8.getText())){
+                    TextUtils.isEmpty(etAB7.getText())){
 
                 btnAB.setText(btnAB.getTextOff());
                 myTaskAB = null;
@@ -506,16 +514,6 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 ABAddressList.add(ABinfo);
             }
 
-            if (!TextUtils.isEmpty(etAB8.getText())){
-                plcAddresses.add(etAB8.getText().toString());
-                callerIDs.add("tvABTagValue8");
-                ABAddressInfo ABinfo = new ABAddressInfo();
-                ABinfo.etABTag = etAB8;
-                ABinfo.etABTagValue = tvAB8;
-                ABinfo.btnWriteAB = btnWriteAB8;
-                ABAddressList.add(ABinfo);
-            }
-
             for (ABAddressInfo abi: ABAddressList){
                 abi.etABTag.setInputType(InputType.TYPE_NULL);
                 abi.etABTag.setClickable(false);
@@ -581,7 +579,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             if (TextUtils.isEmpty(etMB1.getText()) && TextUtils.isEmpty(etMB2.getText()) &&
                     TextUtils.isEmpty(etMB3.getText()) && TextUtils.isEmpty(etMB4.getText()) &&
                     TextUtils.isEmpty(etMB5.getText()) && TextUtils.isEmpty(etMB6.getText()) &&
-                    TextUtils.isEmpty(etMB7.getText()) && TextUtils.isEmpty(etMB8.getText())){
+                    TextUtils.isEmpty(etMB7.getText())){
 
                 btnMB.setText(btnMB.getTextOff());
                 myTaskMB = null;
@@ -678,16 +676,6 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 MBinfo.etMBTag = etMB7;
                 MBinfo.etMBTagValue = tvMB7;
                 MBinfo.btnWriteMB = btnWriteMB7;
-                MBAddressList.add(MBinfo);
-            }
-
-            if (!TextUtils.isEmpty(etMB8.getText())){
-                plcAddresses.add(etMB8.getText().toString());
-                callerIDs.add("tvMBTagValue8");
-                MBAddressInfo MBinfo = new MBAddressInfo();
-                MBinfo.etMBTag = etMB8;
-                MBinfo.etMBTagValue = tvMB8;
-                MBinfo.btnWriteMB = btnWriteMB8;
                 MBAddressList.add(MBinfo);
             }
 
@@ -861,17 +849,6 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvABx = tvAB7;
                 }
                 break;
-            case R.id.btnWriteABTag8:
-                if (TextUtils.isEmpty(etAB8.getText()) || TextUtils.isEmpty(tvAB8.getText())){
-                    myWriteTaskAB = null;
-                    return;
-                } else {
-                    params[2] = etAB8.getText().toString();
-                    etABx = etAB8;
-                    params[3] = tvAB8.getText().toString();
-                    tvABx = tvAB8;
-                }
-                break;
         }
 
         lblWriteMessage.setText(getResources().getStringArray(R.array.ab_tags_please_wait)[0]);
@@ -995,17 +972,6 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvMBx = tvMB7;
                 }
                 break;
-            case R.id.btnWriteMBTag8:
-                if (TextUtils.isEmpty(etMB8.getText()) || TextUtils.isEmpty(tvMB8.getText())){
-                    myWriteTaskMB = null;
-                    return;
-                } else {
-                    params[2] = etMB8.getText().toString();
-                    etMBx = etMB8;
-                    params[3] = tvMB8.getText().toString();
-                    tvMBx = tvMB8;
-                }
-                break;
         }
 
         lblWriteMessage.setText(getResources().getStringArray(R.array.ab_tags_please_wait)[0]);
@@ -1067,10 +1033,8 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             tvAB7.setEnabled(false);
         }
 
-        if (!(etAB8.getInputType() == InputType.TYPE_NULL) && !etAB8.getText().toString().equals("")){
-            etAB8.setText("");
-            tvAB8.setText("");
-            tvAB8.setEnabled(false);
+        if (!(etABGauge.getInputType() == InputType.TYPE_NULL) && !etABGauge.getText().toString().equals("")){
+            etABGauge.setText("");
         }
 
         clearingTags = false;
@@ -1121,10 +1085,8 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             tvMB7.setEnabled(false);
         }
 
-        if (!(etMB8.getInputType() == InputType.TYPE_NULL) && !etMB8.getText().toString().equals("")){
-            etMB8.setText("");
-            tvMB8.setText("");
-            tvMB8.setEnabled(false);
+        if (!(etMBGauge.getInputType() == InputType.TYPE_NULL) && !etMBGauge.getText().toString().equals("")){
+            etMBGauge.setText("");
         }
 
         clearingTags = false;
@@ -1144,6 +1106,29 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         callerName = getResources().getResourceEntryName(v.getId());
 
         Intent intent = new Intent(MainActivity.this, PopUpAddressMB.class);
+        startActivity(intent);
+    }
+
+    public void sendMessageGaugeAB(View v)
+    {
+        abCPU = spinABCPU.getSelectedItem().toString();
+        abIPAddress = etABIP.getText().toString();
+        abPath = etABPath.getText().toString();
+        timeout = etTimeout.getText().toString();
+        abGaugeAddress = etABGauge.getText().toString();
+
+        Intent intent = new Intent(MainActivity.this, GaugeActivityAB.class);
+        startActivity(intent);
+    }
+
+    public void sendMessageGaugeMB(View v)
+    {
+        mbIPAddress = etMBIP.getText().toString();
+        mbUnitID = etMBUnitID.getText().toString();
+        timeout = etTimeout.getText().toString();
+        mbGaugeAddress = etMBGauge.getText().toString();
+
+        Intent intent = new Intent(MainActivity.this, GaugeActivityMB.class);
         startActivity(intent);
     }
 
@@ -1238,9 +1223,6 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             case "etABTag7":
                 tvAB7.setText("");
                 break;
-            case "etABTag8":
-                tvAB8.setText("");
-                break;
             case "etMBTag1":
                 tvMB1.setText("");
                 break;
@@ -1261,9 +1243,6 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 break;
             case "etMBTag7":
                 tvMB7.setText("");
-                break;
-            case "etMBTag8":
-                tvMB8.setText("");
                 break;
         }
 

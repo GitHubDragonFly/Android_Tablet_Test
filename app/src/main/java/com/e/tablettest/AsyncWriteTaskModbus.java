@@ -95,7 +95,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
             }
 
             String tagMBString = "protocol=modbus_tcp&";
-            tagMBString += gateway_unitId + "&elem_size=" + elem_size + "&elem_count=" + elem_count + "&name=" + name + "&elem_type=" + dataType;
+            tagMBString += gateway_unitId + "&elem_size=" + elem_size + "&elem_count=" + elem_count + "&name=" + name;
 
             tag_id = MBWriteMaster.TagCreate(tagMBString, timeout);
 
