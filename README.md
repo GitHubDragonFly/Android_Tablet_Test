@@ -35,7 +35,8 @@ It might be even simpler to just copy the existing libplctag AAR file to a diffe
 - You can specify the name of the Program to get tags for (the default is set to MainProgram).
 - "Write" buttons are only functional when enabled AND tag is present AND value to write is present.
 - Only a single "Write" process per PLC can be running at the time.
-- "Screen Clean" button allows for freezing and cleaning the screen without exiting the app.
+- The "Screen Clean" button allows for freezing and cleaning the screen without exiting the app.
+- The "Gauge" screens have the custom [AngleIndicator](https://github.com/GitHubDragonFly/AndroidUserControls) control which can respond to any non-bool/string data type.
 - As for AB tags, you will need to specify the Custom String Length when the "custom string" data type is selected.
 - As for Modbus tags, you will need to specify the String Length when the "string" data type is selected.
 - Modbus addressing: CO = Coil, DI = Discrete Input, IR = Input Register, HR = Holding Register.
