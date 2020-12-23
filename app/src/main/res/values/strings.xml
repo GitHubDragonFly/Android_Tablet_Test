@@ -37,6 +37,7 @@
     <string name="ModbusPLCAddress">0</string>
     <string name="ModbusPLCAddressHint">Unsigned Short</string>
     <string name="tagHint">Tag</string>
+    <string name="gaugeTagHint">Gauge Tag</string>
     <string name="WriteHint">Read / Write</string>
     <string name="timeout">10000</string>
     <string name="timeoutHint">Positive Number</string>

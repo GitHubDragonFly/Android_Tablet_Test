@@ -51,6 +51,9 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
 
         etABTag = findViewById(R.id.etABtag);
         etABTag.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence chars, int start, int count, int after) {
+            }
+
             public void onTextChanged(CharSequence chars, int start, int before, int count) {
                 if(chars.toString().equals("")){
                     spinABDataType.setEnabled(false);
@@ -71,9 +74,6 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
                             spinABBit.setEnabled(true);
                     }
                 }
-            }
-
-            public void beforeTextChanged(CharSequence chars, int start, int count, int after) {
             }
 
             public void afterTextChanged(Editable s) {
@@ -193,18 +193,20 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
                 spinABBit.setAdapter(dataAdapter);
                 break;
             case R.id.spinnerCustomStringLength:
-                int index = Integer.parseInt(spinCustomStringLength.getSelectedItem().toString());
-                stringArray = new String[index + 1];
-                stringArray[0] = "None";
+                if (spinCustomStringLength.isEnabled()){
+                    int index = Integer.parseInt(spinCustomStringLength.getSelectedItem().toString());
+                    stringArray = new String[index + 1];
+                    stringArray[0] = "None";
 
-                for (int i = 1; i < index + 1; i++){
-                    stringArray[i] = String.valueOf(i);
+                    for (int i = 1; i < index + 1; i++){
+                        stringArray[i] = String.valueOf(i);
+                    }
+
+                    dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringArray);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    dataAdapter.notifyDataSetChanged();
+                    spinABBit.setAdapter(dataAdapter);
                 }
-
-                dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringArray);
-                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                dataAdapter.notifyDataSetChanged();
-                spinABBit.setAdapter(dataAdapter);
                 break;
         }
     }
