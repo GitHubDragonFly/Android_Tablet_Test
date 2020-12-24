@@ -49,15 +49,15 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     AsyncWriteTaskAB myWriteTaskAB = null;
     AsyncWriteTaskModbus myWriteTaskMB = null;
 
-    boolean clearingTags;
+    boolean clearingTags, abActive, otherActive;
 
     EditText tvABx, tvAB1, tvAB2, tvAB3, tvAB4, tvAB5, tvAB6, tvAB7, tvMBx, tvMB1, tvMB2, tvMB3, tvMB4, tvMB5, tvMB6, tvMB7;
     EditText etABx, etAB1, etAB2, etAB3, etAB4, etAB5, etAB6, etAB7, etABGauge, etMBx, etMB1, etMB2, etMB3, etMB4, etMB5, etMB6, etMB7, etMBGauge;
     EditText etABIP, etABPath, etMBIP, etMBUnitID, etTimeout, etProgram;
     ToggleButton btnAB, btnMB;
     TextView lblWriteMessage;
-    Button btnGetCLGXTags, btnWriteABCaller, btnWriteAB1, btnWriteAB2, btnWriteAB3, btnWriteAB4, btnWriteAB5, btnWriteAB6, btnWriteAB7, btnABGauge;
-    Button btnWriteMBCaller, btnWriteMB1, btnWriteMB2, btnWriteMB3, btnWriteMB4, btnWriteMB5, btnWriteMB6, btnWriteMB7, btnMBGauge;
+    Button btnClearABTags, btnGetCLGXTags, btnWriteABCaller, btnWriteAB1, btnWriteAB2, btnWriteAB3, btnWriteAB4, btnWriteAB5, btnWriteAB6, btnWriteAB7, btnABGauge;
+    Button btnClearMBTags, btnWriteMBCaller, btnWriteMB1, btnWriteMB2, btnWriteMB3, btnWriteMB4, btnWriteMB5, btnWriteMB6, btnWriteMB7, btnMBGauge;
     Spinner spinABCPU, spinMBCPU, spinCLGXTags, spinBooleanDisplay;
     CheckBox cbSwapBytes, cbSwapWords;
 
@@ -123,157 +123,235 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     switch (callerName){
                         case "etABTag1":
                             tvAB1.setEnabled(textHasValue);
+                            abActive = true;
+                            otherActive = false;
                             break;
                         case "etABTag2":
                             tvAB2.setEnabled(textHasValue);
+                            abActive = true;
+                            otherActive = false;
                             break;
                         case "etABTag3":
                             tvAB3.setEnabled(textHasValue);
+                            abActive = true;
+                            otherActive = false;
                             break;
                         case "etABTag4":
                             tvAB4.setEnabled(textHasValue);
+                            abActive = true;
+                            otherActive = false;
                             break;
                         case "etABTag5":
                             tvAB5.setEnabled(textHasValue);
+                            abActive = true;
+                            otherActive = false;
                             break;
                         case "etABTag6":
                             tvAB6.setEnabled(textHasValue);
+                            abActive = true;
+                            otherActive = false;
                             break;
                         case "etABTag7":
                             tvAB7.setEnabled(textHasValue);
+                            abActive = true;
+                            otherActive = false;
                             break;
                         case "etABTagGauge":
                             btnABGauge.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnABGauge.setBackground(ContextCompat.getDrawable(MainActivity.this.getBaseContext(), android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnABGauge.setBackground(ContextCompat.getDrawable(MainActivity.this.getBaseContext(), android.R.drawable.button_onoff_indicator_off));
+
+                            abActive = true;
+                            otherActive = false;
                             break;
                         case "tvABTagValue1":
                             btnWriteAB1.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteAB1.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteAB1.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "tvABTagValue2":
                             btnWriteAB2.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteAB2.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteAB2.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "tvABTagValue3":
                             btnWriteAB3.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteAB3.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteAB3.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "tvABTagValue4":
                             btnWriteAB4.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteAB4.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteAB4.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "tvABTagValue5":
                             btnWriteAB5.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteAB5.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteAB5.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "tvABTagValue6":
                             btnWriteAB6.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteAB6.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteAB6.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "tvABTagValue7":
                             btnWriteAB7.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteAB7.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteAB7.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "etMBTag1":
                             tvMB1.setEnabled(textHasValue);
+                            abActive = false;
+                            otherActive = false;
                             break;
                         case "etMBTag2":
                             tvMB2.setEnabled(textHasValue);
+                            abActive = false;
+                            otherActive = false;
                             break;
                         case "etMBTag3":
                             tvMB3.setEnabled(textHasValue);
+                            abActive = false;
+                            otherActive = false;
                             break;
                         case "etMBTag4":
                             tvMB4.setEnabled(textHasValue);
+                            abActive = false;
+                            otherActive = false;
                             break;
                         case "etMBTag5":
                             tvMB5.setEnabled(textHasValue);
+                            abActive = false;
+                            otherActive = false;
                             break;
                         case "etMBTag6":
                             tvMB6.setEnabled(textHasValue);
+                            abActive = false;
+                            otherActive = false;
                             break;
                         case "etMBTag7":
                             tvMB7.setEnabled(textHasValue);
+                            abActive = false;
+                            otherActive = false;
                             break;
                         case "etMBTagGauge":
                             btnMBGauge.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnMBGauge.setBackground(ContextCompat.getDrawable(MainActivity.this.getBaseContext(), android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnMBGauge.setBackground(ContextCompat.getDrawable(MainActivity.this.getBaseContext(), android.R.drawable.button_onoff_indicator_off));
+
+                            abActive = false;
+                            otherActive = false;
                             break;
                         case "tvMBTagValue1":
                             btnWriteMB1.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteMB1.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteMB1.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "tvMBTagValue2":
                             btnWriteMB2.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteMB2.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteMB2.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "tvMBTagValue3":
                             btnWriteMB3.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteMB3.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteMB3.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "tvMBTagValue4":
                             btnWriteMB4.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteMB4.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteMB4.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "tvMBTagValue5":
                             btnWriteMB5.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteMB5.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteMB5.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "tvMBTagValue6":
                             btnWriteMB6.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteMB6.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteMB6.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                         case "tvMBTagValue7":
                             btnWriteMB7.setEnabled(textHasValue);
+
                             if (textHasValue)
                                 btnWriteMB7.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
                             else
                                 btnWriteMB7.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+
+                            otherActive = true;
                             break;
                     }
                 }
@@ -281,6 +359,12 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (!otherActive){
+                    if (abActive)
+                        ButtonClearABTagsEnableDisable();
+                    else
+                        ButtonClearMBTagsEnableDisable();
+                }
             }
         };
 
@@ -393,6 +477,9 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         btnMB = findViewById(R.id.toggleButtonMB);
         btnGetCLGXTags = findViewById(R.id.btnGetCLGXTags);
 
+        btnClearABTags = findViewById(R.id.btnClearABTags);
+        btnClearMBTags = findViewById(R.id.btnClearMBTags);
+
         etABIP = findViewById(R.id.etABIPAddress);
         etABPath = findViewById(R.id.etABPath);
         etProgram = findViewById(R.id.etCLGXProgram);
@@ -492,6 +579,46 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+    }
+
+    public void ButtonClearABTagsEnableDisable(){
+        if ((!(etAB1.getInputType() == InputType.TYPE_NULL) && !etAB1.getText().toString().equals("")) ||
+                (!(etAB2.getInputType() == InputType.TYPE_NULL) && !etAB2.getText().toString().equals("")) ||
+                (!(etAB3.getInputType() == InputType.TYPE_NULL) && !etAB3.getText().toString().equals("")) ||
+                (!(etAB4.getInputType() == InputType.TYPE_NULL) && !etAB4.getText().toString().equals("")) ||
+                (!(etAB5.getInputType() == InputType.TYPE_NULL) && !etAB5.getText().toString().equals("")) ||
+                (!(etAB6.getInputType() == InputType.TYPE_NULL) && !etAB6.getText().toString().equals("")) ||
+                (!(etAB7.getInputType() == InputType.TYPE_NULL) && !etAB7.getText().toString().equals("")) ||
+                !etABGauge.getText().toString().equals("")){
+
+            btnClearABTags.setEnabled(true);
+            btnClearABTags.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
+        } else {
+            if (btnClearABTags.isEnabled()){
+                btnClearABTags.setEnabled(false);
+                btnClearABTags.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+            }
+        }
+    }
+
+    public void ButtonClearMBTagsEnableDisable(){
+        if ((!(etMB1.getInputType() == InputType.TYPE_NULL) && !etMB1.getText().toString().equals("")) ||
+                (!(etMB2.getInputType() == InputType.TYPE_NULL) && !etMB2.getText().toString().equals("")) ||
+                (!(etMB3.getInputType() == InputType.TYPE_NULL) && !etMB3.getText().toString().equals("")) ||
+                (!(etMB4.getInputType() == InputType.TYPE_NULL) && !etMB4.getText().toString().equals("")) ||
+                (!(etMB5.getInputType() == InputType.TYPE_NULL) && !etMB5.getText().toString().equals("")) ||
+                (!(etMB6.getInputType() == InputType.TYPE_NULL) && !etMB6.getText().toString().equals("")) ||
+                (!(etMB7.getInputType() == InputType.TYPE_NULL) && !etMB7.getText().toString().equals("")) ||
+                !etMBGauge.getText().toString().equals("")){
+
+            btnClearMBTags.setEnabled(true);
+            btnClearMBTags.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_on));
+        } else {
+            if (btnClearMBTags.isEnabled()){
+                btnClearMBTags.setEnabled(false);
+                btnClearMBTags.setBackground(ContextCompat.getDrawable(MainActivity.this, android.R.drawable.button_onoff_indicator_off));
+            }
+        }
     }
 
     public void sendMessageGetCLGXTags(View v){
@@ -670,6 +797,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
 
             btnAB.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_on));
             callerName = "";
+            ButtonClearABTagsEnableDisable();
 
             Log.v(TAG, "AB Task is " + myTaskAB.getStatus().toString());
         } else {
@@ -698,6 +826,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             }
 
             btnAB.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
+            ButtonClearABTagsEnableDisable();
 
             Log.v(TAG, "AB Task is Cancelled");
         }
@@ -839,6 +968,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
 
             btnMB.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_on));
             callerName = "";
+            ButtonClearMBTagsEnableDisable();
 
             Log.v(TAG, "Modbus Task is " + myTaskMB.getStatus().toString());
         } else {
@@ -869,6 +999,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             cbSwapWords.setEnabled(true);
 
             btnMB.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
+            ButtonClearMBTagsEnableDisable();
 
             Log.v(TAG, "Modbus Task is Cancelled");
         }
@@ -1192,6 +1323,8 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             btnABGauge.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
         }
 
+        ButtonClearABTagsEnableDisable();
+
         clearingTags = false;
     }
 
@@ -1259,6 +1392,8 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             btnMBGauge.setEnabled(false);
             btnMBGauge.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
         }
+
+        ButtonClearMBTagsEnableDisable();
 
         clearingTags = false;
     }
@@ -1401,6 +1536,9 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 callerName = "tvABTagValue7";
                 tvAB7.setText("");
                 break;
+            case "etABTagGauge":
+                ButtonClearABTagsEnableDisable();
+                break;
             case "etMBTag1":
                 callerName = "tvMBTagValue1";
                 tvMB1.setText("");
@@ -1428,6 +1566,9 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
             case "etMBTag7":
                 callerName = "tvMBTagValue7";
                 tvMB7.setText("");
+                break;
+            case "etMBTagGauge":
+                ButtonClearMBTagsEnableDisable();
                 break;
         }
     }
