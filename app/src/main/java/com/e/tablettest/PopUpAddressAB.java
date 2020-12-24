@@ -184,7 +184,10 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
                         break;
                 }
 
-                if (callerName.equals("etABTagGauge"))
+                String chars = etABTag.getText().toString();
+
+                if (callerName.equals("etABTagGauge") || chars.contains("/") || (chars.contains(".") && !chars.contains(":")) ||
+                        (chars.contains(".") && chars.lastIndexOf(".") > chars.indexOf('.')))
                     spinABBit.setEnabled(false);
 
                 dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringArray);
