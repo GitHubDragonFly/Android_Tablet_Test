@@ -201,15 +201,125 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                                 MBWriteMaster.setBit(tag_id, bitIndex - quot * 16 + zeroBytes * 8, BitValueToWrite);
                         }
                     } else {
-                        MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
+                        switch (dataType){
+                            case "int8":
+                            case "uint8":
+                                if (MainActivity.cbSwapBytesChecked){
+                                    MBWriteMaster.setBit(tag_id, bitIndex + 8, BitValueToWrite);
+                                } else {
+                                    MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
+                                }
+                                break;
+                            case "int16":
+                            case "uint16":
+                                if (MainActivity.cbSwapBytesChecked){
+                                    if (bitIndex < 8)
+                                        MBWriteMaster.setBit(tag_id, bitIndex + 8, BitValueToWrite);
+                                    else
+                                        MBWriteMaster.setBit(tag_id, bitIndex - 8, BitValueToWrite);
+                                } else {
+                                    MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
+                                }
+                                break;
+                            case "int32":
+                            case "uint32":
+                            case "float32":
+                                if (MainActivity.cbSwapBytesChecked || MainActivity.cbSwapWordsChecked){
+                                    if (MainActivity.cbSwapBytesChecked){
+                                        if (MainActivity.cbSwapWordsChecked) // byte3 + byte2 + byte1 + byte0
+                                            if (bitIndex < 8)
+                                                MBWriteMaster.setBit(tag_id, bitIndex + 24, BitValueToWrite);
+                                            else if (bitIndex < 16)
+                                                MBWriteMaster.setBit(tag_id, bitIndex + 8, BitValueToWrite);
+                                            else if (bitIndex < 24)
+                                                MBWriteMaster.setBit(tag_id, bitIndex - 8, BitValueToWrite);
+                                            else
+                                                MBWriteMaster.setBit(tag_id, bitIndex - 24, BitValueToWrite);
+                                        else // byte1 + byte0 + byte3 + byte2
+                                            if (bitIndex < 8)
+                                                MBWriteMaster.setBit(tag_id, bitIndex + 8, BitValueToWrite);
+                                            else if (bitIndex < 16)
+                                                MBWriteMaster.setBit(tag_id, bitIndex - 8, BitValueToWrite);
+                                            else if (bitIndex < 24)
+                                                MBWriteMaster.setBit(tag_id, bitIndex + 8, BitValueToWrite);
+                                            else
+                                                MBWriteMaster.setBit(tag_id, bitIndex - 8, BitValueToWrite);
+                                    } else // byte2 + byte3 + byte0 + byte1
+                                        if (bitIndex < 16)
+                                            MBWriteMaster.setBit(tag_id, bitIndex + 16, BitValueToWrite);
+                                        else
+                                            MBWriteMaster.setBit(tag_id, bitIndex - 16, BitValueToWrite);
+                                } else {
+                                    MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
+                                }
+                                break;
+                            case "int64":
+                            case "uint64":
+                            case "float64":
+                                if (MainActivity.cbSwapBytesChecked || MainActivity.cbSwapWordsChecked){
+                                    if (MainActivity.cbSwapBytesChecked){
+                                        if (MainActivity.cbSwapWordsChecked) // byte7 + byte6 + byte5 + byte4 + byte3 + byte2 + byte1 + byte0
+                                            if (bitIndex < 8)
+                                                MBWriteMaster.setBit(tag_id, bitIndex + 56, BitValueToWrite);
+                                            else if (bitIndex < 16)
+                                                MBWriteMaster.setBit(tag_id, bitIndex + 40, BitValueToWrite);
+                                            else if (bitIndex < 24)
+                                                MBWriteMaster.setBit(tag_id, bitIndex + 24, BitValueToWrite);
+                                            else if (bitIndex < 32)
+                                                MBWriteMaster.setBit(tag_id, bitIndex + 8, BitValueToWrite);
+                                            else if (bitIndex < 40)
+                                                MBWriteMaster.setBit(tag_id, bitIndex - 8, BitValueToWrite);
+                                            else if (bitIndex < 48)
+                                                MBWriteMaster.setBit(tag_id, bitIndex - 24, BitValueToWrite);
+                                            else if (bitIndex < 56)
+                                                MBWriteMaster.setBit(tag_id, bitIndex - 40, BitValueToWrite);
+                                            else
+                                                MBWriteMaster.setBit(tag_id, bitIndex - 56, BitValueToWrite);
+                                        else // byte1 + byte0 + byte3 + byte2 + byte5 + byte4 + byte7 + byte6
+                                            if (bitIndex < 8)
+                                                MBWriteMaster.setBit(tag_id, bitIndex + 8, BitValueToWrite);
+                                            else if (bitIndex < 16)
+                                                MBWriteMaster.setBit(tag_id, bitIndex - 8, BitValueToWrite);
+                                            else if (bitIndex < 24)
+                                                MBWriteMaster.setBit(tag_id, bitIndex + 8, BitValueToWrite);
+                                            else if (bitIndex < 32)
+                                                MBWriteMaster.setBit(tag_id, bitIndex - 8, BitValueToWrite);
+                                            else if (bitIndex < 40)
+                                                MBWriteMaster.setBit(tag_id, bitIndex + 8, BitValueToWrite);
+                                            else if (bitIndex < 48)
+                                                MBWriteMaster.setBit(tag_id, bitIndex - 8, BitValueToWrite);
+                                            else if (bitIndex < 56)
+                                                MBWriteMaster.setBit(tag_id, bitIndex + 8, BitValueToWrite);
+                                            else
+                                                MBWriteMaster.setBit(tag_id, bitIndex - 8, BitValueToWrite);
+                                    } else // byte6 + byte7 + byte4 + byte5 + byte2 + byte3 + byte0 + byte1
+                                        if (bitIndex < 16)
+                                            MBWriteMaster.setBit(tag_id, bitIndex + 48, BitValueToWrite);
+                                        else if (bitIndex < 32)
+                                            MBWriteMaster.setBit(tag_id, bitIndex + 16, BitValueToWrite);
+                                        else if (bitIndex < 48)
+                                            MBWriteMaster.setBit(tag_id, bitIndex - 16, BitValueToWrite);
+                                        else
+                                            MBWriteMaster.setBit(tag_id, bitIndex - 48, BitValueToWrite);
+                                } else {
+                                    MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
+                                }
+                                break;
+                        }
                     }
                 } else {
                     switch (dataType){
                         case "int8":
-                            MBWriteMaster.setInt8(tag_id, 0, Integer.parseInt(params[3]));
+                            if (MainActivity.cbSwapBytesChecked)
+                                MBWriteMaster.setInt8(tag_id, 1, Integer.parseInt(params[3]));
+                            else
+                                MBWriteMaster.setInt8(tag_id, 0, Integer.parseInt(params[3]));
                             break;
                         case "uint8":
-                            MBWriteMaster.setUInt8(tag_id, 0, Short.parseShort(params[3]));
+                            if (MainActivity.cbSwapBytesChecked)
+                                MBWriteMaster.setUInt8(tag_id, 1, Short.parseShort(params[3]));
+                            else
+                                MBWriteMaster.setUInt8(tag_id, 0, Short.parseShort(params[3]));
                             break;
                         case "int16":
                             MBWriteMaster.setInt16(tag_id, 0, Integer.parseInt(params[3]));

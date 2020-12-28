@@ -215,42 +215,72 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
 
                                         boolean bit = (new BigInteger(swappedBytes).testBit(bitIndex[i]));
 
-                                        if (MainActivity.boolDisplay.equals("One : Zero")){
-                                            if (bit){
-                                                tempValue = "1";
-                                            } else {
-                                                tempValue = "0";
-                                            }
-                                        } else if (MainActivity.boolDisplay.equals("On : Off")){
-                                            if (bit){
-                                                tempValue = "On";
-                                            } else {
-                                                tempValue = "Off";
-                                            }
-                                        } else {
-                                            if (bit){
-                                                tempValue = "True";
-                                            } else {
-                                                tempValue = "False";
-                                            }
-                                        }
+                                        tempValue = BooleanDisplay(bit ? '1' : '0');
                                     } else{
-                                        int val = MBMaster.getBit(id,0);
+                                        switch (dType[i]){
+                                            case "int8":
+                                            case "uint8":
+                                            case "int16":
+                                            case "uint16":
+                                                if (swapBytes){
+                                                    String stringPart0 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 0))).replace(' ', '0')).reverse().toString();
+                                                    String stringPart1 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 1))).replace(' ', '0')).reverse().toString();
+                                                    String binaryString = (stringPart1 + stringPart0);
+                                                    tempValue = BooleanDisplay(binaryString.charAt(bitIndex[i]));
+                                                } else {
+                                                    tempValue = BooleanDisplay(String.valueOf(MBMaster.getBit(id, bitIndex[i])).charAt(0));
+                                                }
+                                                break;
+                                            case "int32":
+                                            case "uint32":
+                                            case "float32":
+                                                if (swapBytes || swapWords){
+                                                    String stringPart0 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 0))).replace(' ', '0')).reverse().toString();
+                                                    String stringPart1 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 1))).replace(' ', '0')).reverse().toString();
+                                                    String stringPart2 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 2))).replace(' ', '0')).reverse().toString();
+                                                    String stringPart3 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 3))).replace(' ', '0')).reverse().toString();
+                                                    String binaryString;
 
-                                        if (MainActivity.boolDisplay.equals("One : Zero")){
-                                            tempValue = String.valueOf(val);
-                                        } else if (MainActivity.boolDisplay.equals("On : Off")){
-                                            if (val == 1){
-                                                tempValue = "On";
-                                            } else {
-                                                tempValue = "Off";
-                                            }
-                                        } else {
-                                            if (val == 1){
-                                                tempValue = "True";
-                                            } else {
-                                                tempValue = "False";
-                                            }
+                                                    if (swapBytes){
+                                                        if (swapWords)
+                                                            binaryString = (stringPart3 + stringPart2 + stringPart1 + stringPart0);
+                                                        else
+                                                            binaryString = (stringPart1 + stringPart0 + stringPart3 + stringPart2);
+                                                    } else
+                                                        binaryString = (stringPart2 + stringPart3 + stringPart0 + stringPart1);
+
+                                                    tempValue = BooleanDisplay(binaryString.charAt(bitIndex[i]));
+                                                } else {
+                                                    tempValue = BooleanDisplay(String.valueOf(MBMaster.getBit(id, bitIndex[i])).charAt(0));
+                                                }
+                                                break;
+                                            case "int64":
+                                            case "uint64":
+                                            case "float64":
+                                                if (swapBytes || swapWords){
+                                                    String stringPart0 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 0))).replace(' ', '0')).reverse().toString();
+                                                    String stringPart1 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 1))).replace(' ', '0')).reverse().toString();
+                                                    String stringPart2 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 2))).replace(' ', '0')).reverse().toString();
+                                                    String stringPart3 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 3))).replace(' ', '0')).reverse().toString();
+                                                    String stringPart4 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 4))).replace(' ', '0')).reverse().toString();
+                                                    String stringPart5 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 5))).replace(' ', '0')).reverse().toString();
+                                                    String stringPart6 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 6))).replace(' ', '0')).reverse().toString();
+                                                    String stringPart7 = new StringBuilder(String.format("%8s", Integer.toBinaryString(0xFF & MBMaster.getUInt8(id, 7))).replace(' ', '0')).reverse().toString();
+                                                    String binaryString;
+
+                                                    if (swapBytes){
+                                                        if (swapWords)
+                                                            binaryString = (stringPart7 + stringPart6 + stringPart5 + stringPart4 + stringPart3 + stringPart2 + stringPart1 + stringPart0);
+                                                        else
+                                                            binaryString = (stringPart1 + stringPart0 + stringPart3 + stringPart2 + stringPart5 + stringPart4 + stringPart7 + stringPart6);
+                                                    } else
+                                                        binaryString = (stringPart6 + stringPart7 + stringPart4 + stringPart5 + stringPart2 + stringPart3 + stringPart0 + stringPart1);
+
+                                                    tempValue = BooleanDisplay(binaryString.charAt(bitIndex[i]));
+                                                } else {
+                                                    tempValue = BooleanDisplay(String.valueOf(MBMaster.getBit(id, bitIndex[i])).charAt(0));
+                                                }
+                                                break;
                                         }
                                     }
                                 } else {
@@ -308,23 +338,7 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
 
                                             break;
                                         case "bool":
-                                            int val = MBMaster.getBit(id,0);
-
-                                            if (MainActivity.boolDisplay.equals("One : Zero")){
-                                                tempValue = String.valueOf(val);
-                                            } else if (MainActivity.boolDisplay.equals("On : Off")){
-                                                if (val == 1){
-                                                    tempValue = "On";
-                                                } else {
-                                                    tempValue = "Off";
-                                                }
-                                            } else {
-                                                if (val == 1){
-                                                    tempValue = "True";
-                                                } else {
-                                                    tempValue = "False";
-                                                }
-                                            }
+                                            tempValue = BooleanDisplay(String.valueOf(MBMaster.getBit(id,0)).charAt(0));
                                             break;
                                         case "string":
                                             byte[] strBytes = new byte[strLength[i]];
@@ -501,5 +515,26 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
         }
 
         return UInt128;
+    }
+
+    private String BooleanDisplay(char bitValue){
+        if (MainActivity.boolDisplay.equals("One : Zero")){
+            if (bitValue == '1')
+                return "1";
+            else
+                return "0";
+        } else if (MainActivity.boolDisplay.equals("On : Off")){
+            if (bitValue == '1'){
+                return "On";
+            } else {
+                return "Off";
+            }
+        } else {
+            if (bitValue == '1'){
+                return "True";
+            } else {
+                return "False";
+            }
+        }
     }
 }
