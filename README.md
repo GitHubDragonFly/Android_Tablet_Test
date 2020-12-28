@@ -30,12 +30,12 @@ See [this link](https://github.com/libplctag/libplctag4android/issues/1) for ins
 - Only a single value will be displayed per tag entered, either of string/char/integer/float...etc.
 - It provides automated READ while, during this operation, unused tag spots can be populated and used to write in parallel.
 - The left half of the screen is for a PLC utilizing AB protocol while the right half is for Modbus (simultaneous use of both).
-- "Get Tags" button will fetch ControlLogix tags, both Controller and Program, and by selecting any of the fetched tags it will be copied to the clipboard.
+- The "Get Tags" button will fetch ControlLogix tags, both Controller and Program, and by selecting any of the fetched tags it will be copied to the clipboard.
 - You can specify the name of the Program to get tags for (the default is set to MainProgram).
-- "Write" buttons are only functional when enabled AND tag is present AND value to write is present.
-- Only a single "Write" process per PLC can be running at the time.
+- "Write" buttons are only functional when tag is present AND value to write is present. Only a single "Write" process per PLC can be running at the time.
 - The "Screen Clean" button allows for freezing and cleaning the screen without exiting the app.
-- The "Gauge" screens have the custom [AngleIndicator](https://github.com/GitHubDragonFly/AndroidUserControls) control which can respond to any non-bool/string data type.
+- The "Gauge" screens have the custom [AngleIndicator](https://github.com/GitHubDragonFly/AndroidUserControls) control which can respond to multiple data types.
+- The custom [LEDLight](https://github.com/GitHubDragonFly/AndroidUserControls) control is present but currently not used. You can add it if you have a need for it (check the related [PhoneTest](https://github.com/GitHubDragonFly/PhoneTest) project for how it could be setup).
 - As for AB tags, you will need to specify the Custom String Length when the "custom string" data type is selected.
 - As for Modbus tags, you will need to specify the String Length when the "string" data type is selected.
 - Modbus addressing: CO = Coil, DI = Discrete Input, IR = Input Register, HR = Holding Register.
