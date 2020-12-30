@@ -17,8 +17,8 @@ import android.graphics.RectF;
 public class LEDLight extends View {
 
     public static final int LED_COLOR = Color.BLUE;
-    public static final float LED_LIGHT_COLOR_RATIO = 0.85f;
-    public static final float LED_DARK_COLOR_RATIO = 0.15f;
+    public static final float LED_LIGHT_COLOR_RATIO = 0.9f;
+    public static final float LED_DARK_COLOR_RATIO = 0.1f;
     public static final boolean LED_ON = false;
     public static final boolean LED_BLINK = false;
     public static final int LED_BLINK_INTERVAL = 500;
@@ -117,10 +117,21 @@ public class LEDLight extends View {
 
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
+        // maintain the square layout
         final int canvasWidth = MeasureSpec.getSize(widthMeasureSpec);
         final int canvasHeight = MeasureSpec.getSize(heightMeasureSpec);
 
-        setMeasuredDimension(canvasWidth, canvasHeight);
+        if (canvasWidth > canvasHeight) {
+            super.onMeasure(
+                    MeasureSpec.makeMeasureSpec(canvasHeight, MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(canvasHeight, MeasureSpec.EXACTLY)
+            );
+        } else {
+            super.onMeasure(
+                    MeasureSpec.makeMeasureSpec(canvasWidth, MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(canvasWidth, MeasureSpec.EXACTLY)
+            );
+        }
     }
 
     @Override
