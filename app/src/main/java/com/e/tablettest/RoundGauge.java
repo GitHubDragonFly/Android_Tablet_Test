@@ -45,11 +45,11 @@ public class RoundGauge extends View {
 
     public float getGaugeCurrentValue() {return mGaugeCurrentValue;}
 
-    public void setGaugeCurrentValue(float currentValue){
-        if (currentValue < mGaugeMinValue)
+    public void setGaugeCurrentValue(float gaugeCurrentValue){
+        if (gaugeCurrentValue < mGaugeMinValue)
             mGaugeCurrentValue = mGaugeMinValue;
         else
-            mGaugeCurrentValue = Math.min(currentValue, mGaugeMaxValue);
+            mGaugeCurrentValue = Math.min(gaugeCurrentValue, mGaugeMaxValue);
 
         invalidate();
         requestLayout();
