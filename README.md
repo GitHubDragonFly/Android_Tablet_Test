@@ -35,7 +35,7 @@ See [this link](https://github.com/libplctag/libplctag4android/issues/1) for ins
 - "Write" buttons are only functional when tag is present AND value to write is present. Only a single "Write" process per PLC can be running at the time.
 - The "Screen Clean" button allows for freezing and cleaning the screen without exiting the app.
 - The "Gauge" screens have the custom [AngleIndicator](https://github.com/GitHubDragonFly/AndroidUserControls) control which can respond to multiple data types.
-- The custom [LEDLight](https://github.com/GitHubDragonFly/AndroidUserControls) control is present but currently not used. You can add it if you have a need for it (check the related [PhoneTest](https://github.com/GitHubDragonFly/PhoneTest) project for how it could be setup).
+- The custom [LEDLight & RoundGauge](https://github.com/GitHubDragonFly/AndroidUserControls) controls are present but currently not used. You can add them if you have a need for it. Check the related [PhoneTest](https://github.com/GitHubDragonFly/PhoneTest) project for how it could be setup.
 - As for AB tags, you will need to specify the Custom String Length when the "custom string" data type is selected.
 - As for Modbus tags, you will need to specify the String Length when the "string" data type is selected.
 - Modbus addressing: CO = Coil, DI = Discrete Input, IR = Input Register, HR = Holding Register.
