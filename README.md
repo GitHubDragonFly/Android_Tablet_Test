@@ -22,7 +22,7 @@ Related project: [libplctag4android](https://github.com/libplctag/libplctag4andr
 
 This app is as experimental as the above mentioned related project but a bit more elaborate.
 The above mentioned related project can be used to compile the latest prerelease version of the libplctag library.
-Do realize that using any version other than v2.1.20 could cause the app produce a different result (it will probably show an error but might be something else).
+Do realize that using any version other than v2.1.20 could cause the app produce some different results (it will probably show an error but might be something else).
 
 See [this link](https://github.com/libplctag/libplctag4android/issues/1) for instructions on how to create libplctag AAR.
 
@@ -35,7 +35,7 @@ See [this link](https://github.com/libplctag/libplctag4android/issues/1) for ins
 - "Write" buttons are only functional when tag is present AND value to write is present. Only a single "Write" process per PLC can be running at the time.
 - The "Screen Clean" button allows for freezing and cleaning the screen without exiting the app.
 - The "Gauge" screens have the custom [AngleIndicator](https://github.com/GitHubDragonFly/AndroidUserControls) control which can respond to multiple data types.
-- The custom [LEDLight](https://github.com/GitHubDragonFly/AndroidUserControls) control is present but currently not used. You can add it if you have a need for it (check the related [PhoneTest](https://github.com/GitHubDragonFly/PhoneTest) project for how it could be setup).
+- The custom [LEDLight & RoundGauge](https://github.com/GitHubDragonFly/AndroidUserControls) controls are present but currently not used. You can add them if you have a need for it. Check the related [PhoneTest](https://github.com/GitHubDragonFly/PhoneTest) project for how it could be setup.
 - As for AB tags, you will need to specify the Custom String Length when the "custom string" data type is selected.
 - As for Modbus tags, you will need to specify the String Length when the "string" data type is selected.
 - Modbus addressing: CO = Coil, DI = Discrete Input, IR = Input Register, HR = Holding Register.
