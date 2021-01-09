@@ -14,15 +14,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     public PopUpAddressAB() { super(); }
+
+    private static final int intSpinnerABDataType = R.id.spinnerABDataType;
+    private static final int intSpinnerCustomStringLength = R.id.spinnerCustomStringLength;
 
     SetTags setTags = MainActivity.setTags;
 
     DisplayMetrics dm = new DisplayMetrics();
     String cpu, callerName;
     EditText etABTag;
+    TextView lblBitCharWord;
     Spinner spinABDataType, spinABBit, spinCustomStringLength;
 
     @Override
@@ -49,6 +54,8 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
         spinCustomStringLength.setOnItemSelectedListener(this);
         spinCustomStringLength.setEnabled(false);
 
+        lblBitCharWord = findViewById(R.id.labelABBit);
+
         etABTag = findViewById(R.id.etABtag);
         etABTag.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence chars, int start, int count, int after) {
@@ -67,11 +74,8 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
 
                         spinABBit.setEnabled(false);
                     } else {
-                        if(chars.toString().contains("/") || (chars.toString().contains(".") && !chars.toString().contains(":")) ||
-                                (chars.toString().contains(".") && chars.toString().lastIndexOf(".") > chars.toString().indexOf('.')))
-                            spinABBit.setEnabled(false);
-                        else
-                            spinABBit.setEnabled(true);
+                        spinABBit.setEnabled(!chars.toString().contains("/") && (!chars.toString().contains(".") || chars.toString().contains(":")) &&
+                                (!chars.toString().contains(".") || chars.toString().lastIndexOf(".") <= chars.toString().indexOf('.')));
                     }
                 }
             }
@@ -103,8 +107,12 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
             case "njnx":
                 if (callerName.equals("etABTagGauge"))
                     stringArray = getResources().getStringArray(R.array.gauge_data_type);
-                else
-                    stringArray = getResources().getStringArray(R.array.ab_mlgx_data_type);
+                else {
+                    if (cpu.equals("micrologix"))
+                        stringArray = getResources().getStringArray(R.array.ab_mlgx_data_type);
+                    else
+                        stringArray = getResources().getStringArray(R.array.ab_slcplc5_data_type);
+                }
 
                 dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringArray);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -121,9 +129,10 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
         ArrayAdapter<String> dataAdapter;
 
         switch(parent.getId()){
-            case R.id.spinnerABDataType:
+            case intSpinnerABDataType:
                 // Disable the custom string length spinner
                 spinCustomStringLength.setEnabled(false);
+                lblBitCharWord.setText(getResources().getString(R.string.labelBit));
 
                 switch (spinABDataType.getSelectedItem().toString()) {
                     case "int8":
@@ -179,6 +188,12 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
 
                         spinABBit.setEnabled(true);
                         break;
+                    case "pid":
+                        lblBitCharWord.setText(getResources().getString(R.string.labelBitPID));
+                        stringArray = getResources().getStringArray(R.array.pid_bits_words);
+                        if (spinABDataType.isEnabled())
+                            spinABBit.setEnabled(true);
+                        break;
                     default:
                         spinABBit.setEnabled(false);
                         break;
@@ -195,7 +210,7 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
                 dataAdapter.notifyDataSetChanged();
                 spinABBit.setAdapter(dataAdapter);
                 break;
-            case R.id.spinnerCustomStringLength:
+            case intSpinnerCustomStringLength:
                 if (spinCustomStringLength.isEnabled()){
                     int index = Integer.parseInt(spinCustomStringLength.getSelectedItem().toString());
                     stringArray = new String[index + 1];
@@ -249,6 +264,8 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
                         setTags.UpdateTags(callerName, (tag + "/" + spinABBit.getSelectedItem().toString() + "; " + spinABDataType.getSelectedItem()));
                     else
                         setTags.UpdateTags(callerName, (tag + "." + spinABBit.getSelectedItem().toString() + "; " + spinABDataType.getSelectedItem()));
+                else if (cpu.equals("micrologix") && spinABDataType.getSelectedItem().toString().equals("pid"))
+                    setTags.UpdateTags(callerName, (tag + "." + spinABBit.getSelectedItem().toString() + "; " + spinABDataType.getSelectedItem()));
                 else
                     setTags.UpdateTags(callerName, (tag + "/" + spinABBit.getSelectedItem().toString() + "; " + spinABDataType.getSelectedItem()));
             } else {

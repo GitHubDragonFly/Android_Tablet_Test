@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("deprecation")
 public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>, Void, String> {
@@ -17,13 +18,13 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
     String value = "", tempValue = "", callerID = "", gateway_path = "", name = "", dataType = "";
     int tag_id, timeout, number_of_addresses, elem_size, elem_count, stringLength;
     HashMap<String, Integer> dict = new HashMap<>();
-    private Tag MBMaster = new Tag();
+    private final Tag MBMaster = new Tag();
 
     private String byteOrder = null;
-    private String[] int16byteOrder = new String[]{"int16_byte_order=10", "int16_byte_order=01"};
-    private String[] int32byteOrder = new String[]{"int32_byte_order=3210", "int32_byte_order=2301",
+    private final String[] int16byteOrder = new String[]{"int16_byte_order=10", "int16_byte_order=01"};
+    private final String[] int32byteOrder = new String[]{"int32_byte_order=3210", "int32_byte_order=2301",
             "int32_byte_order=1032", "int32_byte_order=0123"};
-    private String[] int64byteOrder = new String[]{"int64_byte_order=76543210", "int64_byte_order=67452301",
+    private final String[] int64byteOrder = new String[]{"int64_byte_order=76543210", "int64_byte_order=67452301",
             "int64_byte_order=10325476", "int64_byte_order=01234567"};
 
     MBTaskCallback MBtaskCallback = MainActivity.MBtaskCallback;
@@ -160,7 +161,7 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
 
                     while (MBMaster.getStatus(tag_id) == 1){
                         try {
-                            Thread.sleep(10);
+                            TimeUnit.MILLISECONDS.sleep(10);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -403,7 +404,7 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                 // Slow down the communication to give time for UI to update all the values.
                 // Adjust the sleep time if necessary.
                 try {
-                    Thread.sleep(25);
+                    TimeUnit.MILLISECONDS.sleep(25);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

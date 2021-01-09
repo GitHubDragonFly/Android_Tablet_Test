@@ -18,6 +18,10 @@ public class PopUpAddressMB extends AppCompatActivity implements AdapterView.OnI
         super();
     }
 
+    private static final int intSpinnerMBIO = R.id.spinnerMBIO;
+    private static final int intSpinnerMBDataType = R.id.spinnerMBDataType;
+    private static final int intSpinnerMBStringLength = R.id.spinnerMBStringLength;
+
     SetTags setTags = MainActivity.setTags;
 
     DisplayMetrics dm = new DisplayMetrics();
@@ -66,7 +70,7 @@ public class PopUpAddressMB extends AppCompatActivity implements AdapterView.OnI
         String[] stringArray = new String[0];
 
         switch(parent.getId()){
-            case R.id.spinnerMBIO:
+            case intSpinnerMBIO:
                 if (spinMBIO.getSelectedItem().toString().equals("CO") || spinMBIO.getSelectedItem().toString().equals("DI")){
                     stringArray = getResources().getStringArray(R.array.modbus_data_type_bool);
                     dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringArray);
@@ -90,12 +94,8 @@ public class PopUpAddressMB extends AppCompatActivity implements AdapterView.OnI
                     spinMBDataType.setAdapter(dataAdapter);
                 }
                 break;
-            case R.id.spinnerMBDataType:
-                if (spinMBDataType.getSelectedItem().toString().equals("string")){
-                    spinMBStringLength.setEnabled(true);
-                } else {
-                    spinMBStringLength.setEnabled(false);
-                }
+            case intSpinnerMBDataType:
+                spinMBStringLength.setEnabled(spinMBDataType.getSelectedItem().toString().equals("string"));
 
                 if (spinMBBit.isEnabled()){
                     switch (spinMBDataType.getSelectedItem().toString()){
@@ -132,7 +132,7 @@ public class PopUpAddressMB extends AppCompatActivity implements AdapterView.OnI
                     spinMBBit.setAdapter(dataAdapter);
                     break;
                 }
-            case R.id.spinnerMBStringLength:
+            case intSpinnerMBStringLength:
                 int index = Integer.parseInt(spinMBStringLength.getSelectedItem().toString());
                 stringArray = new String[index + 1];
                 stringArray[0] = "None";

@@ -3,6 +3,7 @@ package com.e.tablettest;
 import android.os.AsyncTask;
 import org.libplctag.Tag;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("deprecation")
 public class AsyncGaugeTaskAB extends AsyncTask<String, Void, String> {
@@ -11,7 +12,7 @@ public class AsyncGaugeTaskAB extends AsyncTask<String, Void, String> {
     public String gaugeValue = "";
 
     HashMap<String, Integer> dict = new HashMap<>();
-    private Tag GaugeMaster = new Tag();
+    private final Tag GaugeMaster = new Tag();
 
     private int elem_size;
 
@@ -57,7 +58,7 @@ public class AsyncGaugeTaskAB extends AsyncTask<String, Void, String> {
 
                 while (GaugeMaster.getStatus(tag_id) == 1){
                     try {
-                        Thread.sleep(10);
+                        TimeUnit.MILLISECONDS.sleep(10);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -148,7 +149,7 @@ public class AsyncGaugeTaskAB extends AsyncTask<String, Void, String> {
 
             // Adjust the sleep time if necessary.
             try {
-                Thread.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

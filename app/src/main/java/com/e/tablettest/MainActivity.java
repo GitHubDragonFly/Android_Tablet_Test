@@ -30,6 +30,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SetTags,AdapterView.OnItemSelectedListener,ABTaskCallback,MBTaskCallback,WriteTaskCallback,GetCLGXTagsTaskCallback {
+    private static final int intButtonWriteABTag1 = R.id.btnWriteABTag1;
+    private static final int intButtonWriteABTag2 = R.id.btnWriteABTag2;
+    private static final int intButtonWriteABTag3 = R.id.btnWriteABTag3;
+    private static final int intButtonWriteABTag4 = R.id.btnWriteABTag4;
+    private static final int intButtonWriteABTag5 = R.id.btnWriteABTag5;
+    private static final int intButtonWriteABTag6 = R.id.btnWriteABTag6;
+    private static final int intButtonWriteABTag7 = R.id.btnWriteABTag7;
+    private static final int intButtonWriteMBTag1 = R.id.btnWriteMBTag1;
+    private static final int intButtonWriteMBTag2 = R.id.btnWriteMBTag2;
+    private static final int intButtonWriteMBTag3 = R.id.btnWriteMBTag3;
+    private static final int intButtonWriteMBTag4 = R.id.btnWriteMBTag4;
+    private static final int intButtonWriteMBTag5 = R.id.btnWriteMBTag5;
+    private static final int intButtonWriteMBTag6 = R.id.btnWriteMBTag6;
+    private static final int intButtonWriteMBTag7 = R.id.btnWriteMBTag7;
+
+    private static final int intSpinnerABCPU = R.id.spinnerABCPU;
+    private static final int intSpinnerCLGXTags = R.id.spinnerCLGXTags;
+    private static final int intSpinnerBooleanDisplay = R.id.spinnerBooleanDisplay;
+
     public static ABTaskCallback ABtaskCallback;
     public static MBTaskCallback MBtaskCallback;
     public static GetCLGXTagsTaskCallback GetCLGXTagstaskCallback;
@@ -74,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         ABAddressInfo(){}
     }
 
-    private List<ABAddressInfo> ABAddressList = new ArrayList<>();
+    private final List<ABAddressInfo> ABAddressList = new ArrayList<>();
 
     public static class MBAddressInfo
     {
@@ -85,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         MBAddressInfo(){}
     }
 
-    private static List<MBAddressInfo> MBAddressList = new ArrayList<>();
+    private static final List<MBAddressInfo> MBAddressList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -541,7 +560,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
         switch(parent.getId()){
-            case R.id.spinnerABCPU:
+            case intSpinnerABCPU:
                 if (spinABCPU.getSelectedItem().toString().equals("controllogix") ||
                         spinABCPU.getSelectedItem().toString().equals("logixpccc") ||
                         spinABCPU.getSelectedItem().toString().equals("njnx")){
@@ -562,7 +581,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     etABPath.setText("");
                 }
                 break;
-            case R.id.spinnerCLGXTags:
+            case intSpinnerCLGXTags:
                 if (!(spinCLGXTags.getSelectedItem().toString().startsWith("*") || spinCLGXTags.getSelectedItem().toString().startsWith("Failed") ||
                         spinCLGXTags.getSelectedItem().toString().equals("Controller + Program Tags"))) {
 
@@ -571,7 +590,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     clipboard.setPrimaryClip(clip);
                 }
                 break;
-            case R.id.spinnerBooleanDisplay:
+            case intSpinnerBooleanDisplay:
                 boolDisplay = spinBooleanDisplay.getSelectedItem().toString();
                 break;
         }
@@ -1042,7 +1061,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         params[1] = timeout;
 
         switch(v.getId()){
-            case R.id.btnWriteABTag1:
+            case intButtonWriteABTag1:
                 if (TextUtils.isEmpty(etAB1.getText()) || TextUtils.isEmpty(tvAB1.getText())){
                     myWriteTaskAB = null;
                     return;
@@ -1053,7 +1072,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvABx = tvAB1;
                 }
                 break;
-            case R.id.btnWriteABTag2:
+            case intButtonWriteABTag2:
                 if (TextUtils.isEmpty(etAB2.getText()) || TextUtils.isEmpty(tvAB2.getText())){
                     myWriteTaskAB = null;
                     return;
@@ -1064,7 +1083,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvABx = tvAB2;
                 }
                 break;
-            case R.id.btnWriteABTag3:
+            case intButtonWriteABTag3:
                 if (TextUtils.isEmpty(etAB3.getText()) || TextUtils.isEmpty(tvAB3.getText())){
                     myWriteTaskAB = null;
                     return;
@@ -1075,7 +1094,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvABx = tvAB3;
                 }
                 break;
-            case R.id.btnWriteABTag4:
+            case intButtonWriteABTag4:
                 if (TextUtils.isEmpty(etAB4.getText()) || TextUtils.isEmpty(tvAB4.getText())){
                     myWriteTaskAB = null;
                     return;
@@ -1086,7 +1105,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvABx = tvAB4;
                 }
                 break;
-            case R.id.btnWriteABTag5:
+            case intButtonWriteABTag5:
                 if (TextUtils.isEmpty(etAB5.getText()) || TextUtils.isEmpty(tvAB5.getText())){
                     myWriteTaskAB = null;
                     return;
@@ -1097,7 +1116,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvABx = tvAB5;
                 }
                 break;
-            case R.id.btnWriteABTag6:
+            case intButtonWriteABTag6:
                 if (TextUtils.isEmpty(etAB6.getText()) || TextUtils.isEmpty(tvAB6.getText())){
                     myWriteTaskAB = null;
                     return;
@@ -1108,7 +1127,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvABx = tvAB6;
                 }
                 break;
-            case R.id.btnWriteABTag7:
+            case intButtonWriteABTag7:
                 if (TextUtils.isEmpty(etAB7.getText()) || TextUtils.isEmpty(tvAB7.getText())){
                     myWriteTaskAB = null;
                     return;
@@ -1165,7 +1184,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         params[1] = timeout;
 
         switch(v.getId()){
-            case R.id.btnWriteMBTag1:
+            case intButtonWriteMBTag1:
                 if (TextUtils.isEmpty(etMB1.getText()) || TextUtils.isEmpty(tvMB1.getText())){
                     myWriteTaskMB = null;
                     return;
@@ -1176,7 +1195,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvMBx = tvMB1;
                 }
                 break;
-            case R.id.btnWriteMBTag2:
+            case intButtonWriteMBTag2:
                 if (TextUtils.isEmpty(etMB2.getText()) || TextUtils.isEmpty(tvMB2.getText())){
                     myWriteTaskMB = null;
                     return;
@@ -1187,7 +1206,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvMBx = tvMB2;
                 }
                 break;
-            case R.id.btnWriteMBTag3:
+            case intButtonWriteMBTag3:
                 if (TextUtils.isEmpty(etMB3.getText()) || TextUtils.isEmpty(tvMB3.getText())){
                     myWriteTaskMB = null;
                     return;
@@ -1198,7 +1217,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvMBx = tvMB3;
                 }
                 break;
-            case R.id.btnWriteMBTag4:
+            case intButtonWriteMBTag4:
                 if (TextUtils.isEmpty(etMB4.getText()) || TextUtils.isEmpty(tvMB4.getText())){
                     myWriteTaskMB = null;
                     return;
@@ -1209,7 +1228,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvMBx = tvMB4;
                 }
                 break;
-            case R.id.btnWriteMBTag5:
+            case intButtonWriteMBTag5:
                 if (TextUtils.isEmpty(etMB5.getText()) || TextUtils.isEmpty(tvMB5.getText())){
                     myWriteTaskMB = null;
                     return;
@@ -1220,7 +1239,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvMBx = tvMB5;
                 }
                 break;
-            case R.id.btnWriteMBTag6:
+            case intButtonWriteMBTag6:
                 if (TextUtils.isEmpty(etMB6.getText()) || TextUtils.isEmpty(tvMB6.getText())){
                     myWriteTaskMB = null;
                     return;
@@ -1231,7 +1250,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                     tvMBx = tvMB6;
                 }
                 break;
-            case R.id.btnWriteMBTag7:
+            case intButtonWriteMBTag7:
                 if (TextUtils.isEmpty(etMB7.getText()) || TextUtils.isEmpty(tvMB7.getText())){
                     myWriteTaskMB = null;
                     return;

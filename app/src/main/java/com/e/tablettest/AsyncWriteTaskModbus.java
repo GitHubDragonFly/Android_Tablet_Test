@@ -5,6 +5,7 @@ import android.util.Log;
 import org.libplctag.Tag;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("deprecation")
 public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
@@ -17,7 +18,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
 
     public String value = "";
     private int elem_size, elem_count = 1, strLength;
-    private Tag MBWriteMaster = new Tag();
+    private final Tag MBWriteMaster = new Tag();
 
     WriteTaskCallback WritetaskCallback = MainActivity.WritetaskCallback;
 
@@ -101,7 +102,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
 
             while (MBWriteMaster.getStatus(tag_id) == 1){
                 try {
-                    Thread.sleep(10);
+                    TimeUnit.MILLISECONDS.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
