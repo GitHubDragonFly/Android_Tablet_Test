@@ -55,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     public static WriteTaskCallback WritetaskCallback;
     public static SetTags setTags;
 
+    // Variables used to control unintentional multiple taps of the same button
+    public static boolean gaugeScreenABOpen, popupScreenABOpen, gaugeScreenMBOpen, popupScreenMBOpen;
+    private boolean clearingTags, abActive, otherActive, getCLGXTagsRunning;
+
     private static final String TAG = "Main Activity";
 
     public static String abGaugeAddress = "", abCPU = "", abIPAddress = "", abPath = "", timeout = "";
@@ -67,8 +71,6 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     AsyncTaskGetCLGXTags myTaskGetCLGXTags = null;
     AsyncWriteTaskAB myWriteTaskAB = null;
     AsyncWriteTaskModbus myWriteTaskMB = null;
-
-    boolean clearingTags, abActive, otherActive;
 
     EditText tvABx, tvAB1, tvAB2, tvAB3, tvAB4, tvAB5, tvAB6, tvAB7, tvMBx, tvMB1, tvMB2, tvMB3, tvMB4, tvMB5, tvMB6, tvMB7;
     EditText etABx, etAB1, etAB2, etAB3, etAB4, etAB5, etAB6, etAB7, etABGauge, etMBx, etMB1, etMB2, etMB3, etMB4, etMB5, etMB6, etMB7, etMBGauge;
@@ -641,44 +643,48 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     }
 
     public void sendMessageGetCLGXTags(View v){
-        String[] params = new String[3];
-        String ipaddress, path, program, timeout;
+        if (!getCLGXTagsRunning){
+            getCLGXTagsRunning = true;
 
-        ipaddress = etABIP.getText().toString();
-        path = etABPath.getText().toString();
-        program = etProgram.getText().toString();
-        timeout = etTimeout.getText().toString();
+            String[] params = new String[3];
+            String ipaddress, path, program, timeout;
 
-        ipaddress = ipaddress.replace(" ", "");
-        path = path.replace(" ", "");
-        program = program.replace(" ", "");
-        timeout = timeout.replace(" ", "");
+            ipaddress = etABIP.getText().toString();
+            path = etABPath.getText().toString();
+            program = etProgram.getText().toString();
+            timeout = etTimeout.getText().toString();
 
-        if (TextUtils.isEmpty(ipaddress) || TextUtils.isEmpty(path) || TextUtils.isEmpty(program) || !TextUtils.isDigitsOnly(timeout)){
-            return;
+            ipaddress = ipaddress.replace(" ", "");
+            path = path.replace(" ", "");
+            program = program.replace(" ", "");
+            timeout = timeout.replace(" ", "");
+
+            if (TextUtils.isEmpty(ipaddress) || TextUtils.isEmpty(path) || TextUtils.isEmpty(program) || !TextUtils.isDigitsOnly(timeout)){
+                return;
+            }
+
+            params[0] = "gateway=" + ipaddress + "&path=" + path;
+            params[1] = program;
+            params[2] = timeout;
+
+            if (myTaskGetCLGXTags == null) {
+                myTaskGetCLGXTags = new AsyncTaskGetCLGXTags();
+            } else {
+                return;
+            }
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.ab_tags_please_wait));
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            dataAdapter.notifyDataSetChanged();
+            spinCLGXTags.setAdapter(dataAdapter);
+
+            myTaskGetCLGXTags.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+
+            btnGetCLGXTags.setEnabled(false);
+            btnGetCLGXTags.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
+
+            Log.v(TAG, "GetCLGXTags Task is " + myTaskGetCLGXTags.getStatus().toString());
         }
-
-        params[0] = "gateway=" + ipaddress + "&path=" + path;
-        params[1] = program;
-        params[2] = timeout;
-
-        if (myTaskGetCLGXTags == null) {
-            myTaskGetCLGXTags = new AsyncTaskGetCLGXTags();
-        } else {
-            return;
-        }
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.ab_tags_please_wait));
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dataAdapter.notifyDataSetChanged();
-        spinCLGXTags.setAdapter(dataAdapter);
-
-        myTaskGetCLGXTags.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
-
-        btnGetCLGXTags.setEnabled(false);
-        btnGetCLGXTags.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
-
-        Log.v(TAG, "GetCLGXTags Task is " + myTaskGetCLGXTags.getStatus().toString());
     }
 
     @SuppressWarnings("unchecked")
@@ -1142,14 +1148,18 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
 
         lblWriteMessage.setText(getResources().getStringArray(R.array.ab_tags_please_wait)[0]);
 
-        etABx.setEnabled(false);
-        tvABx.setEnabled(false);
+        // Disable access or clearing of the corresponding text boxes
+        etABx.setInputType(InputType.TYPE_NULL);
+        tvABx.setInputType(InputType.TYPE_NULL);
 
         btnWriteABCaller = (Button)v;
         btnWriteABCaller.setEnabled(false);
         btnWriteABCaller.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
 
         myWriteTaskAB.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+
+        // If this is the only tag then set the correct state of the Clear AB Tags button
+        ButtonClearABTagsEnableDisable();
 
         Log.v(TAG, "AB Write Task is " + myWriteTaskAB.getStatus().toString());
     }
@@ -1265,14 +1275,18 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
 
         lblWriteMessage.setText(getResources().getStringArray(R.array.ab_tags_please_wait)[0]);
 
-        etMBx.setEnabled(false);
-        tvMBx.setEnabled(false);
+        // Disable access or clearing of the corresponding text boxes
+        etMBx.setInputType(InputType.TYPE_NULL);
+        tvMBx.setInputType(InputType.TYPE_NULL);
 
         btnWriteMBCaller = (Button)v;
         btnWriteMBCaller.setEnabled(false);
         btnWriteMBCaller.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_off));
 
         myWriteTaskMB.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+
+        // If this is the only tag then set the correct state of the Clear MB Tags button
+        ButtonClearMBTagsEnableDisable();
 
         Log.v(TAG, "Modbus Write Task is " + myWriteTaskMB.getStatus().toString());
     }
@@ -1419,42 +1433,58 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
 
     public void sendMessagePopUpAddressAB(View v)
     {
-        callerName = getResources().getResourceEntryName(v.getId());
-        cpu = spinABCPU.getSelectedItem().toString();
+        if (!popupScreenABOpen){
+            popupScreenABOpen = true;
 
-        Intent intent = new Intent(MainActivity.this, PopUpAddressAB.class);
-        startActivity(intent);
+            callerName = getResources().getResourceEntryName(v.getId());
+            cpu = spinABCPU.getSelectedItem().toString();
+
+            Intent intent = new Intent(MainActivity.this, PopUpAddressAB.class);
+            startActivity(intent);
+        }
     }
 
     public void sendMessagePopUpAddressMB(View v)
     {
-        callerName = getResources().getResourceEntryName(v.getId());
+        if (!popupScreenMBOpen){
+            popupScreenMBOpen = true;
 
-        Intent intent = new Intent(MainActivity.this, PopUpAddressMB.class);
-        startActivity(intent);
+            callerName = getResources().getResourceEntryName(v.getId());
+
+            Intent intent = new Intent(MainActivity.this, PopUpAddressMB.class);
+            startActivity(intent);
+        }
     }
 
     public void sendMessageGaugeAB(View v)
     {
-        abCPU = spinABCPU.getSelectedItem().toString();
-        abIPAddress = etABIP.getText().toString();
-        abPath = etABPath.getText().toString();
-        timeout = etTimeout.getText().toString();
-        abGaugeAddress = etABGauge.getText().toString();
+        if (!gaugeScreenABOpen){
+            gaugeScreenABOpen = true;
 
-        Intent intent = new Intent(MainActivity.this, GaugeActivityAB.class);
-        startActivity(intent);
+            abCPU = spinABCPU.getSelectedItem().toString();
+            abIPAddress = etABIP.getText().toString();
+            abPath = etABPath.getText().toString();
+            timeout = etTimeout.getText().toString();
+            abGaugeAddress = etABGauge.getText().toString();
+
+            Intent intent = new Intent(MainActivity.this, GaugeActivityAB.class);
+            startActivity(intent);
+        }
     }
 
     public void sendMessageGaugeMB(View v)
     {
-        mbIPAddress = etMBIP.getText().toString();
-        mbUnitID = etMBUnitID.getText().toString();
-        timeout = etTimeout.getText().toString();
-        mbGaugeAddress = etMBGauge.getText().toString();
+        if (!gaugeScreenMBOpen){
+            gaugeScreenMBOpen = true;
 
-        Intent intent = new Intent(MainActivity.this, GaugeActivityMB.class);
-        startActivity(intent);
+            mbIPAddress = etMBIP.getText().toString();
+            mbUnitID = etMBUnitID.getText().toString();
+            timeout = etTimeout.getText().toString();
+            mbGaugeAddress = etMBGauge.getText().toString();
+
+            Intent intent = new Intent(MainActivity.this, GaugeActivityMB.class);
+            startActivity(intent);
+        }
     }
 
     public void sendMessageScreenClean(View v)
@@ -1520,6 +1550,8 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
 
         btnGetCLGXTags.setEnabled(true);
         btnGetCLGXTags.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_on));
+
+        getCLGXTagsRunning = false;
     }
 
     @Override
@@ -1600,22 +1632,28 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
                 myWriteTaskAB = null;
             }
 
-            etABx.setEnabled(true);
-            tvABx.setEnabled(true);
+            // Enable access to corresponding text boxes
+            etABx.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+            tvABx.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
             btnWriteABCaller.setEnabled(true);
             btnWriteABCaller.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_on));
+
+            ButtonClearABTagsEnableDisable();
         } else {
             if (myWriteTaskMB != null){
                 myWriteTaskMB.cancel(true);
                 myWriteTaskMB = null;
             }
 
-            etMBx.setEnabled(true);
-            tvMBx.setEnabled(true);
+            // Enable access to corresponding text boxes
+            etMBx.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+            tvMBx.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
             btnWriteMBCaller.setEnabled(true);
             btnWriteMBCaller.setBackground(ContextCompat.getDrawable(this, android.R.drawable.button_onoff_indicator_on));
+
+            ButtonClearMBTagsEnableDisable();
         }
 
         lblWriteMessage.setText(value.substring(3));

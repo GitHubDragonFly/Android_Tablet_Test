@@ -83,6 +83,8 @@ public class GaugeActivityAB extends AppCompatActivity implements GaugeTaskCallb
             myGaugeTaskAB.cancel(true);
             myGaugeTaskAB = null;
         }
+
+        MainActivity.gaugeScreenABOpen = false;
     }
 
     @Override

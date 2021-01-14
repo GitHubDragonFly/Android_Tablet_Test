@@ -82,6 +82,8 @@ public class GaugeActivityMB extends AppCompatActivity implements GaugeTaskCallb
             myGaugeTaskMB.cancel(true);
             myGaugeTaskMB = null;
         }
+
+        MainActivity.gaugeScreenMBOpen = false;
     }
 
     @Override

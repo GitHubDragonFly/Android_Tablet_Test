@@ -163,6 +163,8 @@ public class PopUpAddressMB extends AppCompatActivity implements AdapterView.OnI
             InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
+
+        MainActivity.popupScreenMBOpen = false;
     }
 
     public void sendMessageReturnTag(View v)
