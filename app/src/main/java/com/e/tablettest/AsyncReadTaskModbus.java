@@ -1,8 +1,10 @@
 package com.e.tablettest;
 
-import android.util.Log;
 import android.os.AsyncTask;
+import android.util.Log;
+
 import org.libplctag.Tag;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -26,6 +28,10 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
             "int32_byte_order=1032", "int32_byte_order=0123"};
     private final String[] int64byteOrder = new String[]{"int64_byte_order=76543210", "int64_byte_order=67452301",
             "int64_byte_order=10325476", "int64_byte_order=01234567"};
+    private final String[] float32byteOrder = new String[]{"float32_byte_order=3210", "float32_byte_order=2301",
+            "float32_byte_order=1032", "float32_byte_order=0123"};
+    private final String[] float64byteOrder = new String[]{"float64_byte_order=76543210", "float64_byte_order=67452301",
+            "float64_byte_order=10325476", "float64_byte_order=01234567"};
 
     MBTaskCallback MBtaskCallback = MainActivity.MBtaskCallback;
 
@@ -38,12 +44,10 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
         number_of_addresses = params[0].get(1).size();
         gateway_path = params[0].get(0).get(0);
 
-        //String[] values = new String[number_of_addresses];
         String[] tags = new String[number_of_addresses];
         String[] dType = new String[number_of_addresses];
         int[] bitIndex = new int[number_of_addresses];
         int[] strLength = new int[number_of_addresses];
-        //Arrays.fill(values, "");
         Arrays.fill(tags, "");
         Arrays.fill(dType, "");
         Arrays.fill(bitIndex, -1);
@@ -88,52 +92,79 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                             elem_size = 2;
                             elem_count = 1;
 
-                            if (swapBytes){
-                                byteOrder = int16byteOrder[0];
-                            } else {
+                            if (swapBytes)
                                 byteOrder = int16byteOrder[1];
-                            }
+                            else
+                                byteOrder = int16byteOrder[0];
 
                             break;
                         case "int32":
                         case "uint32":
+                            elem_size = 2;
+                            elem_count = 2;
+
+                            if (swapBytes){
+                                if (swapWords)
+                                    byteOrder = int32byteOrder[3];
+                                else
+                                    byteOrder = int32byteOrder[2];
+                            } else {
+                                if (swapWords)
+                                    byteOrder = int32byteOrder[1];
+                                else
+                                    byteOrder = int32byteOrder[0];
+                            }
+
+                            break;
                         case "float32":
                             elem_size = 2;
                             elem_count = 2;
 
                             if (swapBytes){
-                                if (swapWords){
-                                    byteOrder = int32byteOrder[0];
-                                } else {
-                                    byteOrder = int32byteOrder[2];
-                                }
+                                if (swapWords)
+                                    byteOrder = float32byteOrder[3];
+                                else
+                                    byteOrder = float32byteOrder[2];
                             } else {
-                                if (swapWords){
-                                    byteOrder = int32byteOrder[1];
-                                } else {
-                                    byteOrder = int32byteOrder[3];
-                                }
+                                if (swapWords)
+                                    byteOrder = float32byteOrder[1];
+                                else
+                                    byteOrder = float32byteOrder[0];
                             }
 
                             break;
                         case "int64":
                         case "uint64":
+                            elem_size = 2;
+                            elem_count = 4;
+
+                            if (swapBytes){
+                                if (swapWords)
+                                    byteOrder = int64byteOrder[3];
+                                else
+                                    byteOrder = int64byteOrder[2];
+                            } else {
+                                if (swapWords)
+                                    byteOrder = int64byteOrder[1];
+                                else
+                                    byteOrder = int64byteOrder[0];
+                            }
+
+                            break;
                         case "float64":
                             elem_size = 2;
                             elem_count = 4;
 
                             if (swapBytes){
-                                if (swapWords){
-                                    byteOrder = int64byteOrder[0];
-                                } else {
-                                    byteOrder = int64byteOrder[2];
-                                }
+                                if (swapWords)
+                                    byteOrder = float64byteOrder[3];
+                                else
+                                    byteOrder = float64byteOrder[2];
                             } else {
-                                if (swapWords){
-                                    byteOrder = int64byteOrder[1];
-                                } else {
-                                    byteOrder = int64byteOrder[3];
-                                }
+                                if (swapWords)
+                                    byteOrder = float64byteOrder[1];
+                                else
+                                    byteOrder = float64byteOrder[0];
                             }
 
                             break;
@@ -379,21 +410,7 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
                         }
                     }
                 }
-
-                // Publish progress on UI thread when value has changed.
-
-                //if (!values[i].equals(tempValue)){
-                //    values[i] = tempValue.trim();
-                //    value = tempValue.trim();
-                //    tempValue = "";
-
-                //    callerID = params[0].get(2).get(i);
-
-                //    publishProgress();
-                //}
-
-
-                // Publish progress on UI thread continuously, controlled with thread's sleep time.
+                // Publish progress on UI thread continuously, controlled with the sleep time.
 
                 value = tempValue.trim();
 

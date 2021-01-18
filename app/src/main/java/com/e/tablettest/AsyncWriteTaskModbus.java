@@ -2,19 +2,23 @@ package com.e.tablettest;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
 import org.libplctag.Tag;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("deprecation")
 public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
     private static final String TAG = "Modbus Write Activity";
 
-    BigInteger BigIntegerMin = new BigInteger("-170141183460469231731687303715884105728");
-    BigInteger BigIntegerMax = new BigInteger("170141183460469231731687303715884105727");
-    BigInteger BigUIntegerMin = new BigInteger("0");
-    BigInteger BigUIntegerMax = new BigInteger("340282366920938463463374607431768211455");
+    private static final BigInteger BigIntegerMin = new BigInteger("-170141183460469231731687303715884105728");
+    private static final BigInteger BigIntegerMax = new BigInteger("170141183460469231731687303715884105727");
+    private static final BigInteger BigUIntegerMin = new BigInteger("0");
+    private static final BigInteger BigUIntegerMax = new BigInteger("340282366920938463463374607431768211455");
 
     public String value = "";
     private int elem_size, elem_count = 1, strLength;
@@ -25,6 +29,9 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         Log.v(TAG,"On doInBackground...");
+
+        boolean swapBytes = MainActivity.cbSwapBytesChecked;
+        boolean swapWords = MainActivity.cbSwapWordsChecked;
 
         String gateway_unitId = params[0];
         int timeout = Integer.parseInt(params[1]);
@@ -160,13 +167,13 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                                 break;
                         }
 
-                        if (MainActivity.cbSwapBytesChecked){
-                            if (MainActivity.cbSwapWordsChecked){
+                        if (swapBytes){
+                            if (swapWords){
                                 MBWriteMaster.setUInt8(tag_id, (2 * elem_count) - 1 - bitIndex - zeroBytes, tempBytes[0]);
                             } else
                                 MBWriteMaster.setUInt8(tag_id, bitIndex, tempBytes[0]);
                         } else{
-                            if (MainActivity.cbSwapWordsChecked)
+                            if (swapWords)
                                 MBWriteMaster.setUInt8(tag_id, (2 * elem_count) - bitIndex - zeroBytes, tempBytes[0]);
                             else
                                 MBWriteMaster.setUInt8(tag_id, bitIndex + zeroBytes - 1, tempBytes[0]);
@@ -190,13 +197,13 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
 
                         int quot = (int)Math.floor(bitIndex / 8F);
 
-                        if (MainActivity.cbSwapBytesChecked){
-                            if (MainActivity.cbSwapWordsChecked){
+                        if (swapBytes){
+                            if (swapWords){
                                 MBWriteMaster.setBit(tag_id, 127 - bitIndex - zeroBytes * 8 + quot * 16, BitValueToWrite);
                             } else
                                 MBWriteMaster.setBit(tag_id, bitIndex - quot * 16 + zeroBytes * 8 + 8, BitValueToWrite);
                         } else{
-                            if (MainActivity.cbSwapWordsChecked)
+                            if (swapWords)
                                 MBWriteMaster.setBit(tag_id, 128 - bitIndex - zeroBytes * 8 + quot * 16, BitValueToWrite);
                             else
                                 MBWriteMaster.setBit(tag_id, bitIndex - quot * 16 + zeroBytes * 8, BitValueToWrite);
@@ -205,7 +212,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                         switch (dataType){
                             case "int8":
                             case "uint8":
-                                if (MainActivity.cbSwapBytesChecked){
+                                if (swapBytes){
                                     MBWriteMaster.setBit(tag_id, bitIndex + 8, BitValueToWrite);
                                 } else {
                                     MBWriteMaster.setBit(tag_id, bitIndex, BitValueToWrite);
@@ -213,7 +220,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                                 break;
                             case "int16":
                             case "uint16":
-                                if (MainActivity.cbSwapBytesChecked){
+                                if (swapBytes){
                                     if (bitIndex < 8)
                                         MBWriteMaster.setBit(tag_id, bitIndex + 8, BitValueToWrite);
                                     else
@@ -225,9 +232,9 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                             case "int32":
                             case "uint32":
                             case "float32":
-                                if (MainActivity.cbSwapBytesChecked || MainActivity.cbSwapWordsChecked){
-                                    if (MainActivity.cbSwapBytesChecked){
-                                        if (MainActivity.cbSwapWordsChecked) // byte3 + byte2 + byte1 + byte0
+                                if (swapBytes || swapWords){
+                                    if (swapBytes){
+                                        if (swapWords) // byte3 + byte2 + byte1 + byte0
                                             if (bitIndex < 8)
                                                 MBWriteMaster.setBit(tag_id, bitIndex + 24, BitValueToWrite);
                                             else if (bitIndex < 16)
@@ -257,9 +264,9 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                             case "int64":
                             case "uint64":
                             case "float64":
-                                if (MainActivity.cbSwapBytesChecked || MainActivity.cbSwapWordsChecked){
-                                    if (MainActivity.cbSwapBytesChecked){
-                                        if (MainActivity.cbSwapWordsChecked) // byte7 + byte6 + byte5 + byte4 + byte3 + byte2 + byte1 + byte0
+                                if (swapBytes || swapWords){
+                                    if (swapBytes){
+                                        if (swapWords) // byte7 + byte6 + byte5 + byte4 + byte3 + byte2 + byte1 + byte0
                                             if (bitIndex < 8)
                                                 MBWriteMaster.setBit(tag_id, bitIndex + 56, BitValueToWrite);
                                             else if (bitIndex < 16)
@@ -309,42 +316,185 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                         }
                     }
                 } else {
+                    byte[] bytes, swappedBytes;
+
                     switch (dataType){
                         case "int8":
-                            if (MainActivity.cbSwapBytesChecked)
+                            if (swapBytes)
                                 MBWriteMaster.setInt8(tag_id, 1, Integer.parseInt(params[3]));
                             else
                                 MBWriteMaster.setInt8(tag_id, 0, Integer.parseInt(params[3]));
                             break;
                         case "uint8":
-                            if (MainActivity.cbSwapBytesChecked)
+                            if (swapBytes)
                                 MBWriteMaster.setUInt8(tag_id, 1, Short.parseShort(params[3]));
                             else
                                 MBWriteMaster.setUInt8(tag_id, 0, Short.parseShort(params[3]));
                             break;
                         case "int16":
-                            MBWriteMaster.setInt16(tag_id, 0, Integer.parseInt(params[3]));
-                            break;
                         case "uint16":
-                            MBWriteMaster.setUInt16(tag_id, 0, Integer.parseInt(params[3]));
+                            ByteBuffer bb16 = ByteBuffer.allocate(2);
+
+                            if (swapBytes){
+                                bb16.order(ByteOrder.LITTLE_ENDIAN);
+
+                                if (dataType.equals("int16"))
+                                    bytes = bb16.putShort(Short.parseShort(params[3])).array();
+                                else
+                                    bytes = bb16.putShort((short)Integer.parseInt(params[3])).array();
+
+                                for (int z = 0; z < 2; z++) {
+                                    MBWriteMaster.setUInt8(tag_id, z, bytes[z]);
+                                }
+                            } else {
+                                if (dataType.equals("int16"))
+                                    MBWriteMaster.setInt16(tag_id, 0, Integer.parseInt(params[3]));
+                                else
+                                    MBWriteMaster.setUInt16(tag_id, 0, Integer.parseInt(params[3]));
+                            }
+
                             break;
                         case "int32":
-                            MBWriteMaster.setInt32(tag_id, 0, Integer.parseInt(params[3]));
-                            break;
                         case "uint32":
-                            MBWriteMaster.setUInt32(tag_id, 0, Long.parseLong(params[3]));
-                            break;
                         case "float32":
-                            MBWriteMaster.setFloat32(tag_id, 0, Float.parseFloat(params[3]));
+                            if (swapBytes || swapWords){
+                                ByteBuffer bb32 = ByteBuffer.allocate(8);
+
+                                if (swapBytes){
+                                    if (swapWords) { // byte3 + byte2 + byte1 + byte0
+                                        bb32.order(ByteOrder.BIG_ENDIAN);
+
+                                        if (dataType.equals("int32")){
+                                            bytes = bb32.putInt(Integer.parseInt(params[3])).array();
+                                        } else if (dataType.equals("float32")){
+                                            bytes = bb32.putFloat(Float.parseFloat(params[3])).array();
+                                        } else {
+                                            bytes = bb32.putLong(Long.parseLong(params[3])).array();
+                                        }
+
+                                        // Swap words
+                                        swappedBytes = SwapWords(bytes);
+
+                                        for (int z = 0; z < swappedBytes.length; z++) {
+                                            MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
+                                        }
+                                    }
+                                    else { // byte1 + byte0 + byte3 + byte2
+                                        bb32.order(ByteOrder.LITTLE_ENDIAN);
+
+                                        if (dataType.equals("int32")){
+                                            bytes = bb32.putInt(Integer.parseInt(params[3])).array();
+                                        } else if (dataType.equals("float32")){
+                                            bytes = bb32.putFloat(Float.parseFloat(params[3])).array();
+                                        } else {
+                                            bytes = bb32.putLong(Long.parseLong(params[3])).array();
+                                        }
+
+                                        // Swap bytes
+                                        swappedBytes = SwapBytes(bytes);
+
+                                        for (int z = 0; z < swappedBytes.length; z++) {
+                                            MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
+                                        }
+                                    }
+                                } else { // byte2 + byte3 + byte0 + byte1
+                                    bb32.order(ByteOrder.BIG_ENDIAN);
+
+                                    if (dataType.equals("int32")){
+                                        bytes = bb32.putInt(Integer.parseInt(params[3])).array();
+                                    } else if (dataType.equals("float32")){
+                                        bytes = bb32.putFloat(Float.parseFloat(params[3])).array();
+                                    } else {
+                                        bytes = bb32.putLong(Long.parseLong(params[3])).array();
+                                    }
+
+                                    // Swap bytes
+                                    swappedBytes = SwapBytes(bytes);
+
+                                    for (int z = 0; z < swappedBytes.length; z++) {
+                                        MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
+                                    }
+                                }
+                            } else {
+                                if (dataType.equals("int32")){
+                                    MBWriteMaster.setInt32(tag_id, 0, Integer.parseInt(params[3]));
+                                } else if (dataType.equals("float32")){
+                                    MBWriteMaster.setFloat32(tag_id, 0, Float.parseFloat(params[3]));
+                                } else {
+                                    MBWriteMaster.setUInt32(tag_id, 0, Long.parseLong(params[3]));
+                                }
+                            }
                             break;
                         case "int64":
-                            MBWriteMaster.setInt64(tag_id, 0, Long.parseLong(params[3]));
-                            break;
                         case "uint64":
-                            MBWriteMaster.setUInt64(tag_id, 0, new BigInteger(params[3]));
-                            break;
                         case "float64":
-                            MBWriteMaster.setFloat64(tag_id, 0, Double.parseDouble(params[3]));
+                            if (swapBytes || swapWords){
+                                ByteBuffer bb64 = ByteBuffer.allocate(8);
+
+                                if (swapBytes){
+                                    if (swapWords) { // byte7 + byte6 + byte5 + byte4 + byte3 + byte2 + byte1 + byte0
+                                        bb64.order(ByteOrder.BIG_ENDIAN);
+
+                                        if (dataType.equals("int64")){
+                                            bytes = bb64.putLong(Long.parseLong(params[3])).array();
+                                        } else if (dataType.equals("float64")){
+                                            bytes = bb64.putDouble(Double.parseDouble(params[3])).array();
+                                        } else {
+                                            bytes = bb64.putLong(new BigInteger(params[3]).longValue()).array();
+                                        }
+
+                                        // Swap words
+                                        swappedBytes = SwapWords(bytes);
+
+                                        for (int z = 0; z < swappedBytes.length; z++) {
+                                            MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
+                                        }
+                                    }
+                                    else { // byte1 + byte0 + byte3 + byte2 + byte5 + byte4 + byte7 + byte6
+                                        bb64.order(ByteOrder.LITTLE_ENDIAN);
+
+                                        if (dataType.equals("int64")){
+                                            bytes = bb64.putLong(Long.parseLong(params[3])).array();
+                                        } else if (dataType.equals("float64")){
+                                            bytes = bb64.putDouble(Double.parseDouble(params[3])).array();
+                                        } else {
+                                            bytes = bb64.putLong(new BigInteger(params[3]).longValue()).array();
+                                        }
+
+                                        // Swap bytes
+                                        swappedBytes = SwapBytes(bytes);
+
+                                        for (int z = 0; z < swappedBytes.length; z++) {
+                                            MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
+                                        }
+                                    }
+                                } else { // byte6 + byte7 + byte4 + byte5 + byte2 + byte3 + byte0 + byte1
+                                    bb64.order(ByteOrder.BIG_ENDIAN);
+
+                                    if (dataType.equals("int64")){
+                                        bytes = bb64.putLong(Long.parseLong(params[3])).array();
+                                    } else if (dataType.equals("float64")){
+                                        bytes = bb64.putDouble(Double.parseDouble(params[3])).array();
+                                    } else {
+                                        bytes = bb64.putLong(new BigInteger(params[3]).longValue()).array();
+                                    }
+
+                                    // Swap bytes
+                                    swappedBytes = SwapBytes(bytes);
+
+                                    for (int z = 0; z < swappedBytes.length; z++) {
+                                        MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
+                                    }
+                                }
+                            } else {
+                                if (dataType.equals("int64")){
+                                    MBWriteMaster.setInt64(tag_id, 0, Long.parseLong(params[3]));
+                                } else if (dataType.equals("float64")){
+                                    MBWriteMaster.setFloat64(tag_id, 0, Double.parseDouble(params[3]));
+                                } else {
+                                    MBWriteMaster.setUInt64(tag_id, 0, new BigInteger(params[3]));
+                                }
+                            }
                             break;
                         case "int128":
                             BigInteger value2write = new BigInteger(params[3]);
@@ -363,7 +513,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
 
                                 System.arraycopy(value2writeBytes, 0, valueBytes, 16 - value2writeBytes.length, value2writeBytes.length);
 
-                                byte[] swappedBytes = SwapCheck(valueBytes);
+                                swappedBytes = SwapCheck(valueBytes);
 
                                 for (int k = 0; k < swappedBytes.length; k++){
                                     MBWriteMaster.setUInt8(tag_id, k, swappedBytes[k]);
@@ -388,7 +538,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
 
                                 System.arraycopy(uvalue2writeBytes, 0, uvalueBytes, 16 - uvalue2writeBytes.length, uvalue2writeBytes.length);
 
-                                byte[] swappedBytes = SwapCheck(uvalueBytes);
+                                swappedBytes = SwapCheck(uvalueBytes);
 
                                 for (int k = 0; k < swappedBytes.length; k++){
                                     MBWriteMaster.setUInt8(tag_id, k, swappedBytes[k]);
@@ -399,7 +549,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                             MBWriteMaster.setBit(tag_id, 0, Integer.parseInt(params[3]));
                             break;
                         case "string":
-                            byte[] bytes = new byte[elem_size * elem_count];
+                            bytes = new byte[elem_size * elem_count];
                             byte[] tempBytes = new byte[]{};
 
                             try {
@@ -410,7 +560,7 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
 
                             System.arraycopy(tempBytes, 0, bytes, 0, tempBytes.length);
 
-                            byte[] swappedBytes = SwapCheck(bytes);
+                            swappedBytes = SwapCheck(bytes);
 
                             for (int z = 0; z < swappedBytes.length; z++) {
                                 MBWriteMaster.setUInt8(tag_id, z, swappedBytes[z]);
@@ -482,6 +632,30 @@ public class AsyncWriteTaskModbus extends AsyncTask<String, Void, String> {
                 bytes[i] = bytes[i + 1];
                 bytes[i + 1] = tempByte;
             }
+        }
+
+        return bytes;
+    }
+
+    private byte[] SwapBytes(byte[] bytes)
+    {
+        for (int i = 0; i < bytes.length; i += 2)
+        {
+            byte tempByte = bytes[i];
+            bytes[i] = bytes[i + 1];
+            bytes[i + 1] = tempByte;
+        }
+
+        return bytes;
+    }
+
+    private byte[] SwapWords(byte[] bytes)
+    {
+        for (int i = 0; i < bytes.length / 2; i++)
+        {
+            byte tempByte = bytes[i];
+            bytes[i] = bytes[bytes.length - i - 1];
+            bytes[bytes.length - i - 1] = tempByte;
         }
 
         return bytes;

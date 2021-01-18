@@ -1,7 +1,9 @@
 package com.e.tablettest;
 
 import android.os.AsyncTask;
+
 import org.libplctag.Tag;
+
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +24,10 @@ public class AsyncGaugeTaskMB extends AsyncTask<String, Void, String> {
             "int32_byte_order=1032", "int32_byte_order=0123"};
     private final String[] int64byteOrder = new String[]{"int64_byte_order=76543210", "int64_byte_order=67452301",
             "int64_byte_order=10325476", "int64_byte_order=01234567"};
+    private final String[] float32byteOrder = new String[]{"float32_byte_order=3210", "float32_byte_order=2301",
+            "float32_byte_order=1032", "float32_byte_order=0123"};
+    private final String[] float64byteOrder = new String[]{"float64_byte_order=76543210", "float64_byte_order=67452301",
+            "float64_byte_order=10325476", "float64_byte_order=01234567"};
 
     @Override
     protected String doInBackground(String... params) {
@@ -52,21 +58,20 @@ public class AsyncGaugeTaskMB extends AsyncTask<String, Void, String> {
                         elem_count = 1;
 
                         if (swapBytes){
-                            byteOrder = int16byteOrder[0];
-                        } else {
                             byteOrder = int16byteOrder[1];
+                        } else {
+                            byteOrder = int16byteOrder[0];
                         }
 
                         break;
                     case "int32":
                     case "uint32":
-                    case "float32":
                         elem_size = 2;
                         elem_count = 2;
 
                         if (swapBytes){
                             if (swapWords){
-                                byteOrder = int32byteOrder[0];
+                                byteOrder = int32byteOrder[3];
                             } else {
                                 byteOrder = int32byteOrder[2];
                             }
@@ -74,20 +79,36 @@ public class AsyncGaugeTaskMB extends AsyncTask<String, Void, String> {
                             if (swapWords){
                                 byteOrder = int32byteOrder[1];
                             } else {
-                                byteOrder = int32byteOrder[3];
+                                byteOrder = int32byteOrder[0];
                             }
+                        }
+
+                        break;
+                    case "float32":
+                        elem_size = 2;
+                        elem_count = 2;
+
+                        if (swapBytes){
+                            if (swapWords)
+                                byteOrder = float32byteOrder[3];
+                            else
+                                byteOrder = float32byteOrder[2];
+                        } else {
+                            if (swapWords)
+                                byteOrder = float32byteOrder[1];
+                            else
+                                byteOrder = float32byteOrder[0];
                         }
 
                         break;
                     case "int64":
                     case "uint64":
-                    case "float64":
                         elem_size = 2;
                         elem_count = 4;
 
                         if (swapBytes){
                             if (swapWords){
-                                byteOrder = int64byteOrder[0];
+                                byteOrder = int64byteOrder[3];
                             } else {
                                 byteOrder = int64byteOrder[2];
                             }
@@ -95,8 +116,25 @@ public class AsyncGaugeTaskMB extends AsyncTask<String, Void, String> {
                             if (swapWords){
                                 byteOrder = int64byteOrder[1];
                             } else {
-                                byteOrder = int64byteOrder[3];
+                                byteOrder = int64byteOrder[0];
                             }
+                        }
+
+                        break;
+                    case "float64":
+                        elem_size = 2;
+                        elem_count = 4;
+
+                        if (swapBytes){
+                            if (swapWords)
+                                byteOrder = float64byteOrder[3];
+                            else
+                                byteOrder = float64byteOrder[2];
+                        } else {
+                            if (swapWords)
+                                byteOrder = float64byteOrder[1];
+                            else
+                                byteOrder = float64byteOrder[0];
                         }
 
                         break;
@@ -104,11 +142,10 @@ public class AsyncGaugeTaskMB extends AsyncTask<String, Void, String> {
 
                 String tagMBString = "protocol=modbus_tcp&";
 
-                if (byteOrder != null){
+                if (byteOrder != null)
                     tagMBString += gateway_unitID + "&elem_size=" + elem_size + "&elem_count=" + elem_count + "&name=" + name + "&" + byteOrder;
-                } else {
+                else
                     tagMBString += gateway_unitID + "&elem_size=" + elem_size + "&elem_count=" + elem_count + "&name=" + name;
-                }
 
                 tag_id = GaugeMaster.TagCreate(tagMBString, timeout);
 
