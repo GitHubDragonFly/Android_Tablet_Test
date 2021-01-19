@@ -12,7 +12,7 @@ In order to work as designed, it uses permission to access Internet and Network 
 
 It is using the following open source libraries, added to the app in the form of AAR modules:
 
-- [libplctag](https://github.com/libplctag/libplctag) v2.1.20
+- [libplctag](https://github.com/libplctag/libplctag) v2.2.0
 - [jna](https://github.com/java-native-access/jna) v5.6.0
 
 It is also using a modified version of the Tag.java wrapper, part of the libplctag project, so a tag_id for every tag created could be mapped and used in the software.
@@ -22,7 +22,6 @@ Related project: [libplctag4android](https://github.com/libplctag/libplctag4andr
 
 This app is as experimental as the above mentioned related project but a bit more elaborate.
 The above mentioned related project can be used to compile the latest prerelease version of the libplctag library.
-Do realize that using any version other than v2.1.20 could cause the app produce some different results (it will probably show an error but might be something else).
 
 See [this link](https://github.com/libplctag/libplctag4android/issues/1) for instructions on how to create libplctag AAR.
 
