@@ -1,13 +1,11 @@
 package com.e.tablettest;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,9 +23,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.sun.jna.Platform;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements SetTags,AdapterView.OnItemSelectedListener,ABTaskCallback,MBTaskCallback,WriteTaskCallback,GetCLGXTagsTaskCallback {
     private static final int intButtonWriteABTag1 = R.id.btnWriteABTag1;
@@ -688,7 +692,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     }
 
     @SuppressWarnings("unchecked")
-    public void sendMessageToggleAB(View v){
+    public void sendMessageToggleAB(View v) throws InterruptedException {
         if (btnAB.getText().equals(btnAB.getTextOn())){
             if (myTaskAB == null) {
                 myTaskAB = new AsyncReadTaskAB();
@@ -828,6 +832,12 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         } else {
             if (myTaskAB != null){
                 myTaskAB.cancel(true);
+
+                // Add check for isCancelled to prevent any subsequent UI update
+                while (!myTaskAB.isCancelled()){
+                    TimeUnit.MILLISECONDS.sleep(5);
+                }
+
                 myTaskAB = null;
             }
 
@@ -858,7 +868,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     }
 
     @SuppressWarnings("unchecked")
-    public void sendMessageToggleMB(View v) {
+    public void sendMessageToggleMB(View v) throws InterruptedException {
         if (btnMB.getText().equals(btnMB.getTextOn())){
             if (myTaskMB == null) {
                 myTaskMB = new AsyncReadTaskModbus();
@@ -999,6 +1009,12 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         } else {
             if (myTaskMB != null){
                 myTaskMB.cancel(true);
+
+                // Add check for isCancelled to prevent any subsequent UI update
+                while (!myTaskMB.isCancelled()){
+                    TimeUnit.MILLISECONDS.sleep(5);
+                }
+
                 myTaskMB = null;
             }
 
