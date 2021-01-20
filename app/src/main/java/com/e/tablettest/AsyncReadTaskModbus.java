@@ -457,7 +457,7 @@ public class AsyncReadTaskModbus  extends AsyncTask<ArrayList<ArrayList<String>>
         super.onCancelled();
         Log.v(TAG,"On Cancelled...");
 
-        if (dict != null && MBMaster != null){
+        if (dict != null){
             for (String key : dict.keySet()){
                 Integer keyIntVal = dict.get(key);
                 if (keyIntVal != null)

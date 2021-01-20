@@ -1,9 +1,11 @@
 package com.e.tablettest;
 
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
-import android.os.AsyncTask;
+
 import org.libplctag.Tag;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -740,7 +742,7 @@ public class AsyncReadTaskAB extends AsyncTask<ArrayList<ArrayList<String>>, Voi
         super.onCancelled();
         Log.v(TAG,"On Cancelled...");
 
-        if (dict != null && ABMaster != null){
+        if (dict != null){
             for (String key : dict.keySet()){
                 Integer keyIntVal = dict.get(key);
                 if (keyIntVal != null)
