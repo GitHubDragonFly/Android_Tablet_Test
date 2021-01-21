@@ -2,13 +2,14 @@ package com.e.tablettest;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import org.libplctag.Tag;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import org.libplctag.Tag;
 
 @SuppressWarnings("deprecation")
 public class AsyncTaskGetCLGXTags extends AsyncTask<String, Void, String> {
