@@ -65,5 +65,5 @@ Any and all trademarks, either directly or indirectly mentioned in this project,
 
 # Useful Resources
 Other open source projects:
-The AdvancedHMI website [forum](https://www.advancedhmi.com/forum/), providing communication with a large number of different PLCs.
-The [pylogix](https://github.com/dmroeder/pylogix) and [pycomm3](https://github.com/ottowayi/pycomm3) repositories.
+- The AdvancedHMI website [forum](https://www.advancedhmi.com/forum/), providing communication with a large number of different PLCs.
+- The [pylogix](https://github.com/dmroeder/pylogix) and [pycomm3](https://github.com/ottowayi/pycomm3) repositories.
