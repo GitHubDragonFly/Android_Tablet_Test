@@ -1,7 +1,9 @@
 package com.e.tablettest;
 
 import android.os.AsyncTask;
+
 import org.libplctag.Tag;
+
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +32,8 @@ public class AsyncGaugeTaskAB extends AsyncTask<String, Void, String> {
             String tempValue = "";
 
             if (dict.size() != 1){
+                int elem_count = 1;
+
                 switch (dataType) {
                     case "int8":
                     case "uint8":
@@ -52,7 +56,7 @@ public class AsyncGaugeTaskAB extends AsyncTask<String, Void, String> {
                 }
 
                 String tagABString = "protocol=ab_eip&";
-                tagABString += gateway_path_cpu + "&elem_size=" + elem_size + "&elem_count=1&name=" + name;
+                tagABString += gateway_path_cpu + "&elem_size=" + elem_size + "&elem_count=" + elem_count + "&name=" + name;
 
                 tag_id = GaugeMaster.TagCreate(tagABString, timeout);
 
