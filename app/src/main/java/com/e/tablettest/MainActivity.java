@@ -29,6 +29,8 @@ import androidx.core.content.ContextCompat;
 
 import com.sun.jna.Platform;
 
+import org.libplctag.Tag;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -58,6 +60,12 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
     public static GetCLGXTagsTaskCallback GetCLGXTagstaskCallback;
     public static WriteTaskCallback WritetaskCallback;
     public static SetTags setTags;
+
+    private final Tag Master = new Tag();
+
+    public static int version_major;
+    public static int version_minor;
+    public static int version_patch;
 
     // Variables used to control unintentional multiple taps of the same button
     public static boolean gaugeScreenABOpen, popupScreenABOpen, gaugeScreenMBOpen, popupScreenMBOpen;
@@ -524,11 +532,15 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         WritetaskCallback = this;
         setTags = this;
 
-        String osArch = "OS Arch : " + System.getProperty("os.arch");
+        version_major = Master.getIntAttribute(0, "version_major", 0);
+        version_minor = Master.getIntAttribute(0, "version_minor", 0);
+        version_patch = Master.getIntAttribute(0, "version_patch", 0);
+
+        String plctagVersion = "libplctag v" + version_major + "." + version_minor + "." + version_patch;
         String platformArch = "Platform Arch : " + Platform.ARCH;
 
-        EditText et0 = findViewById(R.id.txtOSArch);
-        et0.setText(osArch);
+        EditText et0 = findViewById(R.id.txtLibplctagVersion);
+        et0.setText(plctagVersion);
         EditText et1 = findViewById(R.id.txtPlatformArch);
         et1.setText(platformArch);
     }

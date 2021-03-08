@@ -46,7 +46,7 @@
     <string name="unitIDHint">1 to 247</string>
     <string name="checkboxSwapBytes">Swap Bytes</string>
     <string name="checkboxSwapWords">Swap Words</string>
-    <string name="osArchHint">OS Arch</string>
+    <string name="libplctagVersionHint">libplctag v</string>
     <string name="platformArchHint">Platform Arch</string>
 
     <string-array name="ab_tags">

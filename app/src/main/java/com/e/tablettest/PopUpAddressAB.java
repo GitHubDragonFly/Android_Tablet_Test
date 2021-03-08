@@ -1,7 +1,5 @@
 package com.e.tablettest;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -15,6 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     public PopUpAddressAB() { super(); }
@@ -108,8 +109,12 @@ public class PopUpAddressAB extends AppCompatActivity implements AdapterView.OnI
                 if (callerName.equals("etABTagGauge"))
                     stringArray = getResources().getStringArray(R.array.gauge_data_type);
                 else {
-                    if (cpu.equals("micrologix"))
-                        stringArray = getResources().getStringArray(R.array.ab_mlgx_data_type);
+                    if (cpu.equals("micrologix")){ // plctag library v2.1.22 or lower required for PID
+                        if (MainActivity.version_major == 2 && MainActivity.version_minor == 1)
+                            stringArray = getResources().getStringArray(R.array.ab_mlgx_data_type);
+                        else
+                            stringArray = getResources().getStringArray(R.array.ab_slcplc5_data_type);
+                    }
                     else
                         stringArray = getResources().getStringArray(R.array.ab_slcplc5_data_type);
                 }

@@ -66,7 +66,7 @@
         android:textSize="14sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/txtOSArch" />
+        app:layout_constraintEnd_toStartOf="@+id/txtLibplctagVersion" />
 
     <Button
         android:id="@+id/btnABGauge"
@@ -1150,7 +1150,7 @@
         android:textColor="@color/colorPrimaryDark"
         android:textOff="@string/btnMBAutoOFF"
         android:textOn="@string/btnMBAutoON"
-        app:layout_constraintBottom_toTopOf="@+id/txtOSArch"
+        app:layout_constraintBottom_toTopOf="@+id/txtLibplctagVersion"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
@@ -1559,7 +1559,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvABTagValue5" />
 
     <EditText
-        android:id="@+id/txtOSArch"
+        android:id="@+id/txtLibplctagVersion"
         android:layout_width="180dp"
         android:layout_height="36dp"
         android:layout_marginEnd="10dp"
@@ -1570,10 +1570,11 @@
         android:enabled="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:hint="@string/osArchHint"
+        android:gravity="right|center_vertical"
+        android:hint="@string/libplctagVersionHint"
         android:importantForAutofill="no"
         android:inputType="textNoSuggestions"
-        android:textSize="12sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
