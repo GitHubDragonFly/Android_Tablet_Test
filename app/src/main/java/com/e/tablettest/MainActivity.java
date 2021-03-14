@@ -1079,7 +1079,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         path = path.replace(" ", "");
         timeout = timeout.replace(" ", "");
 
-        if (TextUtils.isEmpty(ipaddress) || !TextUtils.isDigitsOnly(timeout)){
+        if (TextUtils.isEmpty(ipaddress) || (TextUtils.isEmpty(path) && (cpu.equals("controllogix") || cpu.equals("logixpccc") || cpu.equals("njnx"))) || !TextUtils.isDigitsOnly(timeout)){
             myWriteTaskAB = null;
             return;
         }
@@ -1091,7 +1091,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         } else {
             params[0] = "gateway=" + ipaddress + "&cpu=" + cpu;
         }
-        params[0] = "gateway=" + ipaddress + "&path=" + path + "&cpu=" + cpu;
+
         params[1] = timeout;
 
         switch(v.getId()){
@@ -1211,7 +1211,7 @@ public class MainActivity extends AppCompatActivity implements SetTags,AdapterVi
         unitID = unitID.replace(" ", "");
         timeout = timeout.replace(" ", "");
 
-        if (TextUtils.isEmpty(ipaddress) || !TextUtils.isDigitsOnly(timeout)){
+        if (TextUtils.isEmpty(ipaddress) || Integer.parseInt(unitID) < 1 || Integer.parseInt(unitID) > 247 || !TextUtils.isDigitsOnly(timeout)){
             myWriteTaskMB = null;
             return;
         }
