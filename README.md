@@ -29,6 +29,10 @@ The above mentioned related project can be used to compile the latest prerelease
 
 See [this link](https://github.com/libplctag/libplctag4android/issues/1) for instructions on how to create libplctag AAR.
 
+# Screenshot
+
+![Start Page](screenshots/1%20App%20Running%20Screen.png?raw=true)
+
 # Functionality
 - Only a single value will be displayed per tag entered, either of string/char/integer/float...etc.
 - It provides automated READ while, during this operation, unused tag spots can be populated and used to write in parallel.
