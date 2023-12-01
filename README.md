@@ -1,6 +1,8 @@
 # TabletTest
 Android tablet app for communication with Allen Bradley and/or Modbus programmable logic controllers (PLC).
 
+Maybe use Android Studio and create 2 apps out of this one, where each app could be used for Allen Bradley or Modbus communication only.
+
 Intended to be used solely as a testing tool (not fit for any production environment).
 Could also represent a great resource for educational purposes.
 
