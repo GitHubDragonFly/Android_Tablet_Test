@@ -1,3 +1,8 @@
+# Reality Check
+Just for those of you who might be concerned about the Climate Change, here are couple of sobering insights:
+- Neil deGrasse Tyson's perspective on climate change: [YouTube Video](https://www.youtube.com/watch?v=tRA2SfSk2Tc)
+- My perspective, with statements from two AI entities: [Climate Change](https://githubdragonfly.github.io/viewers/templates/Climate%20Change.txt)
+
 # TabletTest
 Android tablet app for communication with Allen Bradley and/or Modbus programmable logic controllers (PLC) via WiFi on a local network.
 
